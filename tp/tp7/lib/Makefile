@@ -23,13 +23,13 @@ MCU=atmega324pa
 
 # Nom de votre projet
 # (utilisez un seul mot, exemple: 'monprojet')
-PROJECTNAME=tp6-pb1
+PROJECTNAME=tp7
 
 # Fichiers sources
 # Utilisez le suffixe .cpp pour les fichiers C++
 # Listez tous les fichiers a compiler, separes par
 # un espace. exemple: 'tp1.c tp2.cpp':
-PRJSRC= tp6-pb1.cpp
+PRJSRC= $(wildcard *.cpp)
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
 INC=
@@ -62,6 +62,7 @@ AVRDUDE_PROGRAMMERID=usbasp
 
 #compilateur utilise
 CC=avr-gcc
+AR=avr-ar
 #pour copier le contenu d'un fichier objet vers un autre
 OBJCOPY=avr-objcopy
 #pour permettre le transfert vers le microcontroleur
@@ -141,6 +142,7 @@ OBJDEPS=$(CFILES:.c=.o) \
 all: $(TRG) $(HEXROMTRG)
 
 # Implementation de la cible
+# A CHANGER
 $(TRG): $(OBJDEPS)
 	$(CC) $(LDFLAGS) -o $(TRG) $(OBJDEPS) \
 	-lm $(LIBS)
@@ -154,21 +156,11 @@ $(TRG): $(OBJDEPS)
 	$(CC) $(CFLAGS) $(CXXFLAGS) -c $<
 
 # Verification des dependances (header dependencies)
--include *.d
+-include *.d 
 
 # Pour plus d'information sur cette section, consulter:
 # http://bit.ly/2580FU8
 
-# Production des fichiers hex a partir des fichiers elf
-%.hex: %.elf
-	$(OBJCOPY) -j .text -j .data -O $(HEXFORMAT) $< $@
-
-# Make install permet de compiler le projet puis
-# d'ecrire le programme en memoire flash dans votre
-# microcontroleur. Celui-ci doit etre branche par cable USB
-install: $(HEXROMTRG)
-	$(AVRDUDE) -c $(AVRDUDE_PROGRAMMERID) \
-	-p $(MCU) -P -e -U flash:w:$(HEXROMTRG)
 
 # Make clean permet d'effacer tout les fichiers generes
 # lors de la compilation
