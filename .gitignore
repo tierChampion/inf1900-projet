@@ -1,0 +1,8 @@
+*.vscode
+*.d
+*.elf
+*.map
+*.hex
+*.o
+*.gch
+*.simu
