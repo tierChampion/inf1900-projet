@@ -137,7 +137,7 @@ all: $(TRG)
 # Implementation de la cible
 # A CHANGER
 $(TRG): $(OBJDEPS)
-	$(AR) $(ARFLAGS) $(TRG) $(OBJDEPS) \
+	$(AR) $(ARFLAGS) $(TRG) $(OBJDEPS)
 
 # Production des fichiers object
 # De C a objet

@@ -4,5 +4,6 @@
 *.map
 *.hex
 *.o
+*.a
 *.gch
 *.simu
