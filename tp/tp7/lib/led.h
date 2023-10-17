@@ -13,6 +13,6 @@ public:
 private:
     volatile uint8_t *_port;
     volatile uint8_t *_mode;
-    uint8_t _pinRed;
     uint8_t _pinGreen;
+    uint8_t _pinRed;
 };

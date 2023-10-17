@@ -23,7 +23,7 @@ MCU=atmega324pa
 
 # Nom de votre projet
 # (utilisez un seul mot, exemple: 'monprojet')
-PROJECTNAME=tp7
+PROJECTNAME=tp7-lib
 
 # Fichiers sources
 # Utilisez le suffixe .cpp pour les fichiers C++
@@ -69,10 +69,6 @@ OBJCOPY=avr-objcopy
 AVRDUDE=avrdude
 #pour supprimer les fichiers lorsque l'on appel make clean
 REMOVE=rm -f
-# HEXFORMAT -- format pour les fichiers produient .hex
-HEXFORMAT=ihex
-
-
 
 ####### Options de compilation #######
 
@@ -95,17 +91,14 @@ endif
 # Flags pour le compilateur en C++
 CXXFLAGS=-fno-exceptions
 
-# Linker pour lier les librairies utilisees
-LDFLAGS=-Wl,-Map,$(TRG).map -mmcu=$(MCU)
-
+# Flags pour l'archiveur
+ARFLAGS=-crs
 
 
 ####### Cible (Target) #######
 
 #Nom des cibles par defaut
-TRG=$(PROJECTNAME).elf
-HEXROMTRG=$(PROJECTNAME).hex
-HEXTRG=$(HEXROMTRG) $(PROJECTNAME).ee.hex
+TRG=$(PROJECTNAME).a
 
 
 
@@ -139,13 +132,12 @@ OBJDEPS=$(CFILES:.c=.o) \
 
 # Make all permet simplement de compiler le projet
 #
-all: $(TRG) $(HEXROMTRG)
+all: $(TRG)
 
 # Implementation de la cible
 # A CHANGER
 $(TRG): $(OBJDEPS)
-	$(CC) $(LDFLAGS) -o $(TRG) $(OBJDEPS) \
-	-lm $(LIBS)
+	$(AR) $(ARFLAGS) $(TRG) $(OBJDEPS) \
 
 # Production des fichiers object
 # De C a objet
