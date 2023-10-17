@@ -23,7 +23,7 @@ MCU=atmega324pa
 
 # Nom de votre projet
 # (utilisez un seul mot, exemple: 'monprojet')
-PROJECTNAME=tp7-lib
+PROJECTNAME=lib_tp7
 
 # Fichiers sources
 # Utilisez le suffixe .cpp pour les fichiers C++
@@ -99,8 +99,6 @@ ARFLAGS=-crs
 
 #Nom des cibles par defaut
 TRG=$(PROJECTNAME).a
-
-
 
 ####### Definition de tout les fichiers objets #######
 

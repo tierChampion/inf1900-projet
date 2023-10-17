@@ -23,19 +23,19 @@ MCU=atmega324pa
 
 # Nom de votre projet
 # (utilisez un seul mot, exemple: 'monprojet')
-PROJECTNAME=tp7
+PROJECTNAME=tp7-exec
 
 # Fichiers sources
 # Utilisez le suffixe .cpp pour les fichiers C++
 # Listez tous les fichiers a compiler, separes par
 # un espace. exemple: 'tp1.c tp2.cpp':
-PRJSRC= tp6-pb1.cpp
+PRJSRC= $(wildcard *.cpp)
 
 # Inclusions additionnels (ex: -I/path/to/mydir)
-INC=
+INC=-I ../lib
 
 # Libraires a lier (ex: -lmylib)
-LIBS= 
+LIBS=-l _tp7
 
 # Niveau d'optimization
 # Utilisez s (size opt), 1, 2, 3 ou 0 (off)
@@ -97,8 +97,6 @@ CXXFLAGS=-fno-exceptions
 # Linker pour lier les librairies utilisees
 LDFLAGS=-Wl,-Map,$(TRG).map -mmcu=$(MCU)
 
-
-
 ####### Cible (Target) #######
 
 #Nom des cibles par defaut
@@ -106,7 +104,8 @@ TRG=$(PROJECTNAME).elf
 HEXROMTRG=$(PROJECTNAME).hex
 HEXTRG=$(HEXROMTRG) $(PROJECTNAME).ee.hex
 
-
+#librairies
+LIBDIR=../lib
 
 ####### Definition de tout les fichiers objets #######
 
@@ -143,7 +142,7 @@ all: $(TRG) $(HEXROMTRG)
 # Implementation de la cible
 $(TRG): $(OBJDEPS)
 	$(CC) $(LDFLAGS) -o $(TRG) $(OBJDEPS) \
-	-lm $(LIBS)
+	-lm $(LIBS) -L $(LIBDIR)
 
 # Production des fichiers object
 # De C a objet
