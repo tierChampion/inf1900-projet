@@ -12,8 +12,8 @@ public:
 
     ExternalMemory();
 
-    void write(const uint16_t addressStart, const char* input, const uint8_t length);
-    void read(const uint16_t addressStart, char* output, const uint8_t length);
+    void write(const uint16_t addressStart, const uint8_t* input, const uint8_t length);
+    void read(const uint16_t addressStart, uint8_t* output, const uint8_t length);
 
 private:
 

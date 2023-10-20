@@ -7,7 +7,7 @@ class Comm {
     public:
         Comm();
 
-        void transmissionUART(const uint8_t donnee);
+        void transmitData(const uint8_t* data, uint8_t length);
 };
 
 #endif

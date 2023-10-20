@@ -3,18 +3,18 @@
 ExternalMemory::ExternalMemory() : 
     _protocolManager() {}
 
-void ExternalMemory::write(const uint16_t addressStart, const char *input, uint8_t length)
+void ExternalMemory::write(const uint16_t addressStart, const uint8_t *input, uint8_t length)
 {
-    char writing[length];
+    uint8_t writing[length];
 
     for (uint8_t i = 0; i < length; i++) {
         writing[i] = input[i];
     }
 
-    _protocolManager.ecriture(addressStart, (uint8_t*)writing, length);
+    _protocolManager.ecriture(addressStart, writing, length);
 }
 
-void ExternalMemory::read(const uint16_t addressStart, char* output, uint8_t length)
+void ExternalMemory::read(const uint16_t addressStart, uint8_t* output, uint8_t length)
 {
-    _protocolManager.lecture(addressStart, (uint8_t*)output, length);
+    _protocolManager.lecture(addressStart, output, length);
 }
