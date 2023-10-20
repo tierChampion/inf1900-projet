@@ -1,3 +1,6 @@
+#ifndef LED_H
+#define LED_H
+
 #include <avr/io.h>
 
 typedef volatile uint8_t *Register;
@@ -16,3 +19,5 @@ private:
     uint8_t _pinGreen;
     uint8_t _pinRed;
 };
+
+#endif
