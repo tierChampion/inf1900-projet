@@ -1,7 +1,23 @@
-#include <cinttypes>
+#ifndef EXTERNAL_MEM_H
+#define EXTERNAL_MEM_H
 
-class ExternalMemory {
+#include <avr/io.h>
+#include <string.h>
+
+#include "memoire_24.h"
+
+class ExternalMemory
+{
+public:
+
+    ExternalMemory();
+
+    void write(const uint16_t addressStart, const char* input, const uint8_t length);
+    void read(const uint16_t addressStart, char* output, const uint8_t length);
 
 private:
-    uint8_t test;
+
+    Memoire24CXXX _protocolManager;
 };
+
+#endif
