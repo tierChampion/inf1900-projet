@@ -37,6 +37,13 @@ const uint8_t AMBER_GREEN_MAX = 6;
 
 const uint16_t FLASHING_COMPARE_VALUE = 120;
 
+enum class LedColor
+{
+    RED,
+    GREEN,
+    AMBER
+};
+
 void openGreenLed()
 {
     PORTB &= ~LED_RED;
@@ -59,8 +66,23 @@ void openAmberLed()
     {
         openRedLed();
     }
+}
 
-    gAmberCounter %= AMBER_COUNTER_MAX;
+void openLed(LedColor color)
+{
+
+    switch (color)
+    {
+        case LedColor::RED:
+            openRedLed();
+            break;
+        case LedColor::GREEN:
+            openGreenLed();
+            break;
+        case LedColor::AMBER:
+            openAmberLed();
+            break;
+    }
 }
 
 void closeLed()
@@ -72,9 +94,9 @@ void closeLed()
 ISR(TIMER1_COMPA_vect)
 {
     gAmberCounter++;
-    openAmberLed();
+    openLed(LedColor::AMBER);
+    gAmberCounter %= AMBER_COUNTER_MAX;
 }
-
 
 void initTimer()
 {
@@ -150,7 +172,8 @@ uint8_t proccessAnalogInput(uint16_t rawInput)
     return static_cast<uint8_t>((rawInput >> PRECISION_LOSS) & CAN_INPUT_MASK);
 }
 
-void initialisation() {
+void initialisation()
+{
 
     DDRA &= ~CAN_INPUT;
     DDRB |= LED_GREEN | LED_RED;
@@ -170,7 +193,7 @@ int main()
 
         if (proccessedInput < LOW_LIGHT)
         {
-            openGreenLed();
+            openLed(LedColor::GREEN);
             stopTimer();
         }
         else if (proccessedInput < MEDIUM_LIGHT)
@@ -179,7 +202,7 @@ int main()
         }
         else
         {
-            openRedLed();
+            openLed(LedColor::RED);
             stopTimer();
         }
     }

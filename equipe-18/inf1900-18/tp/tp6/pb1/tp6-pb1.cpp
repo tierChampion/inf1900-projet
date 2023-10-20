@@ -56,6 +56,11 @@ enum class Flashing
     END,
 };
 
+enum class LedColor {
+    RED,
+    GREEN,
+};
+
 volatile uint8_t gCounter = 0;
 volatile uint8_t gFlashCount = 0;
 volatile bool gWaiting = true;
@@ -69,25 +74,49 @@ void openGreenLed()
     PORTB |= LED_GREEN;
 }
 
-void closeLed()
-{
-    PORTB &= ~LED_RED;
-    PORTB &= ~LED_GREEN;
-}
-
 void openRedLed()
 {
     PORTB &= ~LED_GREEN;
     PORTB |= LED_RED;
 }
 
-ISR(INT0_vect)
+void openLed(LedColor color)
 {
+
+    switch (color)
+    {
+        case LedColor::RED:
+            openRedLed();
+            break;
+        case LedColor::GREEN:
+            openGreenLed();
+            break;
+    }
+}
+
+void closeLed()
+{
+    PORTB &= ~LED_RED;
+    PORTB &= ~LED_GREEN;
+}
+
+bool isDebouncedButtonPressed() {
+
+    uint8_t reading1 = (PIND & BUTTON_MASK);
+
     _delay_ms(DEBOUNCE_DELAY);
 
-    uint8_t reading = (PIND & BUTTON_MASK);
+    uint8_t reading2 = (PIND & BUTTON_MASK);
 
-    bool isButtonPressed = (reading == 0);
+    bool isStable = (reading1 == reading2);
+    bool isButtonPressed = (reading2 == 0);
+
+    return isStable && isButtonPressed;
+}
+
+ISR(INT0_vect)
+{
+    bool isButtonPressed = isDebouncedButtonPressed();
 
     if (isButtonPressed)
     {
@@ -270,21 +299,9 @@ void executeFlashing(const Flashing current)
 {
     switch (current)
     {
-        case Flashing::START:
-        {
-            closeLed();
-        }
-        break;
-
         case Flashing::HALF_SECOND_GREEN:
         {
-            openGreenLed();
-        }
-        break;
-
-        case Flashing::TWO_SECOND_OFF:
-        {
-            closeLed();
+            openLed(LedColor::GREEN);
         }
         break;
 
@@ -292,7 +309,7 @@ void executeFlashing(const Flashing current)
         {
             if (gCounter % 2 == 0)
             {
-                openRedLed();
+                openLed(LedColor::RED);
             }
             else
             {
@@ -303,11 +320,11 @@ void executeFlashing(const Flashing current)
 
         case Flashing::ONE_SECOND_GREEN:
         {
-            openGreenLed();
+            openLed(LedColor::GREEN);
         }
         break;
 
-        case Flashing::END:
+        default:
         {
             closeLed();
         }
