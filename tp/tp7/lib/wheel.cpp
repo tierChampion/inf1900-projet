@@ -9,12 +9,13 @@ Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(s
     TCNT0 = 0;
     TCCR0A |= (1 << WGM00) | (1 << COM0A1) | (1 << COM0B1);
     TCCR0B |= (1 << CS01);
-    TCCR1C |= 0;
+    _speed = 0;
     *_directionPin.mode |= (1 << _directionPin.pin);
 }
 
 void Wheel::setSpeed(int8_t speed)
 {
+    _speed = speed;
     if (speed >= 0)
         *_directionPin.port &= ~(1 << _directionPin.pin);
     else
@@ -22,14 +23,24 @@ void Wheel::setSpeed(int8_t speed)
     switch (_side)
     {
     case Side::RIGHT:
-        OCR0A = (255 * speed) / 100;
+        OCR0A = (255 * abs(speed)) / 100;
         break;
     case Side::LEFT:
-        OCR0B = (255 * speed) / 100;
+        OCR0B = (255 * abs(speed)) / 100;
         break;
     default:
         break;
     }
+}
+
+int8_t Wheel::getSpeed()
+{
+    return _speed;
+}
+
+void Wheel::setDirectionPin(Pin directionPin)
+{
+    _directionPin = directionPin;
 }
 
 Pin::Pin(Register mode_, Register port_, uint8_t pin_)
