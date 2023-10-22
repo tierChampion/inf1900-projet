@@ -1,4 +1,5 @@
 #include "avr_useful_lib.h"
+
 typedef volatile uint8_t *Register;
 enum Side
 {
