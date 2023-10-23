@@ -8,13 +8,17 @@ typedef volatile uint8_t *Register;
 
 struct TimerParameters
 {
-    Register counter;
-    Register compareA;
-    Register compareB;
-    Register controlA;
-    Register controlB;
-    Register controlC;
-    Register interruptMask;
+    uint8_t _timerId;
+    // TODO: these three registers wont work on TIMER1 since 
+    //  they are 16 bits.
+    Register _counter;
+    Register _compareA;
+    Register _compareB;
+    //
+    Register _controlA;
+    Register _controlB;
+    Register _controlC;
+    Register _interruptMask;
 };
 
 enum class TimerWaveMode {
@@ -26,7 +30,7 @@ enum class TimerWaveMode {
 enum class TimerCompare {
     A,
     B
-}
+};
 
 enum class TimerCompareMode {
     DISCONNECTED,
@@ -59,6 +63,9 @@ public:
     void start();
     void stop();
     bool isRunning() const;
+
+    void setCounterValue(uint16_t value);
+    void setCompareValue(TimerCompare compare, uint16_t value);
 
     void setWaveMode(TimerWaveMode mode);
     void setCompareMode(TimerCompare compare, TimerCompareMode mode);

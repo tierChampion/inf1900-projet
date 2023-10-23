@@ -28,6 +28,28 @@ bool Timer::isRunning() const
     return _isTicking;
 }
 
+void Timer::setCounterValue(uint16_t value)
+{
+    // TODO: check how to work with the 16 bits of the TIM1.
+    //  does the _counter need to be a different type ?
+    *_params._counter = (value & 0xFF);
+}
+
+void Timer::setCompareValue(TimerCompare compare, uint16_t value)
+{
+    // TODO: check how to work with the 16 bits of the TIM1.
+    //  does the _counter need to be a different type ?
+    switch (compare)
+    {
+    case TimerCompare::A:
+        *_params._compareA = (value & 0xFF);
+        break;
+    case TimerCompare::B:
+        *_params._compareB = (value & 0xFF);
+        break;
+    }
+}
+
 void Timer::setWaveMode(TimerWaveMode mode)
 {
     _waveMode = mode;
@@ -35,20 +57,20 @@ void Timer::setWaveMode(TimerWaveMode mode)
     switch (_waveMode)
     {
     case TimerWaveMode::NORMAL:
-        *_params.controlA &= ~(1 << WGM00 | 1 << WGM01);
-        *_params.controlB &= ~(1 << WGM02);
+        *_params._controlA &= ~(1 << WGM00 | 1 << WGM01);
+        *_params._controlB &= ~(1 << WGM02);
         break;
 
     case TimerWaveMode::CTC:
-        *_params.controlA &= ~(1 << WGM00);
-        *_params.controlA |= (1 << WGM01);
-        *_params.controlB &= ~(1 << WGM02);
+        *_params._controlA &= ~(1 << WGM00);
+        *_params._controlA |= (1 << WGM01);
+        *_params._controlB &= ~(1 << WGM02);
         break;
 
     case TimerWaveMode::PWM_PHASE_CORRECT:
-        *_params.controlA &= ~(1 << WGM01);
-        *_params.controlA |= (1 << WGM00);
-        *_params.controlB &= ~(1 << WGM02);
+        *_params._controlA &= ~(1 << WGM01);
+        *_params._controlA |= (1 << WGM00);
+        *_params._controlB &= ~(1 << WGM02);
         break;
     }
 }
@@ -61,20 +83,20 @@ void Timer::setCompareMode(TimerCompare compare, TimerCompareMode mode)
     switch (mode)
     {
     case TimerCompareMode::DISCONNECTED:
-        *_params.controlA &= ~(1 << compareFlag0 | 1 << compareFlag1);
+        *_params._controlA &= ~(1 << compareFlag0 | 1 << compareFlag1);
         break;
 
     case TimerCompareMode::TOGGLE:
         if (_waveMode != TimerWaveMode::PWM_PHASE_CORRECT)
         {
-            *_params.controlA &= ~(1 << compareFlag0 );
-            *_params.controlA |= (1 << compareFlag1);
+            *_params._controlA &= ~(1 << compareFlag0);
+            *_params._controlA |= (1 << compareFlag1);
         }
         break;
 
     case TimerCompareMode::CLEAR:
-        *_params.controlA &= ~(1 << compareFlag1);
-        *_params.controlA |= (1 << compareFlag0);
+        *_params._controlA &= ~(1 << compareFlag1);
+        *_params._controlA |= (1 << compareFlag0);
         break;
     }
 }
@@ -100,21 +122,21 @@ void Timer::applyInterrupt(TimerInterrupt interrupt)
     switch (interrupt)
     {
     case TimerInterrupt::NONE:
-        *_params.interruptMask &= ~(1 << OCIE0A | 1 << OCIE0B);
+        *_params._interruptMask &= ~(1 << OCIE0A | 1 << OCIE0B);
         break;
 
     case TimerInterrupt::COMPARE_A:
-        *_params.interruptMask &= ~(1 << OCIE0B);
-        *_params.interruptMask |= (1 << OCIE0A);
+        *_params._interruptMask &= ~(1 << OCIE0B);
+        *_params._interruptMask |= (1 << OCIE0A);
         break;
 
     case TimerInterrupt::COMPARE_B:
-        *_params.interruptMask &= ~(1 << OCIE0A);
-        *_params.interruptMask |= (1 << OCIE0B);
+        *_params._interruptMask &= ~(1 << OCIE0A);
+        *_params._interruptMask |= (1 << OCIE0B);
         break;
 
     case TimerInterrupt::BOTH:
-        *_params.interruptMask |= (1 << OCIE0A | 1 << OCIE0B);
+        *_params._interruptMask |= (1 << OCIE0A | 1 << OCIE0B);
         break;
     }
 }
@@ -124,32 +146,32 @@ void Timer::applyPrescalar(TimerPrescalar prescalar)
     switch (prescalar)
     {
     case TimerPrescalar::STOPPED:
-        *_params.controlB &= ~(1 << CS00 | 1 << CS01 | 1 << CS02);
+        *_params._controlB &= ~(1 << CS00 | 1 << CS01 | 1 << CS02);
         break;
 
     case TimerPrescalar::NO_PRESCALAR:
-        *_params.controlB &= ~(1 << CS01 | 1 << CS02);
-        *_params.controlB |= (1 << CS00);
+        *_params._controlB &= ~(1 << CS01 | 1 << CS02);
+        *_params._controlB |= (1 << CS00);
         break;
 
     case TimerPrescalar::EIGHT:
-        *_params.controlB &= ~(1 << CS00 | 1 << CS02);
-        *_params.controlB |= (1 << CS01);
+        *_params._controlB &= ~(1 << CS00 | 1 << CS02);
+        *_params._controlB |= (1 << CS01);
         break;
 
     case TimerPrescalar::SIXTY_FOUR:
-        *_params.controlB &= ~(1 << CS02);
-        *_params.controlB |= (1 << CS00 | 1 << CS01);
+        *_params._controlB &= ~(1 << CS02);
+        *_params._controlB |= (1 << CS00 | 1 << CS01);
         break;
 
     case TimerPrescalar::TWO_FIFTY_SIX:
-        *_params.controlB &= ~(1 << CS00 | 1 << CS01);
-        *_params.controlB |= (1 << CS02);
+        *_params._controlB &= ~(1 << CS00 | 1 << CS01);
+        *_params._controlB |= (1 << CS02);
         break;
 
     case TimerPrescalar::THOUSAND_TWENTY_FOUR:
-        *_params.controlB &= ~(1 << CS01);
-        *_params.controlB |= (1 << CS00 | 1 << CS02);
+        *_params._controlB &= ~(1 << CS01);
+        *_params._controlB |= (1 << CS00 | 1 << CS02);
         break;
     }
 }
