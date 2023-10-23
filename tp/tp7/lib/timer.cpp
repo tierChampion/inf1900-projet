@@ -3,19 +3,23 @@
 Timer::Timer(TimerParameters parameters)
     : _params(parameters)
 {
-    setPrescalar(TimerPrescalar::STOPPED);
     _isTicking = false;
+    setWaveMode(TimerWaveMode::NORMAL);
+    setInterrupt(TimerInterrupt::NONE);
+    setPrescalar(TimerPrescalar::STOPPED);
 }
 
 void Timer::start()
 {
-    applyPrescalar(_runningPrescalar);
     _isTicking = true;
+    applyInterrupt(_runningInterrupt);
+    applyPrescalar(_runningPrescalar);
 }
 
 void Timer::stop()
 {
     applyPrescalar(TimerPrescalar::STOPPED);
+    applyInterrupt(TimerInterrupt::NONE);
     _isTicking = false;
 }
 
@@ -24,9 +28,47 @@ bool Timer::isRunning() const
     return _isTicking;
 }
 
-void Timer::setInterrupts(TimerInterrupt interrupts)
+void Timer::setWaveMode(TimerWaveMode mode)
 {
-    switch (interrupts)
+    _waveMode = mode;
+
+    switch (_waveMode)
+    {
+        case TimerWaveMode::NORMAL:
+        *_params.controlA &= ~(1 << WGM00 | 1 << WGM01);
+        *_params.controlB &= ~(1 << WGM02);
+        break;
+
+        case TimerWaveMode::CTC:
+        *_params.controlA &= ~(1 << WGM00);
+        *_params.controlA |= (1 << WGM01);
+        *_params.controlB &= ~(1 << WGM02);
+        break;
+
+        case TimerWaveMode::PWM_PHASE_CORRECT:
+        *_params.controlA &= ~(1 << WGM01);
+        *_params.controlA |= (1 << WGM00);
+        *_params.controlB &= ~(1 << WGM02);
+        break;
+    }
+}
+
+void Timer::setInterrupt(TimerInterrupt interrupt)
+{
+    _runningInterrupt = interrupt;
+    if (isRunning())
+        applyInterrupt(_runningInterrupt);
+}
+
+void Timer::setPrescalar(TimerPrescalar prescalar)
+{
+    _runningPrescalar = prescalar;
+    if (isRunning())
+        applyPrescalar(_runningPrescalar);
+}
+
+void Timer::applyInterrupt(TimerInterrupt interrupt) {
+switch (interrupt)
     {
     case TimerInterrupt::NONE:
         *_params.interruptMask &= ~(1 << OCIE0A | 1 << OCIE0B);
@@ -46,13 +88,6 @@ void Timer::setInterrupts(TimerInterrupt interrupts)
         *_params.interruptMask |= (1 << OCIE0A | 1 << OCIE0B);
         break;
     }
-}
-
-void Timer::setPrescalar(TimerPrescalar prescalar)
-{
-    _runningPrescalar = prescalar;
-    if (isRunning())
-        applyPrescalar(prescalar);
 }
 
 void Timer::applyPrescalar(TimerPrescalar prescalar)

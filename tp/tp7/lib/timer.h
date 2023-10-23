@@ -17,6 +17,12 @@ struct TimerParameters
     Register interruptMask;
 };
 
+enum class TimerWaveMode {
+    NORMAL,
+    CTC,
+    PWM_PHASE_CORRECT
+};
+
 enum class TimerInterrupt {
     NONE,
     COMPARE_A,
@@ -43,17 +49,21 @@ public:
     void stop();
     bool isRunning() const;
 
-    void setInterrupts(TimerInterrupt interrupts);
+    void setWaveMode(TimerWaveMode mode);
+    void setInterrupt(TimerInterrupt interrupt);
     void setPrescalar(TimerPrescalar prescalar);
 
 private:
 
+    void applyInterrupt(TimerInterrupt interrupt);
     void applyPrescalar(TimerPrescalar prescalar);
 
 private:
 
     bool _isTicking;
     TimerParameters _params;
+    TimerWaveMode _waveMode;
+    TimerInterrupt _runningInterrupt;
     TimerPrescalar _runningPrescalar;
 };
 
