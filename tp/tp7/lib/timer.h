@@ -17,6 +17,13 @@ struct TimerParameters
     Register interruptMask;
 };
 
+enum class TimerInterrupt {
+    NONE,
+    COMPARE_A,
+    COMPARE_B,
+    BOTH
+};
+
 enum class TimerPrescalar {
     STOPPED,
     NO_PRESCALAR,
@@ -36,6 +43,7 @@ public:
     void stop();
     bool isRunning() const;
 
+    void setInterrupts(TimerInterrupt interrupts);
     void setPrescalar(TimerPrescalar prescalar);
 
 private:

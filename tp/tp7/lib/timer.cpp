@@ -24,6 +24,30 @@ bool Timer::isRunning() const
     return _isTicking;
 }
 
+void Timer::setInterrupts(TimerInterrupt interrupts)
+{
+    switch (interrupts)
+    {
+    case TimerInterrupt::NONE:
+        *_params.interruptMask &= ~(1 << OCIE0A | 1 << OCIE0B);
+        break;
+
+    case TimerInterrupt::COMPARE_A:
+        *_params.interruptMask &= ~(1 << OCIE0B);
+        *_params.interruptMask |= (1 << OCIE0A);
+        break;
+
+    case TimerInterrupt::COMPARE_B:
+        *_params.interruptMask &= ~(1 << OCIE0A);
+        *_params.interruptMask |= (1 << OCIE0B);
+        break;
+
+    case TimerInterrupt::BOTH:
+        *_params.interruptMask |= (1 << OCIE0A | 1 << OCIE0B);
+        break;
+    }
+}
+
 void Timer::setPrescalar(TimerPrescalar prescalar)
 {
     _runningPrescalar = prescalar;
