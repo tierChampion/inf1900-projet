@@ -23,6 +23,17 @@ enum class TimerWaveMode {
     PWM_PHASE_CORRECT
 };
 
+enum class TimerCompare {
+    A,
+    B
+}
+
+enum class TimerCompareMode {
+    DISCONNECTED,
+    TOGGLE,
+    CLEAR
+};
+
 enum class TimerInterrupt {
     NONE,
     COMPARE_A,
@@ -50,6 +61,7 @@ public:
     bool isRunning() const;
 
     void setWaveMode(TimerWaveMode mode);
+    void setCompareMode(TimerCompare compare, TimerCompareMode mode);
     void setInterrupt(TimerInterrupt interrupt);
     void setPrescalar(TimerPrescalar prescalar);
 

@@ -4,9 +4,9 @@ Timer::Timer(TimerParameters parameters)
     : _params(parameters)
 {
     _isTicking = false;
-    setWaveMode(TimerWaveMode::NORMAL);
-    setInterrupt(TimerInterrupt::NONE);
-    setPrescalar(TimerPrescalar::STOPPED);
+    _waveMode = TimerWaveMode::NORMAL;
+    _runningInterrupt = TimerInterrupt::NONE;
+    _runningPrescalar = TimerPrescalar::STOPPED;
 }
 
 void Timer::start()
@@ -34,21 +34,47 @@ void Timer::setWaveMode(TimerWaveMode mode)
 
     switch (_waveMode)
     {
-        case TimerWaveMode::NORMAL:
+    case TimerWaveMode::NORMAL:
         *_params.controlA &= ~(1 << WGM00 | 1 << WGM01);
         *_params.controlB &= ~(1 << WGM02);
         break;
 
-        case TimerWaveMode::CTC:
+    case TimerWaveMode::CTC:
         *_params.controlA &= ~(1 << WGM00);
         *_params.controlA |= (1 << WGM01);
         *_params.controlB &= ~(1 << WGM02);
         break;
 
-        case TimerWaveMode::PWM_PHASE_CORRECT:
+    case TimerWaveMode::PWM_PHASE_CORRECT:
         *_params.controlA &= ~(1 << WGM01);
         *_params.controlA |= (1 << WGM00);
         *_params.controlB &= ~(1 << WGM02);
+        break;
+    }
+}
+
+void Timer::setCompareMode(TimerCompare compare, TimerCompareMode mode)
+{
+    uint8_t compareFlag0 = ((compare == TimerCompare::A) ? COM0A0 : COM0B0);
+    uint8_t compareFlag1 = ((compare == TimerCompare::A) ? COM0A1 : COM0B1);
+
+    switch (mode)
+    {
+    case TimerCompareMode::DISCONNECTED:
+        *_params.controlA &= ~(1 << compareFlag0 | 1 << compareFlag1);
+        break;
+
+    case TimerCompareMode::TOGGLE:
+        if (_waveMode != TimerWaveMode::PWM_PHASE_CORRECT)
+        {
+            *_params.controlA &= ~(1 << compareFlag0 );
+            *_params.controlA |= (1 << compareFlag1);
+        }
+        break;
+
+    case TimerCompareMode::CLEAR:
+        *_params.controlA &= ~(1 << compareFlag1);
+        *_params.controlA |= (1 << compareFlag0);
         break;
     }
 }
@@ -62,13 +88,16 @@ void Timer::setInterrupt(TimerInterrupt interrupt)
 
 void Timer::setPrescalar(TimerPrescalar prescalar)
 {
+    // TODO: do we allow the setting of prescalar 0 ?
+    //  would need to handle the stopping of the timer
     _runningPrescalar = prescalar;
     if (isRunning())
         applyPrescalar(_runningPrescalar);
 }
 
-void Timer::applyInterrupt(TimerInterrupt interrupt) {
-switch (interrupt)
+void Timer::applyInterrupt(TimerInterrupt interrupt)
+{
+    switch (interrupt)
     {
     case TimerInterrupt::NONE:
         *_params.interruptMask &= ~(1 << OCIE0A | 1 << OCIE0B);
