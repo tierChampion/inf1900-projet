@@ -2,7 +2,7 @@
 #define DEBUG_H
 
 #include <string.h>
-#include <iostream>
+#include <stdio.h>
 
 #include "comm.h"
 
@@ -14,7 +14,6 @@
 
 #endif
 
-void display(std::string x) {
-}
+void display(uint8_t x);
 
 #endif
