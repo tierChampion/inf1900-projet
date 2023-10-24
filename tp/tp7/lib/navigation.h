@@ -1,5 +1,4 @@
 #include "wheel.h"
-
 class Navigation // PB3-PB4-TIMER0 occupied | speed unit is percentage from -100 to 100
 {
 public:

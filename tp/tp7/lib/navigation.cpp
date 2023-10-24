@@ -12,10 +12,10 @@ void Navigation::turn(Side direction, uint8_t speed)
     {
     case Side::LEFT:
         _leftWheel.setSpeed(0);
-        _rightWheel.setSpeed((int8_t)fabs(speed));
+        _rightWheel.setSpeed((int8_t)speed);
         break;
     case Side::RIGHT:
-        _leftWheel.setSpeed((int8_t)fabs(speed));
+        _leftWheel.setSpeed((int8_t)speed);
         _rightWheel.setSpeed(0);
     default:
         break;

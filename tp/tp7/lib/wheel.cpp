@@ -20,10 +20,10 @@ void Wheel::setSpeed(int8_t speed)
     switch (_side)
     {
     case Side::RIGHT:
-        OCR0A = (255 * fabs(speed)) / 100;
+        OCR0A = (255 * abs(speed)) / 100;
         break;
     case Side::LEFT:
-        OCR0B = (255 * fabs(speed)) / 100;
+        OCR0B = (255 * abs(speed)) / 100;
         break;
     default:
         break;

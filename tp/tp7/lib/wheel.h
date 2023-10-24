@@ -1,18 +1,12 @@
-#include "avr_useful_lib.h"
+#include "PinRegister.h"
 
-typedef volatile uint8_t *Register;
+#include <avr/interrupt.h>
 enum Side
 {
     RIGHT,
     LEFT
 };
-struct Pin
-{
-    Pin(Register mode_, Register port_, uint8_t pin_);
-    Register mode;
-    Register port;
-    uint8_t pin;
-};
+
 class Wheel
 {
 public:
