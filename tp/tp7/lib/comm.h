@@ -7,7 +7,7 @@ class Comm {
     public:
         Comm();
 
-        void transmitData(const uint8_t* data, uint8_t length);
+        static void transmitData(const uint8_t* data, uint8_t length);
 };
 
 #endif
