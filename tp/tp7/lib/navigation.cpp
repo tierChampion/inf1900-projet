@@ -1,6 +1,6 @@
 #include "navigation.h"
 
-Navigation::Navigation(Pin dirRightPin = Pin(&DDRB, &PORTB, PB5), Pin dirLeftPin = Pin(&DDRB, &PORTB, PB6))
+Navigation::Navigation(Pin dirRightPin, Pin dirLeftPin)
 {
     _leftWheel = Wheel(dirLeftPin, Side::LEFT);
     _rightWheel = Wheel(dirRightPin, Side::RIGHT);
