@@ -1,5 +1,5 @@
 #include "wheel.h"
-
+#include <math.h>
 Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(side)
 {
     DDRB |= (1 << PB3 | 1 << PB4);
