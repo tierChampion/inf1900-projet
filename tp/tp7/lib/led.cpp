@@ -19,6 +19,8 @@ void Led::setColor(LedColor color)
     case LedColor::RED:
         setRed();
         break;
+
+    default: break;
     }
 }
 
