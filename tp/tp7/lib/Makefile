@@ -137,6 +137,10 @@ all: $(TRG)
 $(TRG): $(OBJDEPS)
 	$(AR) $(ARFLAGS) $(TRG) $(OBJDEPS)
 
+debug: CXXFLAGS += -DDEBUG -g
+debug: CCFLAGS += -DDEBUG -g
+debug: $(TRG)
+
 # Production des fichiers object
 # De C a objet
 %.o: %.c

@@ -144,6 +144,10 @@ $(TRG): $(OBJDEPS)
 	$(CC) $(LDFLAGS) -o $(TRG) $(OBJDEPS) \
 	-lm $(LIBS) -L $(LIBDIR)
 
+debug: CXXFLAGS += -DDEBUG -g
+debug: CCFLAGS += -DDEBUG -g
+debug: $(TRG) $(HEXROMTRG)
+
 # Production des fichiers object
 # De C a objet
 %.o: %.c
