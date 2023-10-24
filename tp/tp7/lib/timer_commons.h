@@ -9,12 +9,6 @@ typedef volatile uint8_t *Register;
 struct TimerParameters
 {
     uint8_t _timerId;
-    // TODO: these three registers wont work on TIMER1 since 
-    //  they are 16 bits.
-    Register _counter;
-    Register _compareA;
-    Register _compareB;
-    //
     Register _controlA;
     Register _controlB;
     Register _controlC;
@@ -49,7 +43,9 @@ enum class TimerPrescalar {
     STOPPED,
     NO_PRESCALAR,
     EIGHT,
+    THIRTY_TWO,
     SIXTY_FOUR,
+    ONE_TWENTY_EIGHT,
     TWO_FIFTY_SIX,
     THOUSAND_TWENTY_FOUR
 };
