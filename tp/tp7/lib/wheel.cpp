@@ -1,8 +1,5 @@
 #include "wheel.h"
 
-Pin::Pin(Register mode_, Register port_, uint8_t pin_)
-{
-}
 Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(side)
 {
     DDRB |= (1 << PB3 | 1 << PB4);
@@ -23,17 +20,17 @@ void Wheel::setSpeed(int8_t speed)
     switch (_side)
     {
     case Side::RIGHT:
-        OCR0A = (255 * abs(speed)) / 100;
+        OCR0A = (255 * fabs(speed)) / 100;
         break;
     case Side::LEFT:
-        OCR0B = (255 * abs(speed)) / 100;
+        OCR0B = (255 * fabs(speed)) / 100;
         break;
     default:
         break;
     }
 }
 
-int8_t Wheel::getSpeed()
+int8_t Wheel::getSpeed() const
 {
     return _speed;
 }
