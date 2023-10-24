@@ -5,10 +5,21 @@
 
 typedef volatile uint8_t *Register;
 
-class Led {
+enum class LedColor
+{
+    OFF,
+    GREEN,
+    RED
+};
+
+class Led
+{
 public:
     Led(Register port, Register mode, uint8_t pinGreen, uint8_t pinRed);
 
+    void setColor(LedColor color);
+
+private:
     void setOff();
     void setGreen();
     void setRed();
