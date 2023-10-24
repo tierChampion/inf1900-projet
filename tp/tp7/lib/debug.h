@@ -6,8 +6,6 @@
 
 #include "comm.h"
 
-#define DEBUG
-
 #ifdef DEBUG
 #define PRINT(x) display(x)
 
