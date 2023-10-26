@@ -3,17 +3,17 @@
 #include <util/delay.h>
 int main()
 {
+    Navigation navigation{Pin(&DDRB, &PORTB, &PINB, PB5), Pin(&DDRB, &PORTB, &PINB, PB6)};
     while (true)
     {
-        Navigation navigation{Pin(&DDRB, &PORTB, PB5), Pin(&DDRB, &PORTB, PB6)};
-        navigation.go(50);
-        _delay_ms(2000);
-        navigation.go(-50);
-        _delay_ms(2000);
-        navigation.turn(Side::LEFT, 50);
-        _delay_ms(1000);
-        navigation.turn(Side::RIGHT, 50);
-        _delay_ms(1000);
+        navigation.move(Direction::FORWARD, 50);
+        _delay_ms(7000);
+        navigation.move(Direction::BACKWARD, 50);
+        _delay_ms(7000);
+        navigation.turn(Direction::LEFT, 50);
+        _delay_ms(4000);
+        navigation.turn(Direction::RIGHT, 50);
+        _delay_ms(4000);
     }
     return 0;
 }

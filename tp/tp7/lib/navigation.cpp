@@ -4,34 +4,40 @@ Navigation::Navigation(Pin dirRightPin, Pin dirLeftPin)
 {
     _leftWheel = Wheel(dirLeftPin, Side::LEFT);
     _rightWheel = Wheel(dirRightPin, Side::RIGHT);
+    PRINT("Creation of a Navigation object done");
 }
 
-void Navigation::turn(Side direction, uint8_t speed)
+Navigation::~Navigation()
+{
+    PRINT("Destruction of a Navigation object done");
+}
+
+void Navigation::turn(Direction direction, uint8_t speed)
 {
     switch (direction)
     {
-    case Side::LEFT:
-        _leftWheel.setSpeed(0);
-        _rightWheel.setSpeed((int8_t)speed);
+    case Direction::LEFT:
+        _leftWheel.setSpeed(Direction::FORWARD, 0);
+        _rightWheel.setSpeed(Direction::FORWARD, speed);
         break;
-    case Side::RIGHT:
-        _leftWheel.setSpeed((int8_t)speed);
-        _rightWheel.setSpeed(0);
+    case Direction::RIGHT:
+        _leftWheel.setSpeed(Direction::FORWARD, speed);
+        _rightWheel.setSpeed(Direction::FORWARD, 0);
     default:
         break;
     }
 }
 
-void Navigation::go(int8_t speed)
+void Navigation::move(Direction direction, uint8_t speed)
 {
 
-    _leftWheel.setSpeed(speed);
-    _rightWheel.setSpeed(speed);
+    _leftWheel.setSpeed(direction, speed);
+    _rightWheel.setSpeed(direction, speed);
 }
 
 void Navigation::stop()
 {
-    go(0);
+    move(Direction::FORWARD, 0);
 }
 
 void Navigation::setDirPin(Side side, Pin directionPin)
@@ -46,5 +52,17 @@ void Navigation::setDirPin(Side side, Pin directionPin)
         break;
     default:
         break;
+    }
+}
+
+Pin Navigation::getDirPin(Side side) const
+{
+    switch (side)
+    {
+    case Side::RIGHT:
+        return _rightWheel.getDirPin();
+
+    default:
+        return _leftWheel.getDirPin();
     }
 }
