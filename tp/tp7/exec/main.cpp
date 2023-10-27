@@ -10,9 +10,9 @@ int main()
         _delay_ms(7000);
         navigation.move(Direction::BACKWARD, 50);
         _delay_ms(7000);
-        navigation.turn(Direction::LEFT, 50);
+        navigation.turn(Direction::LEFT_DIR, 50);
         _delay_ms(4000);
-        navigation.turn(Direction::RIGHT, 50);
+        navigation.turn(Direction::RIGHT_DIR, 50);
         _delay_ms(4000);
     }
     return 0;

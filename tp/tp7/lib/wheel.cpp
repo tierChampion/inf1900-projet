@@ -31,10 +31,10 @@ void Wheel::setSpeed(Direction direction, uint8_t speed)
     }
     switch (_side)
     {
-    case Side::RIGHT:
+    case Side::RIGHT_WHEEL:
         OCR0A = (uint8_t)(255 * speed / 100);
         break;
-    case Side::LEFT:
+    case Side::LEFT_WHEEL:
         OCR0B = (uint8_t)(255 * speed / 100);
         break;
     default:

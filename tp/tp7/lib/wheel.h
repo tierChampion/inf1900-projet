@@ -4,20 +4,20 @@
 #define WHEEL_H
 enum Side
 {
-    RIGHT,
-    LEFT
+    RIGHT_WHEEL,
+    LEFT_WHEEL
 };
 enum Direction
 {
     FORWARD,
     BACKWARD,
-    RIGHT,
-    LEFT
+    RIGHT_DIR,
+    LEFT_DIR
 };
 class Wheel
 {
 public:
-    Wheel(Pin directionPin = Pin(&DDRB, &PORTB, &PINB, PB5), Side side = Side::RIGHT);
+    Wheel(Pin directionPin = Pin(&DDRB, &PORTB, &PINB, PB5), Side side = Side::RIGHT_WHEEL);
     ~Wheel();
     void setSpeed(Direction direction, uint8_t speed);
     uint8_t getSpeed() const;
