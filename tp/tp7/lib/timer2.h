@@ -10,7 +10,7 @@ class Timer2
 {
 public:
 
-    Timer2(TimerParameters parameters);
+    Timer2(TimerControls parameters);
 
     void start();
     void stop();
@@ -35,10 +35,8 @@ private:
     Register _counter;
     Register _compareA;
     Register _compareB;
-    TimerParameters _params;
-    TimerWaveMode _waveMode;
-    TimerInterrupt _runningInterrupt;
-    TimerPrescalar _runningPrescalar;
+    TimerControls _controls;
+    TimerSettings _settings;
 };
 
 #endif

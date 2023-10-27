@@ -14,8 +14,8 @@ struct Pin
     Register pin;
     uint8_t position;
 
-    Pin();
-    Pin(Register modeP, Register portP, Register pinP, uint8_t positionP);
+    //Pin();
+    //Pin(Register modeP, Register portP, Register pinP, uint8_t positionP);
 };
 
 #endif

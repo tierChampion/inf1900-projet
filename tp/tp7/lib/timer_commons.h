@@ -6,15 +6,6 @@
 
 #include "PinRegister.h"
 
-struct TimerParameters
-{
-    uint8_t _timerId;
-    Register _controlA;
-    Register _controlB;
-    Register _controlC;
-    Register _interruptMask;
-};
-
 enum class TimerWaveMode {
     NORMAL,
     CTC,
@@ -50,36 +41,18 @@ enum class TimerPrescalar {
     THOUSAND_TWENTY_FOUR
 };
 
-class Timer
+struct TimerControls
 {
-public:
+    Register _controlA;
+    Register _controlB;
+    Register _interruptMask;
+};
 
-    Timer(TimerParameters parameters);
-
-    void start();
-    void stop();
-    bool isRunning() const;
-
-    void setCounterValue(uint16_t value);
-    void setCompareValue(TimerCompare compare, uint16_t value);
-
-    void setWaveMode(TimerWaveMode mode);
-    void setCompareMode(TimerCompare compare, TimerCompareMode mode);
-    void setInterrupt(TimerInterrupt interrupt);
-    void setPrescalar(TimerPrescalar prescalar);
-
-private:
-
-    void applyInterrupt(TimerInterrupt interrupt);
-    void applyPrescalar(TimerPrescalar prescalar);
-
-private:
-
-    bool _isTicking;
-    TimerParameters _params;
+struct TimerSettings
+{
     TimerWaveMode _waveMode;
-    TimerInterrupt _runningInterrupt;
-    TimerPrescalar _runningPrescalar;
+    TimerInterrupt _interrupt;
+    TimerPrescalar _prescalar;
 };
 
 #endif
