@@ -35,7 +35,7 @@ PRJSRC= $(wildcard *.cpp)
 INC=-I ../lib
 
 # Libraires a lier (ex: -lmylib)
-LIBS=-l _tp7
+LIBS=-l robot
 
 # Niveau d'optimization
 # Utilisez s (size opt), 1, 2, 3 ou 0 (off)
