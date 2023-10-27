@@ -1,38 +1,38 @@
+#define F_CPU 8000000UL
+#ifndef BUTTON_H
+#define BUTTON_H
 #include <avr/io.h>
-typedef volatile uint8_t *Register
+#include <util/delay.h>
+#include <avr/interrupt.h>
+#include "PinRegister.h"
 
-enum Edges
+// typedef volatile uint8_t *Register;
+
+enum class Edges
 {
     FALLING_EDGE,
     RISING_EDGE,
     ANY_EDGE
 };
 
-enum Interruption
+enum class Interruption
 {
-    INT0,
-    INT1,
-    INT2
-};
-
-struct Pin
-{
-    Pin(Register mode_, Register port_, Register pin_, uint8_t position);
-    Register mode;
-    Register port;
-    Register pin;
-    uint8_t position;
+    INT_0,
+    INT_1,
+    INT_2
 };
 
 class Button
 {
 public:
-Button(Pin pin);
- 
-bool isButtonPressed();
-void setOnInterrupt();
-void setOffInterrupt();
+    Button(const Pin &pin);
+
+    bool isButtonPressed();
+    void setOnInterrupt(Edges edge, Interruption interrupt);
+    void setOffInterrupt();
 
 private:
-struct Pin pin_;
+    Pin _pin;
+    static const uint8_t DEBOUNCE_DELAY = 20;
 };
+#endif // BUTTON_H

@@ -8,8 +8,6 @@ typedef volatile uint8_t *Register;
 
 struct Pin
 {
-    Pin(Register mode_, Register port_, Register pin_, uint8_t position_);
-
     Register mode;
     Register port;
     Register pin;
