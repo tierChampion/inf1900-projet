@@ -27,25 +27,25 @@ void Button::setInterrupt(Interruption interrupt, Edges edge)
         EIMSK |= (1 << INT1);
     }
     else
-        (Interruption::INT_2 == interrupt)
-        {
-            setEICRA(ISC20, ISC21, edge);
-            EIMSK |= (1 << INT2);
-        }
+    {
+        setEICRA(ISC20, ISC21, edge);
+        EIMSK |= (1 << INT2);
+    }
 }
 
-void Button::setEICRA(uint8_t &flagRising, uint8_t &flagFalling, Edges edge)
+void Button::setEICRA(uint8_t flagRising, uint8_t flagFalling, Edges edge)
 {
     switch (edge)
     {
     case Edges::FALLING_EDGE:
         EICRA |= (1 << flagFalling);
-
+        break;
     case Edges::RISING_EDGE:
         EICRA |= (1 << flagRising | 1 << flagFalling);
-
+        break;
     case Edges::ANY_EDGE:
         EICRA |= (1 << flagRising);
+        break;
     }
 }
 

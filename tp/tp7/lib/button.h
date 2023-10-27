@@ -28,15 +28,12 @@ public:
     Button(const Pin &pin);
 
     bool isButtonPressed();
-    void setEICRA(uint8_t &flagRising, uint8_t &flagFalling, Edges edge);
+    void setEICRA(uint8_t flagRising, uint8_t flagFalling, Edges edge);
     void setInterrupt(Interruption interrupt, Edges edge);
     void setOffInterrupt();
 
 private:
     Pin _pin;
     static const uint8_t DEBOUNCE_DELAY = 20;
-    uint8_t flagRising = 0;
-    uint8_t flagFalling = 0;
 };
-
 #endif
