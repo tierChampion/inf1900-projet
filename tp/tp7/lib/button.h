@@ -6,7 +6,7 @@
 #include <avr/interrupt.h>
 #include "PinRegister.h"
 
-// typedef volatile uint8_t *Register;
+typedef volatile uint8_t *Register;
 
 enum class Edges
 {
@@ -28,12 +28,15 @@ public:
     Button(const Pin &pin);
 
     bool isButtonPressed();
-    void setOnInterrupt(Edges edge, Interruption interrupt);
+    void setEICRA(uint8_t &flagRising, uint8_t &flagFalling, Edges edge);
+    void setInterrupt(Interruption interrupt, Edges edge);
     void setOffInterrupt();
 
 private:
     Pin _pin;
     static const uint8_t DEBOUNCE_DELAY = 20;
+    uint8_t flagRising = 0;
+    uint8_t flagFalling = 0;
 };
 
 #endif
