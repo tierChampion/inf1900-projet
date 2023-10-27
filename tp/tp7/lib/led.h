@@ -1,7 +1,10 @@
 #ifndef LED_H
 #define LED_H
+
 #include <avr/io.h>
+
 typedef volatile uint8_t *Register;
+
 enum class LedColor
 {
     OFF,

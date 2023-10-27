@@ -33,7 +33,7 @@ void display(float x)
     Comm::transmitData((uint8_t *)str, strlen(str));
 }
 
-void display(char *x)
+void display(const char *x)
 {
     char str[80];
     sprintf(str, "Debug message (char): %s\n", x);
