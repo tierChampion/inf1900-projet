@@ -4,7 +4,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-typedef volatile uint8_t *Register;
+#include "PinRegister.h"
 
 struct TimerParameters
 {

@@ -79,7 +79,7 @@ HEXFORMAT=ihex
 CFLAGS=-I. -I/usr/include/simavr -MMD $(INC) -g -mmcu=$(MCU) -O$(OPTLEVEL) \
 	-std=c++14 -fpack-struct -fshort-enums \
 	-funsigned-bitfields -funsigned-char \
-	-Wall
+	-Wall -DF_CPU=8000000UL
 
 # Flag supplémentaire pour retirer le bogue de "array subscript 0 is outside 
 # array bounds" sur avr-gcc v12
