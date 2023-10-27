@@ -1,23 +1,27 @@
-#include "PinRegister.h"
-#include <avr/interrupt.h>
+
 #ifndef WHEEL_H
 #define WHEEL_H
-enum Side
+#include "PinRegister.h"
+#include <avr/interrupt.h>
+
+enum class Side
 {
-    RIGHT_WHEEL,
-    LEFT_WHEEL
+    RIGHT,
+    LEFT
 };
-enum Direction
+
+enum class Direction
 {
     FORWARD,
     BACKWARD,
-    RIGHT_DIR,
-    LEFT_DIR
+    RIGHT,
+    LEFT
 };
+
 class Wheel
 {
 public:
-    Wheel(Pin directionPin = Pin(&DDRB, &PORTB, &PINB, PB5), Side side = Side::RIGHT_WHEEL);
+    Wheel(Pin directionPin = Pin(&DDRB, &PORTB, &PINB, PB5), Side side = Side::RIGHT);
     ~Wheel();
     void setSpeed(Direction direction, float speed);
     Pin getDirPin() const;
@@ -25,6 +29,6 @@ public:
 
 private:
     struct Pin _directionPin;
-    uint8_t _side;
+    Side _side;
 };
 #endif

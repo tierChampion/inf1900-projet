@@ -6,7 +6,7 @@ Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(s
     TCCR0B |= (1 << CS01);
     switch (_side)
     {
-    case Side::LEFT_WHEEL:
+    case Side::LEFT:
         DDRB |= (1 << PB3);
         TCCR0A |= (1 << COM0A1);
         break;
@@ -27,7 +27,7 @@ Wheel::~Wheel()
     TCCR0B &= ~(1 << CS01);
     switch (_side)
     {
-    case Side::LEFT_WHEEL:
+    case Side::LEFT:
         TCCR0A &= ~(1 << COM0A1);
         break;
 
@@ -56,10 +56,10 @@ void Wheel::setSpeed(Direction direction, float speed)
     }
     switch (_side)
     {
-    case Side::RIGHT_WHEEL:
+    case Side::RIGHT:
         OCR0A = (uint8_t)(255 * speed / 100);
         break;
-    case Side::LEFT_WHEEL:
+    case Side::LEFT:
         OCR0B = (uint8_t)(255 * speed / 100);
         break;
     default:
