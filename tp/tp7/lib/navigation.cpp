@@ -4,12 +4,14 @@ Navigation::Navigation(Pin dirRightPin, Pin dirLeftPin)
 {
     _leftWheel = Wheel(dirLeftPin, Side::LEFT_WHEEL);
     _rightWheel = Wheel(dirRightPin, Side::RIGHT_WHEEL);
-    PRINT("Creation of a Navigation object done");
+    char string[] = "Creation of a Navigation object done";
+    PRINT(string);
 }
 
 Navigation::~Navigation()
 {
-    PRINT("Destruction of a Navigation object done");
+    char string[] = "Destruction of a Navigation object done";
+    PRINT(string);
 }
 
 void Navigation::turn(Direction direction, uint8_t speed)

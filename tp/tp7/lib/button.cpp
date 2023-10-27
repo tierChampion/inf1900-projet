@@ -1,3 +1,4 @@
+/*
 #include "button.h"
 #include <util/delay.h>
 Pin::Pin(Register mode_, Register port_, Register pin_, uint8_t position)
@@ -90,4 +91,4 @@ void Button::setOffInterrupt()
     EIMSK &= ~(1 << INT2);
 }
 
-
+*/

@@ -1,4 +1,4 @@
-#include <avr/io.h>
+/*#include <avr/io.h>
 typedef volatile uint8_t *Register
 
 enum Edges
@@ -28,7 +28,7 @@ class Button
 {
 public:
 Button(Pin pin);
- 
+
 bool isButtonPressed();
 void setOnInterrupt();
 void setOffInterrupt();
@@ -36,3 +36,4 @@ void setOffInterrupt();
 private:
 struct Pin pin_;
 };
+*/

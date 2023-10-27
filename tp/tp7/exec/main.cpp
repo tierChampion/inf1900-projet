@@ -1,3 +1,4 @@
+#define F_CPU 8000000UL
 #include <led.h>
 #include <navigation.h>
 #include <util/delay.h>
