@@ -44,7 +44,7 @@ void Timer2::setCompareValue(TimerCompare compare, uint8_t value)
         *_compareA = value;
         break;
     case TimerCompare::B:
-        *_compareB = value; 
+        *_compareB = value;
         break;
     }
 }
@@ -87,14 +87,14 @@ void Timer2::setCompareMode(TimerCompare compare, TimerCompareMode mode)
     case TimerCompareMode::TOGGLE:
         if (_waveMode != TimerWaveMode::PWM_PHASE_CORRECT)
         {
-            *_params._controlA &= ~(1 << compareFlag0);
-            *_params._controlA |= (1 << compareFlag1);
+            *_params._controlA &= ~(1 << compareFlag1);
+            *_params._controlA |= (1 << compareFlag0);
         }
         break;
 
     case TimerCompareMode::CLEAR:
-        *_params._controlA &= ~(1 << compareFlag1);
-        *_params._controlA |= (1 << compareFlag0);
+        *_params._controlA &= ~(1 << compareFlag0);
+        *_params._controlA |= (1 << compareFlag1);
         break;
     }
 }
@@ -108,7 +108,7 @@ void Timer2::setInterrupt(TimerInterrupt interrupt)
 
 void Timer2::setPrescalar(TimerPrescalar prescalar)
 {
-    if (prescalar == TimerPrescalar::STOPPED) 
+    if (prescalar == TimerPrescalar::STOPPED)
         stop();
 
     _runningPrescalar = prescalar;
@@ -158,7 +158,7 @@ void Timer2::applyPrescalar(TimerPrescalar prescalar)
         *_params._controlB |= (1 << CS21);
         break;
 
-        case TimerPrescalar::THIRTY_TWO:
+    case TimerPrescalar::THIRTY_TWO:
         *_params._controlB &= ~(1 << CS22);
         *_params._controlB |= (1 << CS20 | 1 << CS21);
         break;

@@ -88,14 +88,14 @@ void Timer1::setCompareMode(TimerCompare compare, TimerCompareMode mode)
     case TimerCompareMode::TOGGLE:
         if (_waveMode != TimerWaveMode::PWM_PHASE_CORRECT)
         {
-            *_params._controlA &= ~(1 << compareFlag0);
-            *_params._controlA |= (1 << compareFlag1);
+            *_params._controlA |= (1 << compareFlag0);
+            *_params._controlA &= ~(1 << compareFlag1);
         }
         break;
 
     case TimerCompareMode::CLEAR:
-        *_params._controlA &= ~(1 << compareFlag1);
-        *_params._controlA |= (1 << compareFlag0);
+        *_params._controlA &= ~(1 << compareFlag0);
+        *_params._controlA |= (1 << compareFlag1);
         break;
     }
 }
