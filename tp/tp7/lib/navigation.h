@@ -5,10 +5,10 @@
 class Navigation
 {
 public:
-    Navigation(Pin dirRightPin, Pin dirLeftPin);
+    Navigation(Pin dirLeftPin, Pin dirRightPin);
     ~Navigation();
-    void turn(Direction direction, uint8_t speed);
-    void move(Direction direction, uint8_t speed);
+    void turn(Direction direction, float speed);
+    void move(Direction direction, float speed);
     void stop();
     void setDirPin(Side side, Pin directionPin);
     Pin getDirPin(Side side) const;

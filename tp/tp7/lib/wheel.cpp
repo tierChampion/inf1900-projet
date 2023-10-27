@@ -39,7 +39,7 @@ Wheel::~Wheel()
     PRINT(string);
 }
 
-void Wheel::setSpeed(Direction direction, uint8_t speed)
+void Wheel::setSpeed(Direction direction, float speed)
 {
     //_speed = std::pair(direction, speed);
     switch (direction)
@@ -65,11 +65,6 @@ void Wheel::setSpeed(Direction direction, uint8_t speed)
     default:
         break;
     }
-}
-
-uint8_t Wheel::getSpeed() const
-{
-    return 0; //_speed;
 }
 
 Pin Wheel::getDirPin() const

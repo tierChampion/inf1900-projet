@@ -4,7 +4,7 @@
 #include <util/delay.h>
 int main()
 {
-    Navigation navigation{Pin(&DDRB, &PORTB, &PINB, PB5), Pin(&DDRB, &PORTB, &PINB, PB6)};
+    Navigation navigation{Pin(&DDRB, &PORTB, &PINB, PB6), Pin(&DDRB, &PORTB, &PINB, PB2)};
     while (true)
     {
         navigation.move(Direction::FORWARD, 50);

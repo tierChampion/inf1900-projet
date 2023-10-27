@@ -19,14 +19,12 @@ class Wheel
 public:
     Wheel(Pin directionPin = Pin(&DDRB, &PORTB, &PINB, PB5), Side side = Side::RIGHT_WHEEL);
     ~Wheel();
-    void setSpeed(Direction direction, uint8_t speed);
-    uint8_t getSpeed() const;
+    void setSpeed(Direction direction, float speed);
     Pin getDirPin() const;
     void setDirectionPin(Pin directionPin);
 
 private:
     struct Pin _directionPin;
     uint8_t _side;
-    // pair<Direction, uint8_t> _speed;
 };
 #endif
