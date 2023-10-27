@@ -17,7 +17,7 @@ void display(uint16_t x)
     Comm::transmitData((uint8_t *)str, strlen(str));
 }
 
-void display(float x)
+void display(double x)
 {
     char str[80];
     sprintf(str, "Debug message: %f\n", x);

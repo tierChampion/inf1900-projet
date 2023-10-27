@@ -1,21 +1,45 @@
 #include "wheel.h"
 Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(side)
 {
-    DDRB |= (1 << PB3 | 1 << PB4);
     TCNT0 = 0;
-    TCCR0A |= (1 << WGM00) | (1 << COM0A1) | (1 << COM0B1);
+    TCCR0A |= (1 << WGM00);
     TCCR0B |= (1 << CS01);
-    //_speed = 0;
+    switch (_side)
+    {
+    case Side::LEFT:
+        DDRB |= (1 << PB3);
+        TCCR0A |= (1 << COM0A1);
+        break;
+
+    default:
+        DDRB |= (1 << PB4);
+        TCCR0A = (1 << COM0B1);
+        break;
+    }
     *_directionPin.mode |= (1 << _directionPin.position);
-    PRINT("Creation of a Wheel object done");
+    char string[] = "Creation of a Wheel object done";
+    PRINT(string);
 }
 
 Wheel::~Wheel()
 {
-    PRINT("Destruction of a Wheel object done");
+    TCCR0A &= ~(1 << WGM00);
+    TCCR0B &= ~(1 << CS01);
+    switch (_side)
+    {
+    case Side::LEFT:
+        TCCR0A &= ~(1 << COM0A1);
+        break;
+
+    default:
+        TCCR0A &= ~(1 << COM0B1);
+        break;
+    }
+    char string[] = "Destruction of a Wheel object done";
+    PRINT(string);
 }
 
-void Wheel::setSpeed(Direction direction, uint8_t speed)
+void Wheel::setSpeed(Direction direction, float speed)
 {
     //_speed = std::pair(direction, speed);
     switch (direction)
@@ -27,7 +51,8 @@ void Wheel::setSpeed(Direction direction, uint8_t speed)
         *_directionPin.port &= ~(1 << _directionPin.position);
         break;
     default:
-        PRINT(("Can Only use FORWARD OR BACKWARD to set a wheel speed .\n Use Navigation.turn to turn".c_str()));
+        char string[] = "Can Only use FORWARD OR BACKWARD to set a wheel speed .\n Use Navigation.turn to turn";
+        PRINT(string);
     }
     switch (_side)
     {
@@ -42,11 +67,6 @@ void Wheel::setSpeed(Direction direction, uint8_t speed)
     }
 }
 
-uint8_t Wheel::getSpeed() const
-{
-    return 0; //_speed;
-}
-
 Pin Wheel::getDirPin() const
 {
     return _directionPin;
@@ -55,12 +75,4 @@ Pin Wheel::getDirPin() const
 void Wheel::setDirectionPin(Pin directionPin)
 {
     _directionPin = directionPin;
-}
-
-Pin::Pin(Register mode_, Register port_, Register pin_, uint8_t position_)
-{
-    mode = mode_;
-    port = port_;
-    position = position_;
-    pin = pin_;
 }

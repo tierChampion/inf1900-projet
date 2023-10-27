@@ -35,4 +35,5 @@ private:
     Pin _pin;
     static const uint8_t DEBOUNCE_DELAY = 20;
 };
-#endif // BUTTON_H
+
+#endif
