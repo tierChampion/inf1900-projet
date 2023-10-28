@@ -24,8 +24,8 @@ private:
     void setRed();
 
 private:
-    volatile uint8_t *_port;
-    volatile uint8_t *_mode;
+    Register _port;
+    Register _mode;
     uint8_t _pinGreen;
     uint8_t _pinRed;
 };
