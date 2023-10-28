@@ -7,15 +7,14 @@
 typedef volatile uint8_t *Register;
 typedef volatile uint16_t* DoubleRegister;
 
+typedef uint8_t Flag;
+
 struct Pin
 {
     Register mode;
     Register port;
     Register pin;
     uint8_t position;
-
-    //Pin();
-    //Pin(Register modeP, Register portP, Register pinP, uint8_t positionP);
 };
 
 #endif

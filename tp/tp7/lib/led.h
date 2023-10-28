@@ -3,7 +3,7 @@
 
 #include <avr/io.h>
 
-typedef volatile uint8_t *Register;
+#include "PinRegister.h"
 
 enum class LedColor
 {
@@ -11,13 +11,14 @@ enum class LedColor
     GREEN,
     RED
 };
+
 class Led
 {
 public:
     Led(Register port, Register mode, uint8_t pinGreen, uint8_t pinRed);
     void setColor(LedColor color);
 
-public:
+private:
     void setOff();
     void setGreen();
     void setRed();
