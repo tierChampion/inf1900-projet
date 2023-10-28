@@ -4,7 +4,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#include "PinRegister.h"
+#include "commons.h"
 #include "general_interrupt.h"
 
 class Button

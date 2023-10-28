@@ -1,7 +1,7 @@
 #ifndef GENERAL_INTERRUPT_H
 #define GENERAL_INTERRUPT_H
 
-#include "PinRegister.h"
+#include "commons.h"
 
 enum class GeneralInterruptType
 {
