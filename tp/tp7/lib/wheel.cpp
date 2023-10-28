@@ -1,40 +1,36 @@
 #include "wheel.h"
 Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(side)
 {
-    TCNT0 = 0;
-    TCCR0A |= (1 << WGM00);
-    TCCR0B |= (1 << CS01);
+    TimerControls params;
+    params._controlA = &TCCR0A;
+    params._controlB = &TCCR0B;
+    params._interruptMask = &TIMSK0;
+    _timerPWM = Timer0(params);
+    _timerPWM.setCounterValue(0);
+    _timerPWM.setPrescalar(TimerPrescalar::NO_PRESCALAR);
+    _timerPWM.setWaveMode(TimerWaveMode::PWM_PHASE_CORRECT);
+
     switch (_side)
     {
     case Side::LEFT:
         DDRB |= (1 << PB3);
-        TCCR0A |= (1 << COM0A1);
+        _timerPWM.setCompareMode(TimerCompare::A, TimerCompareMode::CLEAR);
         break;
 
     default:
         DDRB |= (1 << PB4);
-        TCCR0A = (1 << COM0B1);
+        _timerPWM.setCompareMode(TimerCompare::B, TimerCompareMode::CLEAR);
         break;
     }
     *_directionPin.mode |= (1 << _directionPin.position);
-    PRINT("Creation of a Wheel object done");
+    _timerPWM.start();
+    PRINT("Creation of a Wheel object done\n");
 }
 
 Wheel::~Wheel()
 {
-    TCCR0A &= ~(1 << WGM00);
-    TCCR0B &= ~(1 << CS01);
-    switch (_side)
-    {
-    case Side::LEFT:
-        TCCR0A &= ~(1 << COM0A1);
-        break;
-
-    default:
-        TCCR0A &= ~(1 << COM0B1);
-        break;
-    }
-    PRINT("Destruction of a Wheel object done");
+    _timerPWM.stop();
+    PRINT("Destruction of a Wheel object done\n");
 }
 
 void Wheel::setSpeed(Direction direction, float speed)
@@ -54,10 +50,11 @@ void Wheel::setSpeed(Direction direction, float speed)
     switch (_side)
     {
     case Side::RIGHT:
-        OCR0A = (uint8_t)(255 * speed / 100);
+        _timerPWM.setCompareValue(TimerCompare::B, (uint8_t)(255 * speed / 100));
         break;
     case Side::LEFT:
-        OCR0B = (uint8_t)(255 * speed / 100);
+        _timerPWM.setCompareValue(TimerCompare::A, (uint8_t)(255 * speed / 100));
+
         break;
     default:
         break;

@@ -3,6 +3,7 @@
 
 #include "commons.h"
 #include <avr/interrupt.h>
+#include "timer0.h"
 
 enum class Side
 {
@@ -17,7 +18,6 @@ enum class Direction
     RIGHT,
     LEFT
 };
-
 class Wheel
 {
 public:
@@ -30,5 +30,6 @@ public:
 private:
     struct Pin _directionPin;
     Side _side;
+    Timer0 _timerPWM = Timer0(TimerControls());
 };
 #endif
