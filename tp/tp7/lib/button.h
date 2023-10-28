@@ -5,35 +5,22 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "PinRegister.h"
-
-// typedef volatile uint8_t *Register;
-
-enum class Edges
-{
-    FALLING_EDGE,
-    RISING_EDGE,
-    ANY_EDGE
-};
-
-enum class Interruption
-{
-    INT_0,
-    INT_1,
-    INT_2
-};
+#include "general_interrupt.h"
 
 class Button
 {
 public:
-    Button(const Pin &pin);
+    Button(GeneralInterrupt interrupt, bool activeHigh);
 
-    bool isButtonPressed();
-    void setOnInterrupt(Edges edge, Interruption interrupt);
-    void setOffInterrupt();
+    bool isButtonPressed() const;
+    void setSenseControl(SenseControl control);
+    void enable();
+    void disable();
+    void clearButtonEvents();
 
 private:
     Pin _pin;
-    static const uint8_t DEBOUNCE_DELAY = 20;
+    bool _isActiveHigh;
+    GeneralInterrupt _interrupt;
 };
-
 #endif

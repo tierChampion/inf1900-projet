@@ -1,90 +1,39 @@
 #include "button.h"
 
-Button::Button(const Pin &pin)
+const uint8_t DEBOUNCE_DELAY = 20;
+
+Button::Button(GeneralInterrupt interrupt, bool activeHigh)
+    : _interrupt(interrupt), _isActiveHigh(activeHigh)
 {
-    _pin = pin;
+    _pin = _interrupt.getRequiredPin();
     *_pin.mode &= ~(1 << _pin.position);
 }
 
-bool Button::isButtonPressed()
+bool Button::isButtonPressed() const
 {
-    // verifier que cest egal a 1 a la fin pour confirmer que c<est allume
     uint8_t lecture1 = *_pin.pin & (1 << _pin.position);
     _delay_ms(DEBOUNCE_DELAY);
     uint8_t lecture2 = *_pin.pin & (1 << _pin.position);
-    return (lecture1 && lecture2);
+
+    return (lecture2 == _isActiveHigh) && (lecture1 == lecture2);
 }
 
-void Button::setOnInterrupt(Edges edge, Interruption interrupt)
+void Button::setSenseControl(SenseControl control)
 {
-    cli();
-    switch (interrupt)
-    {
-    case Interruption::INT_0:
-        switch (edge)
-        {
-        case Edges::FALLING_EDGE:
-            EICRA |= (1 << ISC01);
-            EIMSK |= (1 << INT0);
-            break;
-        case Edges::RISING_EDGE:
-            EICRA |= (1 << ISC00);
-            EIMSK |= (1 << INT0);
-            break;
-        case Edges::ANY_EDGE:
-            EICRA |= (1 << ISC00) | (1 << ISC01);
-            EIMSK |= (1 << INT0);
-            break;
-        default:
-            break;
-        }
-        break;
-    case Interruption::INT_1:
-        switch (edge)
-        {
-        case Edges::FALLING_EDGE:
-            EICRA |= (1 << ISC11);
-            EIMSK |= (1 << INT1);
-            break;
-        case Edges::RISING_EDGE:
-            EICRA |= (1 << ISC10) | (1 << ISC11);
-            EIMSK |= (1 << INT1);
-            break;
-        case Edges::ANY_EDGE:
-            EICRA |= (1 << ISC10);
-            EIMSK |= (1 << INT1);
-            break;
-        }
-        break;
-    case Interruption::INT_2:
-        switch (edge)
-        {
-        case Edges::FALLING_EDGE:
-            EICRA |= (1 << ISC21);
-            EIMSK |= (1 << INT2);
-            break;
-        case Edges::RISING_EDGE:
-            EICRA |= (1 << ISC20) | (1 << ISC21);
-            EIMSK |= (1 << INT2);
-            break;
-        case Edges::ANY_EDGE:
-            EICRA |= (1 << ISC20);
-            EIMSK |= (1 << INT2);
-
-            break;
-        default:
-            break;
-        }
-        break;
-    default:
-        break;
-    }
-    sei();
+    _interrupt.setSenseControl(control);
 }
 
-void Button::setOffInterrupt()
+void Button::enable()
 {
-    EIMSK &= ~(1 << INT0);
-    EIMSK &= ~(1 << INT1);
-    EIMSK &= ~(1 << INT2);
+    _interrupt.enable();
+}
+
+void Button::disable()
+{
+    _interrupt.disable();
+}
+
+void Button::clearButtonEvents()
+{
+    _interrupt.clear();
 }

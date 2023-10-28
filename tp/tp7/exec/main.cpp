@@ -1,7 +1,9 @@
 #include <led.h>
-#include <navigation.h>
-#include <util/delay.h>
+#include <button.h>
+
 int main()
 {
     PRINT("oh yeah");
+
+    return 0;
 }
