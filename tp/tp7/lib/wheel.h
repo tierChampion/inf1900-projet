@@ -21,7 +21,7 @@ enum class Direction
 class Wheel
 {
 public:
-    Wheel(Pin directionPin = Pin{&DDRB, &PORTB, &PINB, PB5}, Side side = Side::RIGHT);
+    Wheel(Pin directionPin, Side side);
     ~Wheel();
     void setSpeed(Direction direction, float speed);
     Pin getDirPin() const;

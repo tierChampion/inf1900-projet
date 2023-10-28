@@ -1,6 +1,6 @@
-#define F_CPU 8000000UL
 #ifndef BUTTON_H
 #define BUTTON_H
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -20,7 +20,7 @@ public:
 
 private:
     Pin _pin;
-    bool _isActiveHigh;
     GeneralInterrupt _interrupt;
+    bool _isActiveHigh;
 };
 #endif

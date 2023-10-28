@@ -1,17 +1,15 @@
 #include "navigation.h"
 
-Navigation::Navigation(Pin dirLeftPin, Pin dirRightPin)
+Navigation::Navigation(Pin dirLeftPin, Pin dirRightPin) :
+    _leftWheel(Wheel(dirLeftPin, Side::LEFT)),
+    _rightWheel(Wheel(dirRightPin, Side::RIGHT))
 {
-    _leftWheel = Wheel(dirLeftPin, Side::LEFT);
-    _rightWheel = Wheel(dirRightPin, Side::RIGHT);
-    char string[] = "Creation of a Navigation object done";
-    PRINT(string);
+    PRINT("Creation of a Navigation object done.\n");
 }
 
 Navigation::~Navigation()
 {
-    char string[] = "Destruction of a Navigation object done";
-    PRINT(string);
+    PRINT("Destruction of a Navigation object done.\n");
 }
 
 void Navigation::turn(Direction direction, float speed)
@@ -32,7 +30,6 @@ void Navigation::turn(Direction direction, float speed)
 
 void Navigation::move(Direction direction, float speed)
 {
-
     _leftWheel.setSpeed(direction, speed);
     _rightWheel.setSpeed(direction, speed);
 }

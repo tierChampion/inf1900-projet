@@ -75,8 +75,8 @@ void Timer2::setWaveMode(TimerWaveMode mode)
 
 void Timer2::setCompareMode(TimerCompare compare, TimerCompareMode mode)
 {
-    uint8_t compareFlag0 = ((compare == TimerCompare::A) ? COM2A0 : COM2B0);
-    uint8_t compareFlag1 = ((compare == TimerCompare::A) ? COM2A1 : COM2B1);
+    Flag compareFlag0 = ((compare == TimerCompare::A) ? COM2A0 : COM2B0);
+    Flag compareFlag1 = ((compare == TimerCompare::A) ? COM2A1 : COM2B1);
 
     switch (mode)
     {

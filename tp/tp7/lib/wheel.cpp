@@ -17,8 +17,7 @@ Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(s
         break;
     }
     *_directionPin.mode |= (1 << _directionPin.position);
-    char string[] = "Creation of a Wheel object done";
-    PRINT(string);
+    PRINT("Creation of a Wheel object done");
 }
 
 Wheel::~Wheel()
@@ -35,8 +34,7 @@ Wheel::~Wheel()
         TCCR0A &= ~(1 << COM0B1);
         break;
     }
-    char string[] = "Destruction of a Wheel object done";
-    PRINT(string);
+    PRINT("Destruction of a Wheel object done");
 }
 
 void Wheel::setSpeed(Direction direction, float speed)
@@ -51,8 +49,7 @@ void Wheel::setSpeed(Direction direction, float speed)
         *_directionPin.port &= ~(1 << _directionPin.position);
         break;
     default:
-        char string[] = "Can Only use FORWARD OR BACKWARD to set a wheel speed .\n Use Navigation.turn to turn";
-        PRINT(string);
+        PRINT("Can Only use FORWARD OR BACKWARD to set a wheel speed .\n Use Navigation.turn to turn");
     }
     switch (_side)
     {

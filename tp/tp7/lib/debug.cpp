@@ -1,8 +1,10 @@
-#include <debug.h>
-#include <comm.h>
+#include "debug.h"
+
 #include <stdlib.h> 
 #include <stdio.h>
 #include <math.h>
+
+#include "comm.h"
 
 Comm comm;
 
@@ -15,14 +17,12 @@ void display(uint8_t x)
     Comm::transmitData((uint8_t *)str, strlen(str));
 }
 
-
 void display(uint16_t x)
 {
     char str[80];
     sprintf(str, "Debug message (uint16_t): %u\n", x);
     Comm::transmitData((uint8_t *)str, strlen(str));
 }
-
 
 void display(float x)
 {
@@ -39,5 +39,3 @@ void display(const char *x)
     sprintf(str, "Debug message (char): %s\n", x);
     Comm::transmitData((uint8_t *)str, strlen(str));
 }
-
-

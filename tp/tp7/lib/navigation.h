@@ -15,7 +15,7 @@ public:
     Pin getDirPin(Side side) const;
 
 private:
-    Wheel _rightWheel;
     Wheel _leftWheel;
+    Wheel _rightWheel;
 };
 #endif

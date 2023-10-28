@@ -85,6 +85,8 @@ Pin GeneralInterrupt::getRequiredPin() const
         return Pin{&DDRB, &PORTB, &PINB, PB2};
         break;
     }
+
+    return Pin();
 }
 
 void GeneralInterrupt::debugRequiredPin() const
