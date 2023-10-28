@@ -126,7 +126,7 @@ OBJDEPS=$(CFILES:.c=.o) \
 # En plus de la commande make qui permet de compiler
 # votre projet, vous pouvez utilisez les commandes
 # make all, make install et make clean
-.PHONY: all install clean debug
+.PHONY: all clean debug
 
 # Make all permet simplement de compiler le projet
 #
