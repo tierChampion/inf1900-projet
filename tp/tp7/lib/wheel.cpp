@@ -68,7 +68,7 @@ Pin Wheel::getDirPin() const
     return _directionPin;
 }
 
-void Wheel::setDirectionPin(Pin directionPin)
+void Wheel::setDirPin(Pin directionPin)
 {
     _directionPin = directionPin;
 }

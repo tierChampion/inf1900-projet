@@ -25,7 +25,7 @@ public:
     ~Wheel();
     void setSpeed(Direction direction, float speed);
     Pin getDirPin() const;
-    void setDirectionPin(Pin directionPin);
+    void setDirPin(Pin directionPin);
 
 private:
     struct Pin _directionPin;
