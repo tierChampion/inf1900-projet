@@ -35,9 +35,9 @@ Wheel::~Wheel()
 
 void Wheel::setSpeed(Direction direction, float speed)
 {
-    //_speed = std::pair(direction, speed);
     switch (direction)
     {
+
     case Direction::BACKWARD:
         *_directionPin.port |= (1 << _directionPin.position);
         break;
@@ -45,12 +45,13 @@ void Wheel::setSpeed(Direction direction, float speed)
         *_directionPin.port &= ~(1 << _directionPin.position);
         break;
     default:
-        PRINT("Can Only use FORWARD OR BACKWARD to set a wheel speed .\n Use Navigation.turn to turn");
+        PRINT("Wheel::setSpeed:Can Only use FORWARD OR BACKWARD to set a wheel speed .\n Use Navigation.turn to turn");
     }
     switch (_side)
     {
     case Side::RIGHT:
         _timerPWM.setCompareValue(TimerCompare::B, (uint8_t)(255 * speed / 100));
+
         break;
     case Side::LEFT:
         _timerPWM.setCompareValue(TimerCompare::A, (uint8_t)(255 * speed / 100));
@@ -59,6 +60,7 @@ void Wheel::setSpeed(Direction direction, float speed)
     default:
         break;
     }
+    PRINT("Wheel:Speed has been set\n");
 }
 
 Pin Wheel::getDirPin() const

@@ -1,8 +1,7 @@
 #include "navigation.h"
 
-Navigation::Navigation(Pin dirLeftPin, Pin dirRightPin) :
-    _leftWheel(Wheel(dirLeftPin, Side::LEFT)),
-    _rightWheel(Wheel(dirRightPin, Side::RIGHT))
+Navigation::Navigation(Pin dirLeftPin, Pin dirRightPin) : _leftWheel(Wheel(dirLeftPin, Side::LEFT)),
+                                                          _rightWheel(Wheel(dirRightPin, Side::RIGHT))
 {
     PRINT("Creation of a Navigation object done.\n");
 }
