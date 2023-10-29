@@ -43,10 +43,10 @@ void Navigation::setDirPin(Side side, Pin directionPin)
     switch (side)
     {
     case Side::LEFT:
-        _leftWheel.setDirectionPin(directionPin);
+        _leftWheel.setDirPin(directionPin);
         break;
     case Side::RIGHT:
-        _rightWheel.setDirectionPin(directionPin);
+        _rightWheel.setDirPin(directionPin);
         break;
     default:
         break;
