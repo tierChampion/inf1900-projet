@@ -70,5 +70,6 @@ Pin Wheel::getDirPin() const
 
 void Wheel::setDirPin(Pin directionPin)
 {
+    *_directionPin.mode |= (1 << _directionPin.position);
     _directionPin = directionPin;
 }
