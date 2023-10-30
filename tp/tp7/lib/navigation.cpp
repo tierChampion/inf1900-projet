@@ -1,8 +1,6 @@
 #include "navigation.h"
 
-Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin) :
-    _leftWheel(Wheel(dirLeftPin, Side::LEFT)),
-    _rightWheel(Wheel(dirRightPin, Side::RIGHT))
+Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin) : _leftWheel(Wheel(dirLeftPin, Side::LEFT)), _rightWheel(Wheel(dirRightPin, Side::RIGHT))
 {
     PRINT("Creation of a Navigation object done.\n");
 }
@@ -44,10 +42,10 @@ void Navigation::setDirPin(Side side, WritePin directionPin)
     switch (side)
     {
     case Side::LEFT:
-        _leftWheel.setDirectionPin(directionPin);
+        _leftWheel.setDirPin(directionPin);
         break;
     case Side::RIGHT:
-        _rightWheel.setDirectionPin(directionPin);
+        _rightWheel.setDirPin(directionPin);
         break;
     default:
         break;
