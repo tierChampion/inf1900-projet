@@ -13,12 +13,11 @@ Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(s
     switch (_side)
     {
     case Side::LEFT:
-        DDRB |= (1 << PB3);
+
         _timerPWM.setCompareMode(TimerCompare::A, TimerCompareMode::CLEAR);
         break;
 
     default:
-        DDRB |= (1 << PB4);
         _timerPWM.setCompareMode(TimerCompare::B, TimerCompareMode::CLEAR);
         break;
     }
