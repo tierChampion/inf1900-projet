@@ -1,6 +1,6 @@
 #include "general_interrupt.h"
 
-#include "debug.h"
+#include <avr/interrupt.h>
 
 GeneralInterrupt::GeneralInterrupt(const GeneralInterruptType type)
     : _type(type)
@@ -12,17 +12,23 @@ GeneralInterrupt::GeneralInterrupt(const GeneralInterruptType type)
 
 void GeneralInterrupt::enable()
 {
+    cli();
     EIMSK |= (1 << _maskFlag);
+    sei();
 }
 
 void GeneralInterrupt::disable()
 {
+    cli();
     EIMSK &= ~(1 << _maskFlag);
+    sei();
 }
 
 void GeneralInterrupt::clear()
 {
+    cli();
     EIFR &= ~(1 << _interruptFlag);
+    sei();
 }
 
 void GeneralInterrupt::setFlags()
@@ -46,8 +52,10 @@ void GeneralInterrupt::setFlags()
 
 void GeneralInterrupt::setSenseControl(SenseControl control)
 {
+    cli();
     _control = control;
     applySenseControl();
+    sei();
 }
 
 void GeneralInterrupt::applySenseControl()
