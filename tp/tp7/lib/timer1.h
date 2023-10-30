@@ -10,7 +10,7 @@ class Timer1
 {
 public:
 
-    Timer1(TimerControls parameters);
+    Timer1();
 
     void start();
     void stop();
@@ -32,11 +32,9 @@ private:
 private:
 
     bool _isTicking;
-    DoubleRegister _counter;
-    DoubleRegister _compareA;
-    DoubleRegister _compareB;
-    TimerControls _controls;
-    TimerSettings _settings;
+    TimerWaveMode _waveMode;
+    TimerInterrupt _interrupt;
+    TimerPrescalar _prescalar;
 };
 
 #endif

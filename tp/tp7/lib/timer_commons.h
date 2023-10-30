@@ -41,18 +41,4 @@ enum class TimerPrescalar {
     THOUSAND_TWENTY_FOUR
 };
 
-struct TimerControls
-{
-    Register _controlA;
-    Register _controlB;
-    Register _interruptMask;
-};
-
-struct TimerSettings
-{
-    TimerWaveMode _waveMode;
-    TimerInterrupt _interrupt;
-    TimerPrescalar _prescalar;
-};
-
 #endif

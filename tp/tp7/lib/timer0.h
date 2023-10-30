@@ -11,7 +11,7 @@ class Timer0
 {
 public:
 
-    Timer0(TimerControls parameters);
+    Timer0();
 
     void start();
     void stop();
@@ -33,11 +33,9 @@ private:
 private:
 
     bool _isTicking;
-    Register _counter;
-    Register _compareA;
-    Register _compareB;
-    TimerControls _controls;
-    TimerSettings _settings;
+    TimerWaveMode _waveMode;
+    TimerInterrupt _interrupt;
+    TimerPrescalar _prescalar;
 };
 
 #endif
