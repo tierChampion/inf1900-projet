@@ -1,7 +1,7 @@
 #ifndef WHEEL_H
 #define WHEEL_H
 
-#include "commons.h"
+#include "pins.h"
 #include <avr/interrupt.h>
 
 enum class Side
@@ -21,14 +21,14 @@ enum class Direction
 class Wheel
 {
 public:
-    Wheel(Pin directionPin, Side side);
+    Wheel(WritePin directionPin, Side side);
     ~Wheel();
     void setSpeed(Direction direction, float speed);
-    Pin getDirPin() const;
-    void setDirectionPin(Pin directionPin);
+    WritePin getDirPin() const;
+    void setDirectionPin(WritePin directionPin);
 
 private:
-    struct Pin _directionPin;
+    WritePin _directionPin;
     Side _side;
 };
 #endif

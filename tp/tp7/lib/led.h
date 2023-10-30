@@ -3,7 +3,7 @@
 
 #include <avr/io.h>
 
-#include "commons.h"
+#include "pins.h"
 
 enum class LedColor
 {
@@ -15,7 +15,7 @@ enum class LedColor
 class Led
 {
 public:
-    Led(Register port, Register mode, uint8_t pinGreen, uint8_t pinRed);
+    Led(Port port, uint8_t greenPosition, uint8_t redPosition);
     void setColor(LedColor color);
 
 private:
@@ -24,9 +24,8 @@ private:
     void setRed();
 
 private:
-    Register _port;
-    Register _mode;
-    uint8_t _pinGreen;
-    uint8_t _pinRed;
+
+    WritePin _greenPin;
+    WritePin _redPin;
 };
 #endif

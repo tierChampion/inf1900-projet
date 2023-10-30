@@ -14,8 +14,9 @@ enum class Port
 class ReadPin
 {
 public:
+    ReadPin();
     ReadPin(Port pinPort, uint8_t position);
-    uint8_t read();
+    uint8_t read() const;
 
 private:
     Register _mode;
@@ -26,6 +27,7 @@ private:
 class WritePin
 {
 public:
+    WritePin();
     WritePin(Port pinPort, uint8_t position);
     void set();
     void clear();

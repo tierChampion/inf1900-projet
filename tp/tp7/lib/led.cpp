@@ -1,10 +1,10 @@
-
 #include "led.h"
-Led::Led(Register port, Register mode, uint8_t pinGreen, uint8_t pinRed)
-    : _port(port), _mode(mode), _pinGreen(pinGreen), _pinRed(pinRed)
+
+Led::Led(Port port, uint8_t greenPosition, uint8_t redPosition)
+    : _greenPin(WritePin(port, greenPosition)), _redPin(WritePin(port, redPosition))
 {
-    *mode |= (1 << pinGreen) | (1 << pinRed);
 }
+
 void Led::setColor(LedColor color)
 {
     setOff();
@@ -20,15 +20,19 @@ void Led::setColor(LedColor color)
         break;
     }
 }
+
 void Led::setOff()
 {
-    *_port &= ~((1 << _pinGreen) | (1 << _pinRed));
+    _greenPin.clear();
+    _redPin.clear();
 }
+
 void Led::setGreen()
 {
-    *_port |= (1 << _pinGreen);
+    _greenPin.set();
 }
+
 void Led::setRed()
 {
-    *_port |= (1 << _pinRed);
+    _redPin.set();
 }

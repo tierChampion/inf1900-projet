@@ -6,13 +6,13 @@
 class Navigation
 {
 public:
-    Navigation(Pin dirLeftPin, Pin dirRightPin);
+    Navigation(WritePin dirLeftPin, WritePin dirRightPin);
     ~Navigation();
     void turn(Direction direction, float speed);
     void move(Direction direction, float speed);
     void stop();
-    void setDirPin(Side side, Pin directionPin);
-    Pin getDirPin(Side side) const;
+    void setDirPin(Side side, WritePin directionPin);
+    WritePin getDirPin(Side side) const;
 
 private:
     Wheel _leftWheel;

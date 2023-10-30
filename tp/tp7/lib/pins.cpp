@@ -1,5 +1,7 @@
 #include "pins.h"
 
+ReadPin::ReadPin() {};
+
 ReadPin::ReadPin(Port pinPort, uint8_t position)
 {
     switch (pinPort)
@@ -26,10 +28,12 @@ ReadPin::ReadPin(Port pinPort, uint8_t position)
     *_mode &= ~(1 << _position);
 }
 
-uint8_t ReadPin::read()
+uint8_t ReadPin::read() const
 {
     return (*_pin & (1 << _position));
 }
+
+WritePin::WritePin() {}
 
 WritePin::WritePin(Port pinPort, uint8_t position)
 {

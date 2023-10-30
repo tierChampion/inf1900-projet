@@ -1,6 +1,6 @@
 #include "navigation.h"
 
-Navigation::Navigation(Pin dirLeftPin, Pin dirRightPin) :
+Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin) :
     _leftWheel(Wheel(dirLeftPin, Side::LEFT)),
     _rightWheel(Wheel(dirRightPin, Side::RIGHT))
 {
@@ -39,7 +39,7 @@ void Navigation::stop()
     move(Direction::FORWARD, 0);
 }
 
-void Navigation::setDirPin(Side side, Pin directionPin)
+void Navigation::setDirPin(Side side, WritePin directionPin)
 {
     switch (side)
     {
@@ -54,7 +54,7 @@ void Navigation::setDirPin(Side side, Pin directionPin)
     }
 }
 
-Pin Navigation::getDirPin(Side side) const
+WritePin Navigation::getDirPin(Side side) const
 {
     switch (side)
     {

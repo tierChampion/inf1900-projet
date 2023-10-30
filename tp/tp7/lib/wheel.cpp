@@ -1,5 +1,5 @@
 #include "wheel.h"
-Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(side)
+Wheel::Wheel(WritePin directionPin, Side side) : _directionPin(directionPin), _side(side)
 {
     TCNT0 = 0;
     TCCR0A |= (1 << WGM00);
@@ -16,7 +16,6 @@ Wheel::Wheel(Pin directionPin, Side side) : _directionPin(directionPin), _side(s
         TCCR0A = (1 << COM0B1);
         break;
     }
-    *_directionPin.mode |= (1 << _directionPin.position);
     PRINT("Creation of a Wheel object done");
 }
 
@@ -43,10 +42,10 @@ void Wheel::setSpeed(Direction direction, float speed)
     switch (direction)
     {
     case Direction::BACKWARD:
-        *_directionPin.port |= (1 << _directionPin.position);
+        _directionPin.set();
         break;
     case Direction::FORWARD:
-        *_directionPin.port &= ~(1 << _directionPin.position);
+        _directionPin.clear();
         break;
     default:
         PRINT("Can Only use FORWARD OR BACKWARD to set a wheel speed .\n Use Navigation.turn to turn");
@@ -64,12 +63,12 @@ void Wheel::setSpeed(Direction direction, float speed)
     }
 }
 
-Pin Wheel::getDirPin() const
+WritePin Wheel::getDirPin() const
 {
     return _directionPin;
 }
 
-void Wheel::setDirectionPin(Pin directionPin)
+void Wheel::setDirectionPin(WritePin directionPin)
 {
     _directionPin = directionPin;
 }

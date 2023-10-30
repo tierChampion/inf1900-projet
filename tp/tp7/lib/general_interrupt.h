@@ -1,7 +1,7 @@
 #ifndef GENERAL_INTERRUPT_H
 #define GENERAL_INTERRUPT_H
 
-#include "commons.h"
+#include "pins.h"
 
 enum class GeneralInterruptType
 {
@@ -27,7 +27,7 @@ public:
     void enable();
     void disable();
     void clear();
-    Pin getRequiredPin() const;
+    ReadPin getRequiredPin() const;
 
 private:
     void setFlags();

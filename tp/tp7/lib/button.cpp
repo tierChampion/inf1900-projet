@@ -6,14 +6,13 @@ Button::Button(GeneralInterrupt interrupt, bool activeHigh)
     : _interrupt(interrupt), _isActiveHigh(activeHigh)
 {
     _pin = _interrupt.getRequiredPin();
-    *_pin.mode &= ~(1 << _pin.position);
 }
 
 bool Button::isButtonPressed() const
 {
-    uint8_t lecture1 = *_pin.pin & (1 << _pin.position);
+    uint8_t lecture1 = _pin.read();
     _delay_ms(DEBOUNCE_DELAY);
-    uint8_t lecture2 = *_pin.pin & (1 << _pin.position);
+    uint8_t lecture2 = _pin.read();
 
     return (lecture2 == _isActiveHigh) && (lecture1 == lecture2);
 }

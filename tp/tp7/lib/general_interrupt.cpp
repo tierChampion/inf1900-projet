@@ -79,22 +79,20 @@ void GeneralInterrupt::applySenseControl()
     }
 }
 
-Pin GeneralInterrupt::getRequiredPin() const
+ReadPin GeneralInterrupt::getRequiredPin() const
 {
     switch (_type)
     {
     case GeneralInterruptType::INT_0:
-        return Pin{&DDRD, &PORTD, &PIND, PD2};
+        return ReadPin(Port::D, PD2);
         break;
     case GeneralInterruptType::INT_1:
-        return Pin{&DDRD, &PORTD, &PIND, PD3};
+        return ReadPin(Port::D, PD3);
         break;
-    case GeneralInterruptType::INT_2:
-        return Pin{&DDRB, &PORTB, &PINB, PB2};
+    default:
+        return ReadPin(Port::B, PB2);
         break;
     }
-
-    return Pin();
 }
 
 void GeneralInterrupt::debugRequiredPin() const
