@@ -24,11 +24,11 @@ void Wheel::setSpeed(Orientation orientation, float speed)
     switch (_side)
     {
     case Side::RIGHT:
-        _timerPWM->setCompareValue(TimerCompare::B, (uint8_t)(255 * speed / 100));
+        _timerPWM->setCompareValue(TimerCompare::B, static_cast<uint8_t>(255 * speed / 100));
         PRINT(OCR0B);
         break;
     case Side::LEFT:
-        _timerPWM->setCompareValue(TimerCompare::A, (uint8_t)(255 * speed / 100));
+        _timerPWM->setCompareValue(TimerCompare::A, static_cast<uint8_t>(255 * speed / 100));
         PRINT(OCR0A);
         break;
     }

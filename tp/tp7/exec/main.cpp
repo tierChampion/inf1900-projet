@@ -1,9 +1,14 @@
-#include <led.h>
-#include <button.h>
+#include "navigation.h"
+#include "timer1.h"
+#include "pins.h"
 
 int main()
 {
-    PRINT("oh yeah");
+    Navigation nav = Navigation();
+
+    nav.controlledTurn(Side::RIGHT, Orientation::FORWARD, 100, 255);
+
+    while(true) {}
 
     return 0;
 }

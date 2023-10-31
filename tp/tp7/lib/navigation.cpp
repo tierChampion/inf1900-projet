@@ -26,7 +26,7 @@ Navigation::~Navigation()
 
 void Navigation::controlledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength)
 {
-    float otherSpeed = speed * (1.f - ((float)(turnStrength) / 255.f));
+    float otherSpeed = speed * (1.f - (static_cast<float>(turnStrength) / 255.f));
     
     if (turn == Side::LEFT)
     {
