@@ -14,15 +14,15 @@ void Navigation::turn(Direction direction, float speed)
 {
     switch (direction)
     {
-    case Direction::LEFT:
-        _leftWheel.setSpeed(Direction::FORWARD, 0);
-        _rightWheel.setSpeed(Direction::FORWARD, speed);
-        break;
-    case Direction::RIGHT:
-        _leftWheel.setSpeed(Direction::FORWARD, speed);
-        _rightWheel.setSpeed(Direction::FORWARD, 0);
-    default:
-        break;
+        case Direction::LEFT:
+            _leftWheel.setSpeed(Direction::FORWARD, 0);
+            _rightWheel.setSpeed(Direction::FORWARD, speed);
+            break;
+        case Direction::RIGHT:
+            _leftWheel.setSpeed(Direction::FORWARD, speed);
+            _rightWheel.setSpeed(Direction::FORWARD, 0);
+        default:
+            break;
     }
 }
 
@@ -41,14 +41,14 @@ void Navigation::setDirPin(Side side, WritePin directionPin)
 {
     switch (side)
     {
-    case Side::LEFT:
-        _leftWheel.setDirPin(directionPin);
-        break;
-    case Side::RIGHT:
-        _rightWheel.setDirPin(directionPin);
-        break;
-    default:
-        break;
+        case Side::LEFT:
+            _leftWheel.setDirPin(directionPin);
+            break;
+        case Side::RIGHT:
+            _rightWheel.setDirPin(directionPin);
+            break;
+        default:
+            break;
     }
 }
 
@@ -56,10 +56,10 @@ WritePin Navigation::getDirPin(Side side) const
 {
     switch (side)
     {
-    case Side::RIGHT:
-        return _rightWheel.getDirPin();
+        case Side::RIGHT:
+            return _rightWheel.getDirPin();
 
-    default:
-        return _leftWheel.getDirPin();
+        default:
+            return _leftWheel.getDirPin();
     }
 }

@@ -1,8 +1,9 @@
 #ifndef WHEEL_H
 #define WHEEL_H
 
-#include "pins.h"
 #include <avr/interrupt.h>
+
+#include "pins.h"
 #include "timer0.h"
 
 enum class Side
@@ -18,8 +19,10 @@ enum class Direction
     RIGHT,
     LEFT
 };
+
 class Wheel
 {
+
 public:
     Wheel(WritePin directionPin, Side side);
     ~Wheel();
@@ -32,4 +35,5 @@ private:
     Side _side;
     Timer0 _timerPWM;
 };
+
 #endif

@@ -1,9 +1,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include <avr/io.h>
 #include <avr/interrupt.h>
-
 #include "commons.h"
 
 enum class TimerWaveMode {

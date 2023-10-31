@@ -1,9 +1,6 @@
 #ifndef TIMER_2_H
 #define TIMER_2_H
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
 #include "timer_commons.h"
 
 class Timer2

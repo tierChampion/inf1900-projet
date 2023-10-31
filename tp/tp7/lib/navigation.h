@@ -1,8 +1,8 @@
-#include "wheel.h"
-
 #ifndef NAVIGATION_H
 #define NAVIGATION_H
-/*  PB3-PB4-TIMER0 occupied | speed is from 0 to 100(%) */
+
+#include "wheel.h"
+
 class Navigation
 {
 public:
@@ -18,4 +18,5 @@ private:
     Wheel _leftWheel;
     Wheel _rightWheel;
 };
+
 #endif

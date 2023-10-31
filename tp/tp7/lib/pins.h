@@ -38,6 +38,4 @@ private:
     uint8_t _position;
 };
 
-
-
 #endif

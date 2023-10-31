@@ -1,5 +1,7 @@
 #include "button.h"
 
+#include <avr/delay.h>
+
 const uint8_t DEBOUNCE_DELAY = 20;
 
 Button::Button(GeneralInterrupt interrupt, bool activeHigh)

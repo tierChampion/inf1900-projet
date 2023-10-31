@@ -1,5 +1,7 @@
 #include "wheel.h"
-Wheel::Wheel(WritePin directionPin, Side side) : _directionPin(directionPin), _side(side), _timerPWM(Timer0())
+
+Wheel::Wheel(WritePin directionPin, Side side)
+    : _directionPin(directionPin), _side(side), _timerPWM(Timer0())
 {
     _timerPWM.setCounterValue(0);
     _timerPWM.setInterrupt(TimerInterrupt::NONE);

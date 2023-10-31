@@ -10,14 +10,14 @@ void Led::setColor(LedColor color)
     setOff();
     switch (color)
     {
-    case LedColor::GREEN:
-        setGreen();
-        break;
-    case LedColor::RED:
-        setRed();
-        break;
-    default:
-        break;
+        case LedColor::GREEN:
+            setGreen();
+            break;
+        case LedColor::RED:
+            setRed();
+            break;
+        default:
+            break;
     }
 }
 
