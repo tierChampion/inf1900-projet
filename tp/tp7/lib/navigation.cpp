@@ -1,32 +1,35 @@
 #include "navigation.h"
 
-Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin) : _leftWheel(Wheel(dirLeftPin, Side::LEFT)), _rightWheel(Wheel(dirRightPin, Side::RIGHT))
+Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin)
 {
-    PRINT("Creation of a Navigation object done.\n");
+    Timer0 timerPWM{};
+    timerPWM.setCounterValue(0);
+    timerPWM.setPrescalar(TimerPrescalar::NO_PRESCALAR);
+    timerPWM.setCompareMode(TimerCompare::A, TimerCompareMode::CLEAR);
+    timerPWM.setCompareMode(TimerCompare::B, TimerCompareMode::CLEAR);
+    timerPWM.setWaveMode(TimerWaveMode::PWM_PHASE_CORRECT);
+    _leftWheel = Wheel(dirLeftPin, Side::LEFT, &timerPWM);
+    _rightWheel = Wheel(dirRightPin, Side::RIGHT, &timerPWM);
 }
 
-Navigation::~Navigation()
-{
-    PRINT("Destruction of a Navigation object done.\n");
-}
-
-void Navigation::turn(Direction direction, float speed)
+void Navigation::turn(Direction direction, double speed)
 {
     switch (direction)
     {
-        case Direction::LEFT:
-            _leftWheel.setSpeed(Direction::FORWARD, 0);
-            _rightWheel.setSpeed(Direction::FORWARD, speed);
-            break;
-        case Direction::RIGHT:
-            _leftWheel.setSpeed(Direction::FORWARD, speed);
-            _rightWheel.setSpeed(Direction::FORWARD, 0);
-        default:
-            break;
+    case Direction::LEFT:
+        _leftWheel.setSpeed(Direction::FORWARD, 0);
+        _rightWheel.setSpeed(Direction::FORWARD, speed);
+        break;
+    case Direction::RIGHT:
+        _leftWheel.setSpeed(Direction::FORWARD, speed);
+        _rightWheel.setSpeed(Direction::FORWARD, 0);
+        break;
+    default:
+        break;
     }
 }
 
-void Navigation::move(Direction direction, float speed)
+void Navigation::move(Direction direction, double speed)
 {
     _leftWheel.setSpeed(direction, speed);
     _rightWheel.setSpeed(direction, speed);
@@ -35,31 +38,4 @@ void Navigation::move(Direction direction, float speed)
 void Navigation::stop()
 {
     move(Direction::FORWARD, 0);
-}
-
-void Navigation::setDirPin(Side side, WritePin directionPin)
-{
-    switch (side)
-    {
-        case Side::LEFT:
-            _leftWheel.setDirPin(directionPin);
-            break;
-        case Side::RIGHT:
-            _rightWheel.setDirPin(directionPin);
-            break;
-        default:
-            break;
-    }
-}
-
-WritePin Navigation::getDirPin(Side side) const
-{
-    switch (side)
-    {
-        case Side::RIGHT:
-            return _rightWheel.getDirPin();
-
-        default:
-            return _leftWheel.getDirPin();
-    }
 }

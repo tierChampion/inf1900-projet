@@ -24,16 +24,15 @@ class Wheel
 {
 
 public:
-    Wheel(WritePin directionPin, Side side);
+    Wheel();
+    Wheel(WritePin directionPin, Side side, Timer0 *timerPwm);
     ~Wheel();
-    void setSpeed(Direction direction, float speed);
-    WritePin getDirPin() const;
-    void setDirPin(WritePin directionPin);
+    void setSpeed(Direction direction, double speed);
 
 private:
     WritePin _directionPin;
     Side _side;
-    Timer0 _timerPWM;
+    Timer0 *_timerPWM;
 };
 
 #endif
