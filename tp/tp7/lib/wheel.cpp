@@ -7,13 +7,10 @@ Wheel::Wheel()
 Wheel::Wheel(WritePin directionPin, Side side, Timer0 *timerPwm)
     : _directionPin(directionPin), _side(side), _timerPWM(timerPwm)
 {
-
-    _timerPWM->start();
 }
 
 Wheel::~Wheel()
 {
-    _timerPWM->stop();
 }
 
 void Wheel::setSpeed(Direction direction, double speed)

@@ -14,6 +14,7 @@ public:
 private:
     Wheel _leftWheel;
     Wheel _rightWheel;
+    Timer0 _timerPWM;
 };
 
 #endif

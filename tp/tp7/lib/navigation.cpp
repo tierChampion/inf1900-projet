@@ -2,14 +2,15 @@
 
 Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin)
 {
-    Timer0 timerPWM{};
-    timerPWM.setCounterValue(0);
-    timerPWM.setPrescalar(TimerPrescalar::NO_PRESCALAR);
-    timerPWM.setCompareMode(TimerCompare::A, TimerCompareMode::CLEAR);
-    timerPWM.setCompareMode(TimerCompare::B, TimerCompareMode::CLEAR);
-    timerPWM.setWaveMode(TimerWaveMode::PWM_PHASE_CORRECT);
-    _leftWheel = Wheel(dirLeftPin, Side::LEFT, &timerPWM);
-    _rightWheel = Wheel(dirRightPin, Side::RIGHT, &timerPWM);
+    _timerPWM = Timer0();
+    _timerPWM.setCounterValue(0);
+    _timerPWM.setPrescalar(TimerPrescalar::NO_PRESCALAR);
+    _timerPWM.setCompareMode(TimerCompare::A, TimerCompareMode::CLEAR);
+    _timerPWM.setCompareMode(TimerCompare::B, TimerCompareMode::CLEAR);
+    _timerPWM.setWaveMode(TimerWaveMode::PWM_PHASE_CORRECT);
+    _leftWheel = Wheel(dirLeftPin, Side::LEFT, &_timerPWM);
+    _rightWheel = Wheel(dirRightPin, Side::RIGHT, &_timerPWM);
+    _timerPWM.start();
 }
 
 void Navigation::turn(Direction direction, double speed)
@@ -31,6 +32,8 @@ void Navigation::turn(Direction direction, double speed)
 
 void Navigation::move(Direction direction, double speed)
 {
+    //_timerPWM.setCompareValue(TimerCompare::A, 128);
+    //_timerPWM.setCompareValue(TimerCompare::B, 128);
     _leftWheel.setSpeed(direction, speed);
     _rightWheel.setSpeed(direction, speed);
 }
