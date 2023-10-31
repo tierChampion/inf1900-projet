@@ -28,4 +28,5 @@ private:
     WritePin _greenPin;
     WritePin _redPin;
 };
+
 #endif

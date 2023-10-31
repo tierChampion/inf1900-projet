@@ -6,7 +6,6 @@
 class Timer1
 {
 public:
-
     Timer1();
 
     void start();
@@ -22,12 +21,10 @@ public:
     void setPrescalar(TimerPrescalar prescalar);
 
 private:
-
     void applyInterrupt(TimerInterrupt interrupt);
     void applyPrescalar(TimerPrescalar prescalar);
 
 private:
-
     bool _isTicking;
     TimerWaveMode _waveMode;
     TimerInterrupt _interrupt;

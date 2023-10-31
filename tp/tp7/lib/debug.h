@@ -7,7 +7,7 @@
 #include "comm.h"
 
 #ifdef DEBUG
-#define PRINT(x) display(x)
+#define PRINT(x) display((x))
 
 #else
 #define PRINT(X)
