@@ -13,7 +13,7 @@ Wheel::~Wheel()
 {
 }
 
-void Wheel::setSpeed(Direction direction, double speed)
+void Wheel::setSpeed(Direction direction, float speed)
 {
     switch (direction)
     {

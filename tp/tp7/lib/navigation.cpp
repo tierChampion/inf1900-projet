@@ -13,7 +13,7 @@ Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin)
     _timerPWM.start();
 }
 
-void Navigation::turn(Direction direction, double speed)
+void Navigation::turn(Direction direction, float speed)
 {
     switch (direction)
     {
@@ -30,7 +30,48 @@ void Navigation::turn(Direction direction, double speed)
     }
 }
 
-void Navigation::move(Direction direction, double speed)
+void Navigation::controledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength)
+{
+    // Set roue princiaple
+    if (turn == Side::LEFT) {
+       if (orientation == Orientation::FORWARD) {
+            _rightWheel.setSpeed(Direction::FORWARD, speed);
+       }
+       else {
+            _rightWheel.setSpeed(Direction::BACKWARD, speed);
+       } 
+    }
+    else {
+       if (orientation == Orientation::FORWARD) {
+            _leftWheel.setSpeed(Direction::FORWARD, speed);
+       }
+       else {
+            _leftWheel.setSpeed(Direction::BACKWARD, speed);
+       }
+    }
+
+    // Set seconde roue
+    float otherSpeed = speed * ((float)turnStrength / 255.f);
+
+    if (turn == Side::LEFT) {
+       if (orientation == Orientation::FORWARD) {
+            _leftWheel.setSpeed(Direction::FORWARD, otherSpeed);
+       }
+       else {
+            _leftWheel.setSpeed(Direction::BACKWARD, otherSpeed);
+       } 
+    }
+    else {
+       if (orientation == Orientation::FORWARD) {
+            _rightWheel.setSpeed(Direction::FORWARD, otherSpeed);
+       }
+       else {
+            _rightWheel.setSpeed(Direction::BACKWARD, otherSpeed);
+       }
+    }
+}
+
+void Navigation::move(Direction direction, float speed)
 {
     //_timerPWM.setCompareValue(TimerCompare::A, 128);
     //_timerPWM.setCompareValue(TimerCompare::B, 128);
