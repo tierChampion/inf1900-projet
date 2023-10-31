@@ -12,11 +12,6 @@ enum class Side
     LEFT
 };
 
-enum class Turn {
-    LEFT,
-    RIGHT
-};
-
 enum class Orientation
 {
     FORWARD,

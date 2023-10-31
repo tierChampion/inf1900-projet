@@ -1,6 +1,6 @@
 #include "navigation.h"
 
-Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin)
+Navigation::Navigation()
 {
     _timerPWM = Timer0();
     _timerPWM.setCounterValue(0);
@@ -8,8 +8,14 @@ Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin)
     _timerPWM.setCompareMode(TimerCompare::A, TimerCompareMode::CLEAR);
     _timerPWM.setCompareMode(TimerCompare::B, TimerCompareMode::CLEAR);
     _timerPWM.setWaveMode(TimerWaveMode::PWM_PHASE_CORRECT);
-    _leftWheel = Wheel(dirLeftPin, Side::LEFT, &_timerPWM);
-    _rightWheel = Wheel(dirRightPin, Side::RIGHT, &_timerPWM);
+
+    WritePin pinEnaL = WritePin(Port::B, PB3);
+    WritePin pinEnaR = WritePin(Port::B, PB4);
+    WritePin pinDirL = WritePin(Port::B, PB5);
+    WritePin pinDirR = WritePin(Port::B, PB2);
+
+    _leftWheel = Wheel(pinDirL, Side::LEFT, &_timerPWM);
+    _rightWheel = Wheel(pinDirR, Side::RIGHT, &_timerPWM);
     _timerPWM.start();
 }
 
@@ -20,9 +26,8 @@ Navigation::~Navigation()
 
 void Navigation::controlledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength)
 {
-
     float otherSpeed = speed * (1.f - ((float)(turnStrength) / 255.f));
-    // Set roue princiaple
+    
     if (turn == Side::LEFT)
     {
         _rightWheel.setSpeed(orientation, speed);
