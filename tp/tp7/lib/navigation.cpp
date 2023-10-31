@@ -13,23 +13,6 @@ Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin)
     _timerPWM.start();
 }
 
-void Navigation::turn(Direction direction, float speed)
-{
-    switch (direction)
-    {
-    case Direction::LEFT:
-        _leftWheel.setSpeed(Direction::FORWARD, 0);
-        _rightWheel.setSpeed(Direction::FORWARD, speed);
-        break;
-    case Direction::RIGHT:
-        _leftWheel.setSpeed(Direction::FORWARD, speed);
-        _rightWheel.setSpeed(Direction::FORWARD, 0);
-        break;
-    default:
-        break;
-    }
-}
-
 void Navigation::controledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength)
 {
     // Set roue princiaple
