@@ -9,22 +9,16 @@ Wheel::Wheel(WritePin directionPin, Side side, Timer0 *timerPwm)
 {
 }
 
-Wheel::~Wheel()
+void Wheel::setSpeed(Orientation orientation, float speed)
 {
-}
-
-void Wheel::setSpeed(Direction direction, float speed)
-{
-    switch (direction)
+    switch (orientation)
     {
 
-    case Direction::BACKWARD:
+    case Orientation::BACKWARD:
         _directionPin.set();
         break;
-    case Direction::FORWARD:
+    case Orientation::FORWARD:
         _directionPin.clear();
-        break;
-    default:
         break;
     }
     switch (_side)
@@ -36,8 +30,6 @@ void Wheel::setSpeed(Direction direction, float speed)
     case Side::LEFT:
         _timerPWM->setCompareValue(TimerCompare::A, (uint8_t)(255 * speed / 100));
         PRINT(OCR0A);
-        break;
-    default:
         break;
     }
 }

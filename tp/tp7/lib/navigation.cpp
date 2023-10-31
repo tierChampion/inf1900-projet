@@ -13,56 +13,35 @@ Navigation::Navigation(WritePin dirLeftPin, WritePin dirRightPin)
     _timerPWM.start();
 }
 
-void Navigation::controledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength)
+Navigation::~Navigation()
 {
+    _timerPWM.stop();
+}
+
+void Navigation::controlledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength)
+{
+
+    float otherSpeed = speed * (1.f - ((float)(turnStrength) / 255.f));
     // Set roue princiaple
-    if (turn == Side::LEFT) {
-       if (orientation == Orientation::FORWARD) {
-            _rightWheel.setSpeed(Direction::FORWARD, speed);
-       }
-       else {
-            _rightWheel.setSpeed(Direction::BACKWARD, speed);
-       } 
+    if (turn == Side::LEFT)
+    {
+        _rightWheel.setSpeed(orientation, speed);
+        _leftWheel.setSpeed(orientation, otherSpeed);
     }
-    else {
-       if (orientation == Orientation::FORWARD) {
-            _leftWheel.setSpeed(Direction::FORWARD, speed);
-       }
-       else {
-            _leftWheel.setSpeed(Direction::BACKWARD, speed);
-       }
-    }
-
-    // Set seconde roue
-    float otherSpeed = speed * ((float)turnStrength / 255.f);
-
-    if (turn == Side::LEFT) {
-       if (orientation == Orientation::FORWARD) {
-            _leftWheel.setSpeed(Direction::FORWARD, otherSpeed);
-       }
-       else {
-            _leftWheel.setSpeed(Direction::BACKWARD, otherSpeed);
-       } 
-    }
-    else {
-       if (orientation == Orientation::FORWARD) {
-            _rightWheel.setSpeed(Direction::FORWARD, otherSpeed);
-       }
-       else {
-            _rightWheel.setSpeed(Direction::BACKWARD, otherSpeed);
-       }
+    else
+    {
+        _leftWheel.setSpeed(orientation, speed);
+        _rightWheel.setSpeed(orientation, otherSpeed);
     }
 }
 
-void Navigation::move(Direction direction, float speed)
+void Navigation::moveStraight(Orientation orientation, float speed)
 {
-    //_timerPWM.setCompareValue(TimerCompare::A, 128);
-    //_timerPWM.setCompareValue(TimerCompare::B, 128);
-    _leftWheel.setSpeed(direction, speed);
-    _rightWheel.setSpeed(direction, speed);
+    _leftWheel.setSpeed(orientation, speed);
+    _rightWheel.setSpeed(orientation, speed);
 }
 
 void Navigation::stop()
 {
-    move(Direction::FORWARD, 0);
+    moveStraight(Orientation::FORWARD, 0);
 }

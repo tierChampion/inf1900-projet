@@ -12,14 +12,6 @@ enum class Side
     LEFT
 };
 
-enum class Direction
-{
-    FORWARD,
-    BACKWARD,
-    RIGHT,
-    LEFT
-};
-
 enum class Turn {
     LEFT,
     RIGHT
@@ -37,8 +29,7 @@ class Wheel
 public:
     Wheel();
     Wheel(WritePin directionPin, Side side, Timer0 *timerPwm);
-    ~Wheel();
-    void setSpeed(Direction direction, float speed);
+    void setSpeed(Orientation orientation, float speed);
 
 private:
     WritePin _directionPin;

@@ -7,8 +7,9 @@ class Navigation
 {
 public:
     Navigation(WritePin dirLeftPin, WritePin dirRightPin);
-    void controledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength);
-    void move(Direction direction, float speed);
+    ~Navigation();
+    void controlledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength);
+    void moveStraight(Orientation orientation, float speed);
     void stop();
 
 private:
