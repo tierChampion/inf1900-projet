@@ -1,6 +1,6 @@
 #include "button.h"
 
-#include <avr/delay.h>
+#include <util/delay.h>
 
 const uint8_t DEBOUNCE_DELAY = 20;
 
