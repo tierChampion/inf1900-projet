@@ -2,6 +2,6 @@
 
 make clean -C ../lib
 make debug -C ../lib
-make clean -C exec
-make debug -C exec
-make install -C exec
+make clean
+make debug
+make install
