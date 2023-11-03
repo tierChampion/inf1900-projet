@@ -2,6 +2,7 @@
 #define PIEZO_H
 
 #include "timer2.h"
+#include "pins.h"
 
 enum class Note
 {
@@ -35,13 +36,15 @@ class Piezo
 {
 public:
 
-    Piezo(Timer2 timer);
+    Piezo();
     void play(Note note, Octave octave);
     void stop();
 
 private:
     
     Timer2 _timer;
+    WritePin _timerPin;
+    WritePin _groundPin;
 
 };
 
