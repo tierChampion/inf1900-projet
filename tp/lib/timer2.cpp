@@ -66,8 +66,9 @@ void Timer2::setWaveMode(TimerWaveMode mode)
             break;
 
         case TimerWaveMode::CTC:
-            TCCR2A &= ~(1 << WGM20 | 1 << WGM21);
-            TCCR2B |= (1 << WGM22);
+            TCCR2A &= ~(1 << WGM20);
+            TCCR2A |= (1 << WGM21);
+            TCCR2B &= ~(1 << WGM22);
             break;
 
         case TimerWaveMode::PWM_PHASE_CORRECT:

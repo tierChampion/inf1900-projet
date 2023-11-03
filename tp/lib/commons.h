@@ -1,5 +1,5 @@
-#ifndef PIN_REGISTER_H
-#define PIN_REGISTER_H
+#ifndef COMMONS_H
+#define COMMONS_H
 
 #include <avr/io.h>
 #include <util/delay.h>
