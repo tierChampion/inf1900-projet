@@ -17,6 +17,8 @@ Navigation::Navigation()
     _leftWheel = Wheel(pinDirL, Side::LEFT, &_timerPWM);
     _rightWheel = Wheel(pinDirR, Side::RIGHT, &_timerPWM);
     _timerPWM.start();
+
+    _speed = 0;
 }
 
 Navigation::~Navigation()
@@ -26,8 +28,9 @@ Navigation::~Navigation()
 
 void Navigation::controlledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength)
 {
+    _speed = speed;
     float otherSpeed = speed * (1.f - (static_cast<float>(turnStrength) / 255.f));
-    
+
     if (turn == Side::LEFT)
     {
         _rightWheel.setSpeed(orientation, speed);
@@ -42,11 +45,33 @@ void Navigation::controlledTurn(Side turn, Orientation orientation, float speed,
 
 void Navigation::moveStraight(Orientation orientation, float speed)
 {
+    _speed = speed;
     _leftWheel.setSpeed(orientation, speed);
     _rightWheel.setSpeed(orientation, speed);
+}
+void Navigation::moveStraight(Orientation orientation)
+{
+    _leftWheel.setSpeed(orientation, _speed);
+    _rightWheel.setSpeed(orientation, _speed);
 }
 
 void Navigation::stop()
 {
     moveStraight(Orientation::FORWARD, 0);
+}
+
+void Navigation::syncSpeedTurn(Side turn, Orientation orientation, uint8_t turnStrength)
+{
+    float otherSpeed = _speed * (1.f - (static_cast<float>(turnStrength) / 255.f));
+
+    if (turn == Side::LEFT)
+    {
+        _rightWheel.setSpeed(orientation, _speed);
+        _leftWheel.setSpeed(orientation, otherSpeed);
+    }
+    else
+    {
+        _leftWheel.setSpeed(orientation, _speed);
+        _rightWheel.setSpeed(orientation, otherSpeed);
+    }
 }
