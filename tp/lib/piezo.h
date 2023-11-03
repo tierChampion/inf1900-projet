@@ -22,23 +22,27 @@ enum class Note
     G,
     GSHARP,
     AFLAT
-}
+};
 
-enum class Register 
+enum class Octave 
 {
     LOW,
     MEDIUM,
     HIGH
-}
+};
 
 class Piezo
 {
 public:
+
     Piezo(Timer2 timer);
-    void play(Note note, Register register);
+    void play(Note note, Octave octave);
     void stop();
+
 private:
     
-}
+    Timer2 _timer;
+
+};
 
 #endif
