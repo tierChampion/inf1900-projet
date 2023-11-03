@@ -12,16 +12,15 @@ class Interpreter
 {
 public:
     Interpreter();
-    ~Interpreter();
     void startInterpreting(uint8_t adress);
     uint8_t executeCommand(uint8_t adress, uint8_t *command);
 
 private:
-    Navigation *_navigation;
-    Piezo *_piezo;
-    Led *_led;
-    LoopManager *_loopManager;
-    Memoire24CXXX *_eeprom;
+    Navigation _navigation;
+    Piezo _piezo;
+    Led _led;
+    LoopManager _loopManager;
+    Memoire24CXXX _eeprom;
     bool _executeEnable;
     uint8_t _operand;
     uint8_t _instruction;
