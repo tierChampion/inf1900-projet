@@ -1,16 +1,52 @@
-#include "navigation.h"
-#include "button.h"
 #include "led.h"
-#include "pins.h"
+#include "debug.h"
+#include "memoire_24.h"
 
 int main()
 {
-    Navigation nav = Navigation();
+    Led led(Port::A, PA0, PA1);
 
-    Button button = Button(GeneralInterruptType::INT_0, true);
+    Memoire24CXXX memory = Memoire24CXXX();
 
-    Led led = Led(Port::A, PA0, PA1);
+    led.setColor(LedColor::RED);
 
+    uint16_t length;
+    uint8_t data[Comm::MAX_RECEIVE_SIZE];
+    Comm::receiveData(data, &length);
+
+    bool isTransferStarted = false;
+    bool isTransferDone = false;
+
+    uint8_t address = 0;
+
+    for (uint8_t i = 0; i < length; i++)
+    {
+        PRINT(data[i]);
+        if (data[i] == 0x00)
+        {
+            isTransferStarted = true;
+        }
+        else if (data[i] == 0xFF)
+        {
+            isTransferDone = true;
+        }
+        if (isTransferStarted && !isTransferDone)
+        {
+            memory.ecriture(address, data[i]);
+            address++;
+        }
+    }
+
+#ifdef DEBUG
+    memory.lecture(0, data, length);
+
+    for (uint8_t i = 0; i < length; i++)
+    {
+        PRINT(data[i]);
+    }
+#endif
+
+    led.setColor(LedColor::GREEN);
 
     return 0;
 }

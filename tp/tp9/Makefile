@@ -31,4 +31,4 @@ debug-interpreter: interpreter
 
 debug-loader: DEBUGFLAG += debug
 debug-loader: library
-debug-loader: interpreter
+debug-loader: loader

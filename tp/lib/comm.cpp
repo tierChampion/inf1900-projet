@@ -1,5 +1,9 @@
 #include "comm.h"
 
+#include "debug.h"
+
+const uint8_t RECEIVE_HEADER_SIZE = 2;
+
 Comm::Comm()
 {
     // 2400 bauds. Nous vous donnons la valeur des deux
@@ -26,4 +30,31 @@ void Comm::transmitData(const uint8_t *data, uint8_t length)
         /* Put data into buffer, sends the data */
         UDR0 = data[i];
     }
+}
+
+void Comm::receiveData(uint8_t* data, uint16_t* length)
+{
+
+    singleReceive();
+    *length = singleReceive() - RECEIVE_HEADER_SIZE;
+
+    if (*length > MAX_RECEIVE_SIZE) {
+        PRINT("Warning: Bytecode is too large!");
+        *length = MAX_RECEIVE_SIZE;
+    }
+
+
+    for (uint16_t i = 0; i < *length; i++) {
+
+        data[i] = singleReceive();
+    }
+}
+
+uint8_t Comm::singleReceive() {
+
+    while (!(UCSR0A & (1 << RXC0)))
+    {
+    }
+
+    return UDR0;
 }
