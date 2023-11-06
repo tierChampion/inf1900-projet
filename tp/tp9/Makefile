@@ -1,26 +1,34 @@
-.PHONY: library interpreter loader clean
+.PHONY: all library interpreter loader clean debug debug-interpreter debug-loader
+
+DEBUGFLAG=
+INSTALLFLAG=
+
+all: library
 
 library: 
 	$(MAKE) -C ../lib clean
-	$(MAKE) -C ../lib
+	$(MAKE) $(DEBUGFLAG) -C ../lib
 
 interpreter: 
 	$(MAKE) -C interpreter clean
-	$(MAKE) -C interpreter
+	$(MAKE) $(DEBUGFLAG) -C interpreter install
 
 loader: 
 	$(MAKE) -C loader clean
-	$(MAKE) -C loader
+	$(MAKE) $(DEBUGFLAG) -C loader install
 
 clean:
 	$(MAKE) -C ../lib clean
 	$(MAKE) -C interpreter clean
 	$(MAKE) -C loader clean
 
-debug: 
-	$(MAKE) -C ../lib clean
-	$(MAKE) debug -C ../lib
-	$(MAKE) -C interpreter clean
-	$(MAKE) debug -C interpreter
-	$(MAKE) -C loader clean
-	$(MAKE) debug -C loader
+debug: DEBUGFLAG += debug
+debug: all
+
+debug-interpreter: DEBUGFLAG += debug
+debug-interpreter: library
+debug-interpreter: interpreter
+
+debug-loader: DEBUGFLAG += debug
+debug-loader: library
+debug-loader: interpreter
