@@ -37,6 +37,7 @@ class Piezo
 public:
 
     Piezo();
+    void play(int val);
     void play(Note note, Octave octave);
     void stop();
 
