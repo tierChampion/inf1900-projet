@@ -71,6 +71,11 @@ void Piezo::play(int val) {
         _timer.setPrescalar(TimerPrescalar::SIXTY_FOUR);
         break;
     }
+    case 3:
+    {
+        _timer.setPrescalar(TimerPrescalar::THIRTY_TWO);
+        break;
+    }
     }
     _timer.start();
 
@@ -138,6 +143,11 @@ void Piezo::play(Note note, Octave octave)
     case Octave::HIGH:
     {
         _timer.setPrescalar(TimerPrescalar::SIXTY_FOUR);
+        break;
+    }
+    case Octave::TOP:
+    {
+        _timer.setPrescalar(TimerPrescalar::THIRTY_TWO);
         break;
     }
     }

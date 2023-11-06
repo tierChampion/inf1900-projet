@@ -29,7 +29,8 @@ enum class Octave
 {
     LOW,
     MEDIUM,
-    HIGH
+    HIGH,
+    TOP
 };
 
 class Piezo
