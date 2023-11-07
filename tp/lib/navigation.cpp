@@ -75,3 +75,22 @@ void Navigation::syncSpeedTurn(Side turn, Orientation orientation, uint8_t turnS
         _rightWheel.setSpeed(orientation, otherSpeed);
     }
 }
+
+void Navigation::pivot90(Side turn) {
+
+    if (turn == Side::LEFT)
+    {
+        _rightWheel.setSpeed(Orientation::FORWARD, 80);
+        _leftWheel.setSpeed(Orientation::BACKWARD, 80);
+    }
+    else
+    {
+        _leftWheel.setSpeed(Orientation::FORWARD, 80);
+        _rightWheel.setSpeed(Orientation::BACKWARD, 80);
+    }
+
+    // delay for the right amount of time
+    _delay_ms(650);
+
+    stop();
+}

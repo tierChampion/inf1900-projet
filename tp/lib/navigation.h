@@ -10,6 +10,7 @@ public:
     ~Navigation();
     void controlledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength);
     void syncSpeedTurn(Side turn, Orientation orientation, uint8_t turnStrength);
+    void pivot90(Side turn);
     void moveStraight(Orientation orientation, float speed);
     void moveStraight(Orientation orientation);
     void stop();
