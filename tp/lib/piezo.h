@@ -4,33 +4,28 @@
 #include "timer2.h"
 #include "pins.h"
 
-enum class Note
+enum class Note : uint8_t
 {
-    A,
-    ASHARP,
-    BFLAT,
-    B,
-    C,
-    CSHARP,
-    DFLAT,
-    D,
-    DSHARP,
-    EFLAT,
-    E,
-    F,
-    FSHARP,
-    GFLAT,
-    G,
-    GSHARP,
-    AFLAT
+    A = 0,
+    ASHARP_BFLAT = 1,
+    B = 2,
+    C = 3,
+    CSHARP_DFLAT = 4,
+    D = 5,
+    DSHARP_EFLAT = 6,
+    E = 7,
+    F = 8,
+    FSHARP_GFLAT = 9,
+    G = 10,
+    GSHARP_AFLAT = 11
 };
 
-enum class Octave 
+enum class Octave : uint8_t
 {
-    LOW,
-    MEDIUM,
-    HIGH,
-    TOP
+    LOW = 0,
+    MEDIUM = 1,
+    HIGH = 2,
+    TOP = 3
 };
 
 class Piezo
@@ -38,7 +33,7 @@ class Piezo
 public:
 
     Piezo();
-    void play(int val);
+    void play(uint8_t val);
     void play(Note note, Octave octave);
     void stop();
 
@@ -47,7 +42,6 @@ private:
     Timer2 _timer;
     WritePin _timerPin;
     WritePin _groundPin;
-
 };
 
 #endif
