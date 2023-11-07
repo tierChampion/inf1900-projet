@@ -6,22 +6,22 @@ Interpreter::Interpreter() : _navigation(Navigation()),
 {
 }
 
-void Interpreter::startInterpreting(uint8_t adress)
+void Interpreter::startInterpreting(uint8_t address)
 {
 
     // TODO cette partie, loading doit etre different
     uint8_t command[2];
-    _eeprom.lecture(adress, (uint8_t *)command, 2);
+    _eeprom.lecture(address, (uint8_t *)command, 2);
 
     uint8_t scriptLenght = command[0];
     for (; scriptLenght > 0; scriptLenght--)
     {
-        _eeprom.lecture(adress, (uint8_t *)command, 2);
-        adress = executeCommand(adress, command);
+        _eeprom.lecture(address, (uint8_t *)command, 2);
+        address = executeCommand(address, command);
     }
 }
 
-uint8_t Interpreter::executeCommand(uint8_t adress, uint8_t *command)
+uint8_t Interpreter::executeCommand(uint8_t address, uint8_t *command)
 {
     _instruction = static_cast<Instruction>(command[0]);
     _operand = command[1];
@@ -90,16 +90,16 @@ uint8_t Interpreter::executeCommand(uint8_t adress, uint8_t *command)
             break;
 
         case Instruction::DBC:
-            _loopManager.startLoop(adress, _operand);
+            _loopManager.startLoop(address, _operand);
             break;
 
         case Instruction::FBC:
-            return _loopManager.stopLoop(adress);
+            return _loopManager.stopLoop(address);
             break;
 
         default:
             break;
         }
     }
-    return adress + 2;
+    return address + 2;
 }

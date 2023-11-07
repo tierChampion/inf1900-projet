@@ -13,7 +13,7 @@ public:
     Comm();
 
     static void transmitData(const uint8_t *data, uint8_t length);
-    static void receiveData(uint8_t* data, uint16_t *length);
+    static void receiveData(uint8_t* data, uint8_t *length);
 
 private:
     static uint8_t singleReceive();

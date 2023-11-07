@@ -15,8 +15,8 @@ class Interpreter
 {
 public:
     Interpreter();
-    void startInterpreting(uint8_t adress);
-    uint8_t executeCommand(uint8_t adress, uint8_t *command);
+    void startInterpreting(uint8_t address);
+    uint8_t executeCommand(uint8_t address, uint8_t *command);
 
 private:
     Navigation _navigation;

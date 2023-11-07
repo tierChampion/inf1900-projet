@@ -32,19 +32,14 @@ void Comm::transmitData(const uint8_t *data, uint8_t length)
     }
 }
 
-void Comm::receiveData(uint8_t* data, uint16_t* length)
+void Comm::receiveData(uint8_t* data, uint8_t* length)
 {
 
     singleReceive();
     *length = singleReceive() - RECEIVE_HEADER_SIZE;
 
-    if (*length > MAX_RECEIVE_SIZE) {
-        PRINT("Warning: Bytecode is too large!");
-        *length = MAX_RECEIVE_SIZE;
-    }
 
-
-    for (uint16_t i = 0; i < *length; i++) {
+    for (uint8_t i = 0; i < *length; i++) {
 
         data[i] = singleReceive();
     }
