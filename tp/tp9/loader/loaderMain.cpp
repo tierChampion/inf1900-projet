@@ -1,6 +1,7 @@
 #include "led.h"
 #include "debug.h"
 #include "memoire_24.h"
+#include "instructions.h"
 
 int main()
 {
@@ -22,11 +23,11 @@ int main()
     for (uint8_t i = 0; i < length; i++)
     {
         PRINT(data[i]);
-        if (data[i] == 0x00)
+        if (static_cast<Instruction>(data[i]) == Instruction::DBT)
         {
             isTransferStarted = true;
         }
-        else if (data[i] == 0xFF)
+        else if (static_cast<Instruction>(data[i]) == Instruction::FIN)
         {
             isTransferDone = true;
         }

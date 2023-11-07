@@ -2,12 +2,15 @@
 #define INTERPRETER_H
 #include <avr/io.h>
 #include <util/delay.h>
+
 #include "navigation.h"
 #include "led.h"
-#include <piezo.h>
-#include <loopManager.h>
-#include <comm.h>
-#include <memoire_24.h>
+#include "piezo.h"
+#include "loopManager.h"
+#include "comm.h"
+#include "memoire_24.h"
+#include "instructions.h"
+
 class Interpreter
 {
 public:
@@ -23,6 +26,6 @@ private:
     Memoire24CXXX _eeprom;
     bool _executeEnable;
     uint8_t _operand;
-    uint8_t _instruction;
+    Instruction _instruction;
 };
 #endif
