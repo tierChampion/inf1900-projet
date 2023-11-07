@@ -2,7 +2,7 @@
 
 Interpreter::Interpreter() : _navigation(Navigation()),
                              _piezo(Piezo()), _led(Led(Port::A, PA0, PA1)), _loopManager(LoopManager()),
-                             _eeprom(Memoire24CXXX()), _executeEnable(false)
+                             _eeprom(Memoire24CXXX()), _executeEnable(true)
 {
 }
 
@@ -11,38 +11,33 @@ void Interpreter::interpreteByteCode(uint16_t adress)
 
     // TODO cette partie, loading doit etre different
     uint8_t command[2];
-    _eeprom.lecture(adress, (uint8_t *)_commands, MAX_LOOP_INSTRUCTIONS);
     _executeEnable = true;
-    uint8_t i = (uint8_t)0;
-    while (_executeEnable && i < MAX_LOOP_INSTRUCTIONS)
+    uint8_t i = 0;
+    while (_executeEnable && i < Comm::MAX_RECEIVE_SIZE)
     {
         command[0] = _commands[i];
         command[1] = _commands[i + 1];
         if (static_cast<Instruction>(command[0]) == Instruction::DBC)
         {
-            i = interpreteLoop(i);
+            // i = interpreteLoop(i);
             continue;
-        }
-        else
-        {
-            i = executeCommand(i, command);
         }
     }
 }
-uint8_t Interpreter::interpreteLoop(uint8_t index)
+
+uint8_t Interpreter::interpreteLoop()
 {
     uint8_t command[2];
-    do
+    uint16_t address = 0;
+    _eeprom.lecture(address, _commands, 127);
+
+    while (_executeEnable && address <= Comm::MAX_RECEIVE_SIZE)
     {
-        if (index >= MAX_LOOP_INSTRUCTIONS)
-            break;
-
-        command[0] = _commands[index];
-        command[1] = _commands[index + 1];
-        index = executeCommand(index, command);
-
-    } while (_loopManager.loopStarted() && !_loopManager.loopEnded());
-    return index;
+        command[0] = _commands[address];
+        command[1] = _commands[address + 1];
+        address = executeCommand(address, command);
+    }
+    return address;
 }
 
 uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
@@ -52,9 +47,9 @@ uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
 
     switch (_instruction)
     {
-    case Instruction::DBT:
-        _executeEnable = true;
-        break;
+    // case Instruction::DBT:
+    //     _executeEnable = true;
+    //     break;
     case Instruction::FIN:
         _executeEnable = false;
         break;
@@ -102,15 +97,11 @@ uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
             break;
         // TODO tourner sur soit meme
         case Instruction::TRD:                                                 // right
-            _navigation.syncSpeedTurn(Side::RIGHT, Orientation::FORWARD, 100); // A CHANGER!!!
-            _delay_ms(1000);
-            _navigation.moveStraight(Orientation::FORWARD);
+            _navigation.pivot90(Side::RIGHT);
             break;
 
         case Instruction::TRG:                                                // left
-            _navigation.syncSpeedTurn(Side::LEFT, Orientation::FORWARD, 100); // A CHANGER!!!!
-            _delay_ms(1000);
-            _navigation.moveStraight(Orientation::FORWARD);
+            _navigation.pivot90(Side::LEFT);
             break;
 
         case Instruction::DBC:

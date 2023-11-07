@@ -3,16 +3,16 @@
 #include "memoire_24.h"
 #include "instructions.h"
 
-void writeBytecodeToMemory(Memoire24CXXX memory, uint8_t* data, uint8_t length) 
+void writeBytecodeToMemory(Memoire24CXXX memory, uint8_t* data, uint16_t length) 
 {
     bool isTransferStarted = false;
     bool isTransferDone = false;
 
-    uint8_t address = 0;
+    uint16_t address = 0;
 
     PRINT("INSTRUCTIONS: ");
 
-    for (uint8_t i = 0; i < length && !isTransferDone; i += INSTRUCTION_SIZE)
+    for (uint16_t i = 0; i < length && !isTransferDone; i += INSTRUCTION_SIZE)
     {
         PRINT(data[i]);
         if (static_cast<Instruction>(data[i]) == Instruction::DBT)
@@ -23,7 +23,7 @@ void writeBytecodeToMemory(Memoire24CXXX memory, uint8_t* data, uint8_t length)
         {
             isTransferDone = true;
         }
-        if (isTransferStarted && !isTransferDone)
+        if (isTransferStarted)
         {
             memory.ecriture(address, &data[i], INSTRUCTION_SIZE);
             address += INSTRUCTION_SIZE;
@@ -31,7 +31,7 @@ void writeBytecodeToMemory(Memoire24CXXX memory, uint8_t* data, uint8_t length)
     }
 }
 
-void verifySuccess(Memoire24CXXX memory, uint8_t* data, uint8_t length) {
+void verifySuccess(Memoire24CXXX memory, uint8_t* data, uint16_t length) {
 
     PRINT("PROGRAM IN MEMORY:");
     memory.lecture(0, data, length);
@@ -50,7 +50,7 @@ int main()
 
     led.setColor(LedColor::RED);
 
-    uint8_t length;
+    uint16_t length;
     uint8_t data[Comm::MAX_RECEIVE_SIZE];
     Comm::receiveData(data, &length);
 

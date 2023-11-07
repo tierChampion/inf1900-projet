@@ -14,15 +14,11 @@
 class Interpreter
 {
 public:
-    static const uint8_t MAX_LOOP_INSTRUCTIONS = (uint8_t)256;
-
-public:
     Interpreter();
     void interpreteByteCode(uint16_t adress);
     uint8_t executeCommand(uint8_t index, uint8_t *command);
 
-private:
-    uint8_t interpreteLoop(uint8_t index);
+    uint8_t interpreteLoop();
 
 private:
     Navigation _navigation;
@@ -31,7 +27,7 @@ private:
     LoopManager _loopManager;
     Memoire24CXXX _eeprom;
     bool _executeEnable;
-    static uint8_t _commands[MAX_LOOP_INSTRUCTIONS];
+    uint8_t _commands[Comm::MAX_RECEIVE_SIZE];
     uint8_t _operand;
     Instruction _instruction;
 };
