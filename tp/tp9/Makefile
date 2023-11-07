@@ -28,9 +28,7 @@ debug: DEBUGFLAG += debug
 debug: all
 
 debug-interpreter: DEBUGFLAG += debug
-debug-interpreter: library
 debug-interpreter: interpreter
 
 debug-loader: DEBUGFLAG += debug
-debug-loader: library
 debug-loader: loader
