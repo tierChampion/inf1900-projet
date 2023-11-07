@@ -12,10 +12,12 @@ library:
 interpreter: 
 	$(MAKE) -C interpreter clean
 	$(MAKE) $(DEBUGFLAG) -C interpreter install
+interpreter: library
 
 loader: 
 	$(MAKE) -C loader clean
 	$(MAKE) $(DEBUGFLAG) -C loader install
+loader: library
 
 clean:
 	$(MAKE) -C ../lib clean
