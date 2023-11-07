@@ -1,5 +1,8 @@
 #include "navigation.h"
 
+const float DEFAULT_SPEED_PERCENTAGE = 80.0f;
+const uint16_t TURN_DELAY = 650;
+
 Navigation::Navigation()
 {
     _timerPWM = Timer0();
@@ -18,29 +21,12 @@ Navigation::Navigation()
     _rightWheel = Wheel(pinDirR, Side::RIGHT, &_timerPWM);
     _timerPWM.start();
 
-    _speed = 0;
+    _speed = 0.0f;
 }
 
 Navigation::~Navigation()
 {
     _timerPWM.stop();
-}
-
-void Navigation::controlledTurn(Side turn, Orientation orientation, float speed, uint8_t turnStrength)
-{
-    _speed = speed;
-    float otherSpeed = speed * (1.f - (static_cast<float>(turnStrength) / 255.f));
-
-    if (turn == Side::LEFT)
-    {
-        _rightWheel.setSpeed(orientation, speed);
-        _leftWheel.setSpeed(orientation, otherSpeed);
-    }
-    else
-    {
-        _leftWheel.setSpeed(orientation, speed);
-        _rightWheel.setSpeed(orientation, otherSpeed);
-    }
 }
 
 void Navigation::moveStraight(Orientation orientation, float speed)
@@ -49,8 +35,10 @@ void Navigation::moveStraight(Orientation orientation, float speed)
     _leftWheel.setSpeed(orientation, speed);
     _rightWheel.setSpeed(orientation, speed);
 }
+
 void Navigation::moveStraight(Orientation orientation)
 {
+    _speed = DEFAULT_SPEED_PERCENTAGE;
     _leftWheel.setSpeed(orientation, _speed);
     _rightWheel.setSpeed(orientation, _speed);
 }
@@ -60,37 +48,19 @@ void Navigation::stop()
     moveStraight(Orientation::FORWARD, 0);
 }
 
-void Navigation::syncSpeedTurn(Side turn, Orientation orientation, uint8_t turnStrength)
-{
-    float otherSpeed = _speed * (1.f - (static_cast<float>(turnStrength) / 255.f));
-
-    if (turn == Side::LEFT)
-    {
-        _rightWheel.setSpeed(orientation, _speed);
-        _leftWheel.setSpeed(orientation, otherSpeed);
-    }
-    else
-    {
-        _leftWheel.setSpeed(orientation, _speed);
-        _rightWheel.setSpeed(orientation, otherSpeed);
-    }
-}
-
 void Navigation::pivot90(Side turn) {
 
     if (turn == Side::LEFT)
     {
-        _rightWheel.setSpeed(Orientation::FORWARD, 80);
-        _leftWheel.setSpeed(Orientation::BACKWARD, 80);
+        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED_PERCENTAGE);
+        _leftWheel.setSpeed(Orientation::BACKWARD, DEFAULT_SPEED_PERCENTAGE);
     }
     else
     {
-        _leftWheel.setSpeed(Orientation::FORWARD, 80);
-        _rightWheel.setSpeed(Orientation::BACKWARD, 80);
+        _leftWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED_PERCENTAGE);
+        _rightWheel.setSpeed(Orientation::BACKWARD, DEFAULT_SPEED_PERCENTAGE);
     }
 
-    // delay for the right amount of time
-    _delay_ms(650);
-
+    _delay_ms(TURN_DELAY);
     stop();
 }

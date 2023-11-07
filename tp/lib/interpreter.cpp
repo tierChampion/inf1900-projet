@@ -38,70 +38,70 @@ uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
 
     switch (_instruction)
     {
-    case Instruction::FIN:
-        _executeEnable = false;
-        break;
-    default:
-        break;
+        case Instruction::FIN:
+            _executeEnable = false;
+            break;
+        default:
+            break;
     }
 
     if (_executeEnable)
     {
         switch (_instruction)
         {
-        case Instruction::ATT:
-            configurableDelayMS(_operand);
-            break;
+            case Instruction::ATT:
+                configurableDelayMS(_operand);
+                break;
 
-        case Instruction::DAL: 
-            if (_operand == 1)
-                _led.setColor(LedColor::GREEN);
-            else if (_operand == 2)
-                _led.setColor(LedColor::RED);
-            break;
+            case Instruction::DAL: 
+                if (_operand == 1)
+                    _led.setColor(LedColor::GREEN);
+                else if (_operand == 2)
+                    _led.setColor(LedColor::RED);
+                break;
 
-        case Instruction::DET: 
-            _led.setColor(LedColor::OFF);
-            break;
+            case Instruction::DET: 
+                _led.setColor(LedColor::OFF);
+                break;
 
-        case Instruction::SGO:
-            _piezo.play(_operand); 
-            break;
+            case Instruction::SGO:
+                _piezo.play(_operand); 
+                break;
 
-        case Instruction::SAR:
-            _piezo.stop();
-            break;
+            case Instruction::SAR:
+                _piezo.stop();
+                break;
 
-        case Instruction::MAR:
-            _navigation.stop();
-            break;
+            case Instruction::MAR:
+                _navigation.stop();
+                break;
 
-        case Instruction::MAV:
-            _navigation.moveStraight(Orientation::FORWARD, toPercentage(_operand));
-            break;
+            case Instruction::MAV:
+                _navigation.moveStraight(Orientation::FORWARD, toPercentage(_operand));
+                break;
 
-        case Instruction::MRE:
-            _navigation.moveStraight(Orientation::BACKWARD, toPercentage(_operand));
-            break;
+            case Instruction::MRE:
+                _navigation.moveStraight(Orientation::BACKWARD, toPercentage(_operand));
+                break;
 
-        case Instruction::TRD:
-            _navigation.pivot90(Side::RIGHT);
-            break;
+            case Instruction::TRD:
+                _navigation.pivot90(Side::RIGHT);
+                break;
 
-        case Instruction::TRG:
-            _navigation.pivot90(Side::LEFT);
-            break;
+            case Instruction::TRG:
+                _navigation.pivot90(Side::LEFT);
+                break;
 
-        case Instruction::DBC:
-            _loopManager.startLoop(index, _operand);
-            break;
+            case Instruction::DBC:
+                _loopManager.startLoop(index, _operand);
+                break;
 
-        case Instruction::FBC:
-            return _loopManager.stopLoop(index);
-            break;
+            case Instruction::FBC:
+                return _loopManager.stopLoop(index);
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
     }
 

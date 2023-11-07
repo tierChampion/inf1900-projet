@@ -31,67 +31,68 @@ void Piezo::play(Note note, Octave octave)
 {
     switch (note)
     {
-    case Note::A:
-        _timer.setCompareValue(TimerCompare::A, 142);
-        break;
-    case Note::ASHARP_BFLAT:
-        _timer.setCompareValue(TimerCompare::A, 134);
-        break;
-    case Note::B:
-        _timer.setCompareValue(TimerCompare::A, 127);
-        break;
-    case Note::C:
-        _timer.setCompareValue(TimerCompare::A, 120);
-        break;
-    case Note::CSHARP_DFLAT:
-        _timer.setCompareValue(TimerCompare::A, 113);
-        break;
-    case Note::D:
-        _timer.setCompareValue(TimerCompare::A, 107);
-        break;
-    case Note::DSHARP_EFLAT:
-        _timer.setCompareValue(TimerCompare::A, 100);
-        break;
-    case Note::E:
-        _timer.setCompareValue(TimerCompare::A, 95);
-        break;
-    case Note::F:
-        _timer.setCompareValue(TimerCompare::A, 89);
-        break;
-    case Note::FSHARP_GFLAT:
-        _timer.setCompareValue(TimerCompare::A, 84);
-        break;
-    case Note::G:
-        _timer.setCompareValue(TimerCompare::A, 80);
-        break;
-    case Note::GSHARP_AFLAT:
-        _timer.setCompareValue(TimerCompare::A, 75);
-        break;
+        case Note::A:
+            _timer.setCompareValue(TimerCompare::A, 142);
+            break;
+        case Note::ASHARP_BFLAT:
+            _timer.setCompareValue(TimerCompare::A, 134);
+            break;
+        case Note::B:
+            _timer.setCompareValue(TimerCompare::A, 127);
+            break;
+        case Note::C:
+            _timer.setCompareValue(TimerCompare::A, 120);
+            break;
+        case Note::CSHARP_DFLAT:
+            _timer.setCompareValue(TimerCompare::A, 113);
+            break;
+        case Note::D:
+            _timer.setCompareValue(TimerCompare::A, 107);
+            break;
+        case Note::DSHARP_EFLAT:
+            _timer.setCompareValue(TimerCompare::A, 100);
+            break;
+        case Note::E:
+            _timer.setCompareValue(TimerCompare::A, 95);
+            break;
+        case Note::F:
+            _timer.setCompareValue(TimerCompare::A, 89);
+            break;
+        case Note::FSHARP_GFLAT:
+            _timer.setCompareValue(TimerCompare::A, 84);
+            break;
+        case Note::G:
+            _timer.setCompareValue(TimerCompare::A, 80);
+            break;
+        case Note::GSHARP_AFLAT:
+            _timer.setCompareValue(TimerCompare::A, 75);
+            break;
     }
 
     switch (octave)
     {
-    case Octave::LOW:
-    {
-        _timer.setPrescalar(TimerPrescalar::TWO_FIFTY_SIX);
-        break;
+        case Octave::LOW:
+        {
+            _timer.setPrescalar(TimerPrescalar::TWO_FIFTY_SIX);
+            break;
+        }
+        case Octave::MEDIUM:
+        {
+            _timer.setPrescalar(TimerPrescalar::ONE_TWENTY_EIGHT);
+            break;
+        }
+        case Octave::HIGH:
+        {
+            _timer.setPrescalar(TimerPrescalar::SIXTY_FOUR);
+            break;
+        }
+        case Octave::TOP:
+        {
+            _timer.setPrescalar(TimerPrescalar::THIRTY_TWO);
+            break;
+        }
     }
-    case Octave::MEDIUM:
-    {
-        _timer.setPrescalar(TimerPrescalar::ONE_TWENTY_EIGHT);
-        break;
-    }
-    case Octave::HIGH:
-    {
-        _timer.setPrescalar(TimerPrescalar::SIXTY_FOUR);
-        break;
-    }
-    case Octave::TOP:
-    {
-        _timer.setPrescalar(TimerPrescalar::THIRTY_TWO);
-        break;
-    }
-    }
+
     _timer.start();
 }
 

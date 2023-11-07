@@ -20,15 +20,14 @@ void Wheel::setSpeed(Orientation orientation, float speed)
             _directionPin.clear();
             break;
     }
+
     switch (_side)
     {
         case Side::RIGHT:
-            _timerPWM->setCompareValue(TimerCompare::B, static_cast<uint8_t>(255 * speed / 100));
-            //PRINT(OCR0B);
+            _timerPWM->setCompareValue(TimerCompare::B, to8Bits(speed));
             break;
         case Side::LEFT:
-            _timerPWM->setCompareValue(TimerCompare::A, static_cast<uint8_t>(255 * speed / 100));
-            //PRINT(OCR0A);
+            _timerPWM->setCompareValue(TimerCompare::A, to8Bits(speed));
             break;
     }
 }

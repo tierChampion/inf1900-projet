@@ -3,6 +3,7 @@
 #include "debug.h"
 
 const uint8_t RECEIVE_HEADER_SIZE = 2;
+const uint8_t BYTE_SIZE = 8;
 
 bool Comm::_isInitialised = false;
 
@@ -23,14 +24,16 @@ Comm::Comm()
     _isInitialised = true;
 }
 
-void Comm::initialiseComm() {
+void Comm::initialiseComm()
+{
     _comm = Comm();
 }
 
 void Comm::transmitData(const uint8_t *data, uint16_t length)
 {
 
-    if (!_isInitialised) initialiseComm();
+    if (!_isInitialised)
+        initialiseComm();
 
     for (uint16_t i = 0; i < length; i++)
     {
@@ -43,27 +46,30 @@ void Comm::transmitData(const uint8_t *data, uint16_t length)
     }
 }
 
-void Comm::receiveData(uint8_t* data, uint16_t* length)
+void Comm::receiveData(uint8_t *data, uint16_t *length)
 {
-    if (!_isInitialised) initialiseComm();
+    if (!_isInitialised)
+        initialiseComm();
 
     uint8_t highLength = singleReceive();
     uint8_t lowLength = singleReceive() - RECEIVE_HEADER_SIZE;
 
-    *length = (highLength << 8) | lowLength;
+    *length = (highLength << BYTE_SIZE) | lowLength;
 
-    if (*length > MAX_RECEIVE_SIZE) {
+    if (*length > MAX_RECEIVE_SIZE)
+    {
         PRINT("WARNING: Bytecode is too large.");
         *length = MAX_RECEIVE_SIZE;
     }
 
-    for (uint8_t i = 0; i < *length; i++) {
-
+    for (uint8_t i = 0; i < *length; i++)
+    {
         data[i] = singleReceive();
     }
 }
 
-uint8_t Comm::singleReceive() {
+uint8_t Comm::singleReceive()
+{
 
     while (!(UCSR0A & (1 << RXC0)))
     {

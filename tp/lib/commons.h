@@ -24,4 +24,9 @@ inline float toPercentage(uint8_t val)
     return (static_cast<float>(val) / MAXIMUM_8BIT) * MAXIMUM_PERCENTAGE;
 }
 
+inline uint8_t to8Bits(float val)
+{
+    return static_cast<uint8_t>(MAXIMUM_8BIT * val / MAXIMUM_PERCENTAGE);
+}
+
 #endif

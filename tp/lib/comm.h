@@ -8,10 +8,9 @@ class Comm
 public:
     static const uint16_t MAX_RECEIVE_SIZE = 512;
 
-    static bool _isInitialised;
-
 private:
     static Comm _comm;
+    static bool _isInitialised;
 
 public:
     static void initialiseComm();
