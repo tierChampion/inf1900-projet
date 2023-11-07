@@ -4,6 +4,8 @@
 
 const uint8_t RECEIVE_HEADER_SIZE = 2;
 
+bool Comm::_isInitialised = false;
+
 Comm::Comm()
 {
     // 2400 bauds. Nous vous donnons la valeur des deux
@@ -17,10 +19,19 @@ Comm::Comm()
 
     // Format des trames: 8 bits, 1 stop bits, sans parité
     UCSR0C = (1 << UCSZ01) | ((1 << UCSZ00));
+
+    _isInitialised = true;
+}
+
+void Comm::initialiseComm() {
+    _comm = Comm();
 }
 
 void Comm::transmitData(const uint8_t *data, uint8_t length)
 {
+
+    if (!_isInitialised) initialiseComm();
+
     for (uint8_t i = 0; i < length; i++)
     {
         /* Wait for empty transmit buffer */
@@ -34,10 +45,10 @@ void Comm::transmitData(const uint8_t *data, uint8_t length)
 
 void Comm::receiveData(uint8_t* data, uint8_t* length)
 {
+    if (!_isInitialised) initialiseComm();
 
     singleReceive();
     *length = singleReceive() - RECEIVE_HEADER_SIZE;
-
 
     for (uint8_t i = 0; i < *length; i++) {
 

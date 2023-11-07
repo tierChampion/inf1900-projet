@@ -6,8 +6,6 @@
 
 #include "comm.h"
 
-Comm comm;
-
 const uint16_t MAX_BUFFER_SIZE = 7;
 
 void display(const uint8_t x)

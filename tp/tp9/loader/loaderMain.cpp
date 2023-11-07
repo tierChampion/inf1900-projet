@@ -27,8 +27,6 @@ void writeBytecodeToMemory(Memoire24CXXX memory, uint8_t* data, uint8_t length)
         {
             memory.ecriture(address, &data[i], INSTRUCTION_SIZE);
             address += INSTRUCTION_SIZE;
-            //memory.ecriture(address, data[i + 1]);
-            //address++;
         }
     }
 }
