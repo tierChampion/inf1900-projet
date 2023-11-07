@@ -1,5 +1,9 @@
 #include "piezo.h"
 
+const uint8_t STARTING_NOTE = 45;
+const uint8_t NOTES_PER_OCTAVE = 12;
+const uint8_t OCTAVE_COUNT = 4;
+
 Piezo::Piezo()
     : _timer(Timer2()), _timerPin(WritePin(Port::D, PD7)), _groundPin(WritePin(Port::D, PD6))
 {
@@ -10,9 +14,9 @@ Piezo::Piezo()
 }
 
 void Piezo::play(int val) {
-    int base = val - 45;
-    int note = base % 12;
-    int octave = (base / 12) % 3;
+    int base = val - STARTING_NOTE;
+    int note = base % NOTES_PER_OCTAVE;
+    int octave = (base / NOTES_PER_OCTAVE) % OCTAVE_COUNT;
 
     switch(note)
     {
