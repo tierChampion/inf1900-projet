@@ -1,21 +1,35 @@
 #include "loopManager.h"
 
-LoopManager::LoopManager() : _returnAddress(0), _counter(0) {}
+LoopManager::LoopManager() : _returnAddress(0), _counter(0), _loopStarted(false), _loopEnded(false) {}
 
-void LoopManager::startLoop(uint16_t address, uint8_t counter)
+bool LoopManager::loopStarted() const
 {
-    _counter = counter;
-
-    _returnAddress = address + 2;
+    return _loopStarted;
 }
 
-uint16_t LoopManager::stopLoop(uint16_t address)
+bool LoopManager::loopEnded() const
+{
+    return _loopEnded;
+}
+
+void LoopManager::startLoop(uint8_t index, uint8_t counter)
+{
+    _loopStarted = true;
+    _loopEnded = false;
+    _counter = counter;
+
+    _returnAddress = index + 2;
+}
+
+uint16_t LoopManager::stopLoop(uint8_t index)
 {
     _counter--;
 
     if (_counter == 0)
     {
-        return address + 2;
+        _loopEnded = true;
+        _loopStarted = false;
+        return index + 2;
     }
     else
     {

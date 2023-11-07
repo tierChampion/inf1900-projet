@@ -6,22 +6,46 @@ Interpreter::Interpreter() : _navigation(Navigation()),
 {
 }
 
-void Interpreter::startInterpreting(uint8_t address)
+void Interpreter::interpreteByteCode(uint16_t adress)
 {
 
     // TODO cette partie, loading doit etre different
     uint8_t command[2];
-    _eeprom.lecture(address, (uint8_t *)command, 2);
-
-    uint8_t scriptLenght = command[0];
-    for (; scriptLenght > 0; scriptLenght--)
+    _eeprom.lecture(adress, (uint8_t *)_commands, MAX_LOOP_INSTRUCTIONS);
+    _executeEnable = true;
+    uint8_t i = (uint8_t)0;
+    while (_executeEnable && i < MAX_LOOP_INSTRUCTIONS)
     {
-        _eeprom.lecture(address, (uint8_t *)command, 2);
-        address = executeCommand(address, command);
+        command[0] = _commands[i];
+        command[1] = _commands[i + 1];
+        if (static_cast<Instruction>(command[0]) == Instruction::DBC)
+        {
+            i = interpreteLoop(i);
+            continue;
+        }
+        else
+        {
+            i = executeCommand(i, command);
+        }
     }
 }
+uint8_t Interpreter::interpreteLoop(uint8_t index)
+{
+    uint8_t command[2];
+    do
+    {
+        if (index >= MAX_LOOP_INSTRUCTIONS)
+            break;
 
-uint8_t Interpreter::executeCommand(uint8_t address, uint8_t *command)
+        command[0] = _commands[index];
+        command[1] = _commands[index + 1];
+        index = executeCommand(index, command);
+
+    } while (_loopManager.loopStarted() && !_loopManager.loopEnded());
+    return index;
+}
+
+uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
 {
     _instruction = static_cast<Instruction>(command[0]);
     _operand = command[1];
@@ -90,16 +114,16 @@ uint8_t Interpreter::executeCommand(uint8_t address, uint8_t *command)
             break;
 
         case Instruction::DBC:
-            _loopManager.startLoop(address, _operand);
+            _loopManager.startLoop(index, _operand);
             break;
 
         case Instruction::FBC:
-            return _loopManager.stopLoop(address);
+            return _loopManager.stopLoop(index);
             break;
 
         default:
             break;
         }
     }
-    return address + 2;
+    return index + 2;
 }
