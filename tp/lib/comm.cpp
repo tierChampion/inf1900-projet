@@ -52,6 +52,11 @@ void Comm::receiveData(uint8_t* data, uint16_t* length)
 
     *length = (highLength << 8) | lowLength;
 
+    if (*length > MAX_RECEIVE_SIZE) {
+        PRINT("WARNING: Bytecode is too large.");
+        *length = MAX_RECEIVE_SIZE;
+    }
+
     for (uint8_t i = 0; i < *length; i++) {
 
         data[i] = singleReceive();
