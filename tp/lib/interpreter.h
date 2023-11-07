@@ -15,10 +15,11 @@ class Interpreter
 {
 public:
     Interpreter();
-    void interpreteByteCode(uint16_t adress);
-    uint8_t executeCommand(uint8_t index, uint8_t *command);
+    void interpretBytecode();
 
-    uint8_t interpreteLoop();
+private:
+    void loadBytecode();
+    uint8_t executeCommand(uint8_t index, uint8_t *command);
 
 private:
     Navigation _navigation;

@@ -1,35 +1,19 @@
 #include <interpreter.h>
 
+const uint8_t MAXIMUM_READ = 127;
+
 Interpreter::Interpreter() : _navigation(Navigation()),
                              _piezo(Piezo()), _led(Led(Port::A, PA0, PA1)), _loopManager(LoopManager()),
                              _eeprom(Memoire24CXXX()), _executeEnable(true)
 {
 }
 
-void Interpreter::interpreteByteCode(uint16_t adress)
+void Interpreter::interpretBytecode()
 {
-
-    // TODO cette partie, loading doit etre different
-    uint8_t command[2];
-    _executeEnable = true;
-    uint8_t i = 0;
-    while (_executeEnable && i < Comm::MAX_RECEIVE_SIZE)
-    {
-        command[0] = _commands[i];
-        command[1] = _commands[i + 1];
-        if (static_cast<Instruction>(command[0]) == Instruction::DBC)
-        {
-            // i = interpreteLoop(i);
-            continue;
-        }
-    }
-}
-
-uint8_t Interpreter::interpreteLoop()
-{
-    uint8_t command[2];
+    uint8_t command[INSTRUCTION_SIZE];
     uint16_t address = 0;
-    _eeprom.lecture(address, _commands, 127);
+
+    loadBytecode();
 
     while (_executeEnable && address <= Comm::MAX_RECEIVE_SIZE)
     {
@@ -37,7 +21,14 @@ uint8_t Interpreter::interpreteLoop()
         command[1] = _commands[address + 1];
         address = executeCommand(address, command);
     }
-    return address;
+}
+
+void Interpreter::loadBytecode() {
+
+    for (uint8_t i = 0; i < Comm::MAX_RECEIVE_SIZE / MAXIMUM_READ; i++)
+    {
+        _eeprom.lecture(i * (MAXIMUM_READ + 1), _commands, MAXIMUM_READ);
+    }
 }
 
 uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
@@ -47,9 +38,6 @@ uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
 
     switch (_instruction)
     {
-    // case Instruction::DBT:
-    //     _executeEnable = true;
-    //     break;
     case Instruction::FIN:
         _executeEnable = false;
         break;
@@ -61,23 +49,23 @@ uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
     {
         switch (_instruction)
         {
-        case Instruction::ATT: // attendre
+        case Instruction::ATT:
             configurableDelayMS(_operand);
             break;
 
-        case Instruction::DAL: // allumer del
+        case Instruction::DAL: 
             if (_operand == 1)
                 _led.setColor(LedColor::GREEN);
             else if (_operand == 2)
                 _led.setColor(LedColor::RED);
             break;
 
-        case Instruction::DET: // eteindre del
+        case Instruction::DET: 
             _led.setColor(LedColor::OFF);
             break;
 
         case Instruction::SGO:
-            _piezo.play(_operand); /// A CHANGER!!!
+            _piezo.play(_operand); 
             break;
 
         case Instruction::SAR:
@@ -87,20 +75,20 @@ uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
         case Instruction::MAR:
             _navigation.stop();
             break;
-        // TODO check les mouvements et la navigation
-        case Instruction::MAV: // avant
-            _navigation.moveStraight(Orientation::FORWARD, (_operand / 255) * 100);
+
+        case Instruction::MAV:
+            _navigation.moveStraight(Orientation::FORWARD, toPercentage(_operand));
             break;
 
-        case Instruction::MRE: // arriere
-            _navigation.moveStraight(Orientation::BACKWARD, (_operand / 255) * 100);
+        case Instruction::MRE:
+            _navigation.moveStraight(Orientation::BACKWARD, toPercentage(_operand));
             break;
-        // TODO tourner sur soit meme
-        case Instruction::TRD:                                                 // right
+
+        case Instruction::TRD:
             _navigation.pivot90(Side::RIGHT);
             break;
 
-        case Instruction::TRG:                                                // left
+        case Instruction::TRG:
             _navigation.pivot90(Side::LEFT);
             break;
 
@@ -116,5 +104,6 @@ uint8_t Interpreter::executeCommand(uint8_t index, uint8_t *command)
             break;
         }
     }
-    return index + 2;
+
+    return index + INSTRUCTION_SIZE;
 }
