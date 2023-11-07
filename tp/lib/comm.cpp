@@ -27,12 +27,12 @@ void Comm::initialiseComm() {
     _comm = Comm();
 }
 
-void Comm::transmitData(const uint8_t *data, uint8_t length)
+void Comm::transmitData(const uint8_t *data, uint16_t length)
 {
 
     if (!_isInitialised) initialiseComm();
 
-    for (uint8_t i = 0; i < length; i++)
+    for (uint16_t i = 0; i < length; i++)
     {
         /* Wait for empty transmit buffer */
         while (!(UCSR0A & (1 << UDRE0)))
@@ -43,12 +43,14 @@ void Comm::transmitData(const uint8_t *data, uint8_t length)
     }
 }
 
-void Comm::receiveData(uint8_t* data, uint8_t* length)
+void Comm::receiveData(uint8_t* data, uint16_t* length)
 {
     if (!_isInitialised) initialiseComm();
 
-    singleReceive();
-    *length = singleReceive() - RECEIVE_HEADER_SIZE;
+    uint8_t highLength = singleReceive();
+    uint8_t lowLength = singleReceive() - RECEIVE_HEADER_SIZE;
+
+    *length = (highLength << 8) | lowLength;
 
     for (uint8_t i = 0; i < *length; i++) {
 
