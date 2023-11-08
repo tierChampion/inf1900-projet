@@ -1,6 +1,6 @@
 #include <interpreter.h>
 
-const uint8_t MAXIMUM_READ = 127;
+const uint16_t MAXIMUM_READ = 127;
 
 Interpreter::Interpreter() : _navigation(Navigation()),
                              _piezo(Piezo()), _led(Led(Port::A, PA0, PA1)), _loopManager(LoopManager()),
@@ -23,11 +23,12 @@ void Interpreter::interpretBytecode()
     }
 }
 
-void Interpreter::loadBytecode() {
-
+void Interpreter::loadBytecode() 
+{
     for (uint8_t i = 0; i < Comm::MAX_RECEIVE_SIZE / MAXIMUM_READ; i++)
     {
-        _eeprom.lecture(i * (MAXIMUM_READ + 1), _commands, MAXIMUM_READ);
+        uint16_t address = i * (MAXIMUM_READ + 1);
+        _eeprom.lecture(address, &_commands[address], MAXIMUM_READ);
     }
 }
 
