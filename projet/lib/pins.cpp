@@ -33,6 +33,11 @@ uint8_t ReadPin::read() const
     return (*_pin & (1 << _position));
 }
 
+uint8_t ReadPin::getPosition() const 
+{
+    return _position;
+}
+
 WritePin::WritePin() {}
 
 WritePin::WritePin(Port pinPort, uint8_t position)
@@ -70,4 +75,9 @@ void WritePin::set()
 void WritePin::clear()
 {
     *_port &= ~(1 << _position);
+}
+
+uint8_t WritePin::getPosition() const
+{
+    return _position;
 }

@@ -17,6 +17,7 @@ public:
     ReadPin();
     ReadPin(Port pinPort, uint8_t position);
     uint8_t read() const;
+    uint8_t getPosition() const;
 
 private:
     Register _mode;
@@ -31,6 +32,7 @@ public:
     WritePin(Port pinPort, uint8_t position);
     void set();
     void clear();
+    uint8_t getPosition() const;
 
 private:
     Register _mode;

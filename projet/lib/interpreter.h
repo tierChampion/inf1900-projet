@@ -6,7 +6,7 @@
 #include "navigation.h"
 #include "led.h"
 #include "piezo.h"
-#include "loopManager.h"
+#include "loop_manager.h"
 #include "comm.h"
 #include "memoire_24.h"
 #include "instructions.h"
