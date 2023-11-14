@@ -30,4 +30,25 @@ inline uint8_t to8Bits(float val)
     return static_cast<uint8_t>(MAXIMUM_8BIT_F * val / MAXIMUM_PERCENTAGE);
 }
 
+inline uint8_t max(uint8_t a, uint8_t b)
+{
+    if (a > b)
+        return a;
+    return b;
+}
+
+inline uint8_t min(uint8_t a, uint8_t b)
+{
+    if (a < b)
+        return a;
+    return b;
+}
+
+inline uint8_t difference(uint8_t a, uint8_t b)
+{
+    if (a > b)
+        return a - b;
+    return b - a;
+}
+
 #endif

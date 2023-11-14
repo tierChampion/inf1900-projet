@@ -12,62 +12,112 @@ Map::Map()
     initialiseMap();
 }
 
+const MapNode& Map::getNode(uint8_t position) const
+{
+    return _nodes[position];
+}
+
 void Map::placePillar(uint8_t position)
 {
     _pillar = position;
 
-    if (_pillar >= MAP_WIDTH)
+    uint8_t x = getPositionX(position);
+    uint8_t y = getPositionY(position);
+
+    if (y > 0)
     {
         // north
-        _nodes[_pillar - MAP_WIDTH]._southDistance = 0;
+        _nodes[getNorthId(position)]._southDistance = 0;
     }
-    if (_pillar <= NODE_COUNT - MAP_WIDTH - 1)
+    if (y < MAP_HEIGHT - 1)
     {
         // south
-        _nodes[_pillar + MAP_WIDTH]._northDistance = 0;
+        _nodes[getSouthId(position)]._northDistance = 0;
     }
-    if (_pillar % MAP_WIDTH != 0)
+    if (x > 0)
     {
         // west
-        _nodes[_pillar - 1]._eastDistance = 0;
+        _nodes[getWestId(position)]._eastDistance = 0;
     }
-    if (_pillar % MAP_WIDTH != MAP_WIDTH - 1)
+    if (x < MAP_WIDTH - 1)
     {
         // east
-        _nodes[_pillar + 1]._westDistance = 0;
+        _nodes[getEastId(position)]._westDistance = 0;
     }
 }
 
 void Map::removePillar()
 {
-    if (_pillar >= MAP_WIDTH)
+    uint8_t x = getPositionX(_pillar);
+    uint8_t y = getPositionY(_pillar);
+
+    if (y > 0)
     {
         // north
-        _nodes[_pillar - MAP_WIDTH]._southDistance = _nodes[_pillar]._northDistance;
+        _nodes[getNorthId(_pillar)]._southDistance = _nodes[_pillar]._northDistance;
     }
-    if (_pillar <= NODE_COUNT - MAP_WIDTH - 1)
+    if (y < MAP_HEIGHT - 1)
     {
         // south
-        _nodes[_pillar + MAP_WIDTH]._northDistance = _nodes[_pillar]._southDistance;
+        _nodes[getSouthId(_pillar)]._northDistance = _nodes[_pillar]._southDistance;
     }
-    if (_pillar % MAP_WIDTH != 0)
+    if (x > 0)
     {
         // west
-        _nodes[_pillar - 1]._eastDistance = _nodes[_pillar]._westDistance;
+        _nodes[getWestId(_pillar)]._eastDistance = _nodes[_pillar]._westDistance;
     }
-    if (_pillar % MAP_WIDTH != MAP_WIDTH - 1)
+    if (x < MAP_WIDTH - 1)
     {
         // east
-        _nodes[_pillar + 1]._westDistance = _nodes[_pillar]._eastDistance;
+        _nodes[getEastId(_pillar)]._westDistance = _nodes[_pillar]._eastDistance;
     }
 
     _pillar = NONE;
 }
 
+uint8_t getPositionX(uint8_t position)
+{
+    return position % Map::MAP_WIDTH;
+}
+
+uint8_t getPositionY(uint8_t position)
+{
+    return position / Map::MAP_WIDTH;
+}
+
+uint8_t getNorthId(uint8_t position)
+{
+    if (getPositionY(position) == 0)
+        return NONE;
+    return position - Map::MAP_WIDTH;
+}
+
+uint8_t getSouthId(uint8_t position)
+{
+    if (getPositionY(position) == Map::MAP_HEIGHT - 1)
+        return NONE;
+    return position + Map::MAP_WIDTH;
+}
+
+uint8_t getEastId(uint8_t position)
+{
+    if (getPositionX(position) == Map::MAP_WIDTH - 1)
+        return NONE;
+    return position + 1;
+}
+
+uint8_t getWestId(uint8_t position)
+{
+    if (getPositionX(position) == 0)
+        return NONE;
+    return position - 1;
+}
+
 void Map::printMap() const
 {
-    for (uint8_t i = 0; i < NODE_COUNT; i++) {
-        PRINT("NODE:");
+    for (uint8_t i = 0; i < NODE_COUNT; i++)
+    {
+        PRINT("NODE: (N, S, E, W)");
         PRINT(_nodes[i]._northDistance);
         PRINT(_nodes[i]._southDistance);
         PRINT(_nodes[i]._eastDistance);
