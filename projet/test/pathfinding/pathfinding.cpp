@@ -19,6 +19,7 @@ int main()
     Pathfinder finder = Pathfinder();
 
     map.placePillar(16);
+    map.removePillar();
 
     finder.findPath(map, 14, 22);
 }

@@ -15,6 +15,9 @@ void Pathfinder::findPath(const Map &map, uint8_t start, uint8_t dest)
     {
         uint8_t index = popBestNode();
 
+        //PRINT("POPPED:");
+        PRINT(index);
+
         if (index == dest)
         {
             finished = true;
@@ -24,21 +27,25 @@ void Pathfinder::findPath(const Map &map, uint8_t start, uint8_t dest)
         _workMap[index]._visited = VisitedState::FINISHED;
         const MapNode mapNode = map.getNode(index);
 
-        if (mapNode._northDistance > 0)
+        if (mapNode.getCardinalDist(Direction::NORTH) > 0)
         {
-            handleNeighbor(index, getNorthId(index), mapNode._northDistance);
+            //PRINT("N");
+            handleNeighbor(index, getNorthId(index), mapNode.getCardinalDist(Direction::NORTH));
         }
-        if (mapNode._southDistance > 0)
+        if (mapNode.getCardinalDist(Direction::SOUTH) > 0)
         {
-            handleNeighbor(index, getSouthId(index), mapNode._southDistance);
+            //PRINT("S");
+            handleNeighbor(index, getSouthId(index), mapNode.getCardinalDist(Direction::SOUTH));
         }
-        if (mapNode._eastDistance > 0)
+        if (mapNode.getCardinalDist(Direction::EAST) > 0)
         {
-            handleNeighbor(index, getEastId(index), mapNode._eastDistance);
+            //PRINT("E");
+            handleNeighbor(index, getEastId(index), mapNode.getCardinalDist(Direction::EAST));
         }
-        if (mapNode._westDistance > 0)
+        if (mapNode.getCardinalDist(Direction::WEST) > 0)
         {
-            handleNeighbor(index, getWestId(index), mapNode._westDistance);
+            //PRINT("W");
+            handleNeighbor(index, getWestId(index), mapNode.getCardinalDist(Direction::WEST));
         }
     }
 
@@ -68,7 +75,6 @@ uint8_t Pathfinder::popBestNode()
     }
     _workSize--;
 
-    uint8_t temp = minId;
     _workArray[minId] = _workArray[_workSize];
     _workArray[_workSize] = minMapId;
 

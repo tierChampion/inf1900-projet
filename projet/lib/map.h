@@ -3,17 +3,28 @@
 
 #include "commons.h"
 
-struct MapNode
+enum class Direction
 {
-    uint8_t _westDistance;
-    uint8_t _eastDistance;
-    uint8_t _northDistance;
-    uint8_t _southDistance;
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
+};
 
-    MapNode() : _westDistance(0),
-                _eastDistance(0),
-                _northDistance(0),
-                _southDistance(0) {}
+class MapNode
+{
+public:
+    MapNode() : _verticalDistances(0),
+                _lateralDistances(0) {}
+
+    MapNode(uint8_t north, uint8_t south, uint8_t east, uint8_t west);
+
+    uint8_t getCardinalDist(Direction direction) const;
+    void setCardinalDist(Direction direction, uint8_t newDist);
+
+private:
+    uint8_t _verticalDistances;
+    uint8_t _lateralDistances;
 };
 
 class Map
@@ -21,7 +32,7 @@ class Map
 
 public:
     Map();
-    const MapNode& getNode(uint8_t position) const;
+    const MapNode &getNode(uint8_t position) const;
     void placePillar(uint8_t position);
     void removePillar();
 
