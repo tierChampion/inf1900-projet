@@ -3,10 +3,10 @@
 
 #include "map.h"
 
-enum class VisitedState {
-    UNKNOWN,
-    VISITED,
-    FINISHED
+enum class VisitedState : uint8_t {
+    UNKNOWN = 0,
+    VISITED = 1,
+    FINISHED = 2
 };
 
 struct WorkNode
