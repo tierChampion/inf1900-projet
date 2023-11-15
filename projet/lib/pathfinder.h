@@ -3,7 +3,7 @@
 
 #include "map.h"
 
-enum class VisitedState : uint8_t {
+enum class Visited : uint8_t {
     UNKNOWN = 0,
     VISITED = 1,
     FINISHED = 2
@@ -11,13 +11,15 @@ enum class VisitedState : uint8_t {
 
 struct WorkNode
 {
-    uint8_t _prev;
     uint8_t _distance;
-    VisitedState _visited;
+    uint8_t _travelSettings;
 
-    WorkNode() : _distance(0xFF),
-                 _prev(0xFF),
-                 _visited(VisitedState::UNKNOWN) {}
+    WorkNode();
+
+    Visited getVisited() const;
+    uint8_t getPrev() const;
+    void setVisited(Visited visited);
+    void setPrev(uint8_t prevPos);
 };
 
 class Pathfinder

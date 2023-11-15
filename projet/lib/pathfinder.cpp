@@ -1,11 +1,36 @@
 #include "pathfinder.h"
 
+WorkNode::WorkNode() : _distance(Map::NONE),
+                       _travelSettings(0x1F) {}
+
+Visited WorkNode::getVisited() const
+{
+    return static_cast<Visited>(_travelSettings >> 5);
+}
+
+uint8_t WorkNode::getPrev() const
+{
+    return _travelSettings & 0x1F;
+}
+
+void WorkNode::setVisited(Visited visited)
+{
+    _travelSettings = (_travelSettings & 0x1F) |
+                   (static_cast<uint8_t>(visited) << 5);
+}
+
+void WorkNode::setPrev(uint8_t prevPos)
+{
+    _travelSettings = (_travelSettings & 0xE0) |
+                   (prevPos & 0x1F);
+}
+
 Pathfinder::Pathfinder() : _workSize(0) {}
 
 void Pathfinder::findPath(const Map &map, uint8_t start, uint8_t dest)
 {
     _workMap[start]._distance = 0;
-    _workMap[start]._visited = VisitedState::VISITED;
+    _workMap[start].setVisited(Visited::VISITED);
 
     _workArray[_workSize++] = start;
 
@@ -13,39 +38,32 @@ void Pathfinder::findPath(const Map &map, uint8_t start, uint8_t dest)
 
     while (!finished && _workSize > 0)
     {
-        uint8_t index = popBestNode();
+        uint8_t position = popBestNode();
 
-        //PRINT("POPPED:");
-        PRINT(index);
-
-        if (index == dest)
+        if (position == dest)
         {
             finished = true;
             continue;
         }
 
-        _workMap[index]._visited = VisitedState::FINISHED;
-        const MapNode mapNode = map.getNode(index);
+        _workMap[position].setVisited(Visited::FINISHED);
+        const MapNode mapNode = map.getNode(position);
 
-        if (mapNode.getCardinalDist(Direction::NORTH) > 0)
+        if (mapNode.getCardinalDist(Direction::NORTH) > Map::DISCONNECTED)
         {
-            //PRINT("N");
-            handleNeighbor(index, getNorthId(index), mapNode.getCardinalDist(Direction::NORTH));
+            handleNeighbor(position, Map::getNorthPosition(position), mapNode.getCardinalDist(Direction::NORTH));
         }
-        if (mapNode.getCardinalDist(Direction::SOUTH) > 0)
+        if (mapNode.getCardinalDist(Direction::SOUTH) > Map::DISCONNECTED)
         {
-            //PRINT("S");
-            handleNeighbor(index, getSouthId(index), mapNode.getCardinalDist(Direction::SOUTH));
+            handleNeighbor(position, Map::getSouthPosition(position), mapNode.getCardinalDist(Direction::SOUTH));
         }
-        if (mapNode.getCardinalDist(Direction::EAST) > 0)
+        if (mapNode.getCardinalDist(Direction::EAST) > Map::DISCONNECTED)
         {
-            //PRINT("E");
-            handleNeighbor(index, getEastId(index), mapNode.getCardinalDist(Direction::EAST));
+            handleNeighbor(position, Map::getEastPosition(position), mapNode.getCardinalDist(Direction::EAST));
         }
-        if (mapNode.getCardinalDist(Direction::WEST) > 0)
+        if (mapNode.getCardinalDist(Direction::WEST) > Map::DISCONNECTED)
         {
-            //PRINT("W");
-            handleNeighbor(index, getWestId(index), mapNode.getCardinalDist(Direction::WEST));
+            handleNeighbor(position, Map::getWestPosition(position), mapNode.getCardinalDist(Direction::WEST));
         }
     }
 
@@ -58,17 +76,17 @@ uint8_t Pathfinder::popBestNode()
 {
     uint8_t id = 0;
     uint8_t minId = id;
-    uint8_t minMapId = _workArray[minId];
-    uint8_t min = _workMap[minMapId]._distance;
+    uint8_t minPosition = _workArray[minId];
+    uint8_t min = _workMap[minPosition]._distance;
     id++;
 
     while (id < _workSize)
     {
-        if (_workMap[_workArray[id]]._visited == VisitedState::VISITED &&
+        if (_workMap[_workArray[id]].getVisited() == Visited::VISITED &&
             _workMap[_workArray[id]]._distance < min)
         {
             minId = id;
-            minMapId = _workArray[minId];
+            minPosition = _workArray[minId];
             min = _workMap[_workArray[id]]._distance;
         }
         id++;
@@ -76,9 +94,9 @@ uint8_t Pathfinder::popBestNode()
     _workSize--;
 
     _workArray[minId] = _workArray[_workSize];
-    _workArray[_workSize] = minMapId;
+    _workArray[_workSize] = minPosition;
 
-    return minMapId;
+    return minPosition;
 }
 
 void Pathfinder::handleNeighbor(uint8_t position, uint8_t neighborPos, uint8_t weight)
@@ -86,20 +104,20 @@ void Pathfinder::handleNeighbor(uint8_t position, uint8_t neighborPos, uint8_t w
     uint8_t distance = _workMap[position]._distance +
                        weight;
 
-    if (_workMap[neighborPos]._visited != VisitedState::FINISHED &&
+    if (_workMap[neighborPos].getVisited() != Visited::FINISHED &&
         (distance < _workMap[neighborPos]._distance ||
-         _workMap[neighborPos]._distance == 0xFF))
+         _workMap[neighborPos]._distance == Map::NONE))
     {
-        _workMap[neighborPos]._prev = position;
+        _workMap[neighborPos].setPrev(position);
         _workMap[neighborPos]._distance = distance;
 
-        if (_workMap[neighborPos]._visited == VisitedState::UNKNOWN)
+        if (_workMap[neighborPos].getVisited() == Visited::UNKNOWN)
         {
             _workArray[_workSize] = neighborPos;
             _workSize++;
         }
 
-        _workMap[neighborPos]._visited = VisitedState::VISITED;
+        _workMap[neighborPos].setVisited(Visited::VISITED);
     }
 }
 
@@ -108,9 +126,9 @@ void Pathfinder::printInvertedPath(uint8_t dest) const
     WorkNode node = _workMap[dest];
     PRINT("Inverted path:");
     PRINT(dest);
-    while (node._prev != 0xFF)
+    while (node.getPrev() != 0x1F)
     {
-        PRINT(node._prev);
-        node = _workMap[node._prev];
+        PRINT(node.getPrev());
+        node = _workMap[node.getPrev()];
     }
 }
