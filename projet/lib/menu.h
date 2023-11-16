@@ -25,7 +25,8 @@ public:
     static void interrupt1();
     static void interrupt2();
 
-    static void update();
+    static void updateStep();
+    static void executeStep();
 
 private:
     Menu();

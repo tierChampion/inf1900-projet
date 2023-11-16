@@ -5,20 +5,29 @@
 const uint8_t DEBOUNCE_DELAY = 10;
 
 Button::Button(GeneralInterrupt interrupt, bool activeHigh)
-    : _interrupt(interrupt), _isActiveHigh(activeHigh)
+    : _interrupt(interrupt), _isActiveHigh(activeHigh), _isPressed(false), _hasChanged(false)
 {
     _pin = _interrupt.getRequiredPin();
 }
 
 void Button::update()
 {
-    _isPressed = isButtonPressed();
+    bool newPressed = isButtonPressed();
+    _hasChanged = (newPressed != _isPressed);
+    _isPressed = newPressed;
     clearButtonEvents();
 }
 
-bool Button::getIsPressed()
+bool Button::getIsPressed() const
 {
     return _isPressed;
+}
+
+bool Button::getHasChanged() 
+{
+    bool temp = _hasChanged;
+    _hasChanged = false;
+    return temp;
 }
 
 bool Button::isButtonPressed() const

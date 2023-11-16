@@ -3,6 +3,13 @@
 #include "avr/interrupt.h"
 
 bool Menu::_isInitialised = false;
+Button Menu::_modeButton = Button(GeneralInterruptType::INT_2, true);
+Button Menu::_selectionButton = Button(GeneralInterruptType::INT_0, false);
+Button Menu::_validationButton = Button(GeneralInterruptType::INT_1, false);
+MenuStep Menu::_step;
+bool Menu::_isYes;
+uint8_t Menu::_line;
+uint8_t Menu::_column;
 
 ISR(INT0_vect)
 {
@@ -26,106 +33,150 @@ void Menu::initialiseMenu()
 
 Menu::Menu()
 {
-    _selectionButton = Button(GeneralInterruptType::INT_0, false);
-    _selectionButton.setSenseControl(SenseControl::ANY_EDGE);
-    _validationButton = Button(GeneralInterruptType::INT_1, false);
-    _validationButton.setSenseControl(SenseControl::ANY_EDGE);
-    _modeButton = Button(GeneralInterruptType::INT_2, true);
-    _modeButton.setSenseControl(SenseControl::ANY_EDGE);
+    Menu::_selectionButton = Button(GeneralInterruptType::INT_0, false);
+    Menu::_selectionButton.setSenseControl(SenseControl::ANY_EDGE);
+    Menu::_validationButton = Button(GeneralInterruptType::INT_1, false);
+    Menu::_validationButton.setSenseControl(SenseControl::ANY_EDGE);
+    Menu::_modeButton = Button(GeneralInterruptType::INT_2, true);
+    Menu::_modeButton.setSenseControl(SenseControl::ANY_EDGE);
 
-    _step = MenuStep::INIT;
-    _isYes = false;
-    _line = 0;
-    _column = 0;
+    Menu::_step = MenuStep::INIT;
+    Menu::_isYes = false;
+    Menu::_line = 0;
+    Menu::_column = 0;
 
-    _modeButton.enable();
-    _selectionButton.enable();
-    _validationButton.enable();
+    Menu::_modeButton.enable();
+    Menu::_selectionButton.enable();
+    Menu::_validationButton.enable();
+
+    Menu::_isInitialised = true;
 }
 
 void Menu::interrupt0()
 {
-    _selectionButton.update();
+    Menu::_selectionButton.update();
 }
 
 void Menu::interrupt1()
 {
-    _validationButton.update();
+    Menu::_validationButton.update();
 }
 
 void Menu::interrupt2()
 {
-    _modeButton.update();
+    Menu::_modeButton.update();
 }
 
-void Menu::update()
+void Menu::updateStep()
 {
-    if (!_isInitialised)
+    if (!Menu::_isInitialised)
         initialiseMenu();
 
     // corners
-    if (_modeButton.getIsPressed())
+    if (Menu::_modeButton.getIsPressed())
     {
-        _step = MenuStep::CORNERS;
-        PRINT("COIN...");
+        Menu::_step = MenuStep::CORNERS;
     }
 
     // switch to line select
-    if ((_step == MenuStep::INIT || _step == MenuStep::CORNERS) && _selectionButton.getIsPressed())
+    if ((Menu::_step == MenuStep::INIT || Menu::_step == MenuStep::CORNERS) && 
+    (Menu::_selectionButton.getIsPressed() && Menu::_selectionButton.getHasChanged()))
     {
-        _step = MenuStep::LINE;
-        _line = 0;
-        _column = 0;
+        Menu::_step = MenuStep::LINE;
+        Menu::_line = 0;
+        Menu::_column = 0;
     }
 
     // line select
-    if (_step == MenuStep::LINE_RELEASE && _validationButton.getIsPressed())
+    else if (Menu::_step == MenuStep::LINE_RELEASE && Menu::_validationButton.getIsPressed())
     {
-        _step = MenuStep::LINE;
-        _line = (_line + 1) % 4;
+        Menu::_step = MenuStep::LINE;
+        Menu::_line = (Menu::_line + 1) % 4;
     }
-    else if (_step == MenuStep::LINE && !_validationButton.getIsPressed())
+    else if (Menu::_step == MenuStep::LINE && !Menu::_validationButton.getIsPressed())
     {
-        _step = MenuStep::LINE_RELEASE;
+        Menu::_step = MenuStep::LINE_RELEASE;
     }
 
     // switch to column select
-    if ((_step == MenuStep::LINE_RELEASE || _step == MenuStep::LINE) && _selectionButton.getIsPressed())
+    else if ((Menu::_step == MenuStep::LINE_RELEASE || Menu::_step == MenuStep::LINE) && 
+    (Menu::_selectionButton.getIsPressed() && Menu::_selectionButton.getHasChanged()))
     {
-        _step = MenuStep::COLUMN;
+        Menu::_step = MenuStep::COLUMN;
     }
 
     // column select
-    if (_step == MenuStep::COLUMN_RELEASE && _validationButton.getIsPressed())
+    else if (Menu::_step == MenuStep::COLUMN_RELEASE && Menu::_validationButton.getIsPressed())
     {
-        _step = MenuStep::COLUMN;
-        _column = (_column + 1) % 7;
+        Menu::_step = MenuStep::COLUMN;
+        Menu::_column = (Menu::_column + 1) % 7;
     }
-    else if (_step == MenuStep::COLUMN && !_validationButton.getIsPressed())
+    else if (Menu::_step == MenuStep::COLUMN && !Menu::_validationButton.getIsPressed())
     {
-        _step = MenuStep::COLUMN_RELEASE;
+        Menu::_step = MenuStep::COLUMN_RELEASE;
     }
 
     // switch to confirmation
-    if ((_step == MenuStep::COLUMN_RELEASE || _step == MenuStep::COLUMN) && _selectionButton.getIsPressed())
+    else if ((Menu::_step == MenuStep::COLUMN_RELEASE || Menu::_step == MenuStep::COLUMN) && 
+    (Menu::_selectionButton.getIsPressed() && Menu::_selectionButton.getHasChanged()))
     {
-        _step = MenuStep::CONFIRM;
+        Menu::_step = MenuStep::CONFIRM;
     }
 
     // confirmation select
-    if (_step == MenuStep::CONFIRM_RELEASE && _selectionButton.getIsPressed())
+    else if (Menu::_step == MenuStep::CONFIRM_RELEASE && Menu::_selectionButton.getIsPressed())
     {
-        _isYes = !_isYes;
-        _step = MenuStep::CONFIRM;
-    } 
-    else if (_step == MenuStep::CONFIRM && !_selectionButton.getIsPressed())
+        Menu::_isYes = !Menu::_isYes;
+        Menu::_step = MenuStep::CONFIRM;
+    }
+    else if (Menu::_step == MenuStep::CONFIRM && !Menu::_selectionButton.getIsPressed())
     {
-        _step = MenuStep::CONFIRM_RELEASE;
+        Menu::_step = MenuStep::CONFIRM_RELEASE;
     }
 
     // switch to path
-    if ((_step == MenuStep::CONFIRM_RELEASE || _step == MenuStep::CONFIRM) && _validationButton.isButtonPressed())
+    else if ((Menu::_step == MenuStep::CONFIRM_RELEASE || Menu::_step == MenuStep::CONFIRM) && 
+    (Menu::_validationButton.isButtonPressed() && Menu::_validationButton.getHasChanged()))
     {
-        _step = MenuStep::PATH;
+        if (_isYes) {
+        Menu::_step = MenuStep::PATH;
+        }
+        else {
+            Menu::_step = MenuStep::LINE;
+            _line = 0;
+            _column = 0;
+        }
+    }
+}
+
+void Menu::executeStep()
+{
+
+    switch (Menu::_step)
+    {
+    case MenuStep::INIT:
+        PRINT("CHOISIR MODE:");
+        break;
+    case MenuStep::CORNERS:
+        PRINT("(X, Y) Z");
+        break;
+    case MenuStep::LINE_RELEASE:
+    case MenuStep::LINE:
+        PRINT("LIGNE");
+        PRINT(Menu::_line);
+        break;
+    case MenuStep::COLUMN_RELEASE:
+    case MenuStep::COLUMN:
+        PRINT("COLONNE");
+        PRINT(_column);
+        break;
+    case MenuStep::CONFIRM_RELEASE:
+    case MenuStep::CONFIRM:
+        PRINT("(L, C) OK?");
+        PRINT(_isYes ? "OUI" : "NON");
+        break;
+    case MenuStep::PATH:
+        PRINT("TRAJET EN COURS...");
+        break;
     }
 }

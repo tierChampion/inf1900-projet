@@ -10,7 +10,8 @@ public:
     Button(GeneralInterrupt interrupt, bool activeHigh);
 
     void update();
-    bool getIsPressed();
+    bool getIsPressed() const;
+    bool getHasChanged();
     bool isButtonPressed() const;
     void setSenseControl(SenseControl control);
     void enable();
@@ -22,6 +23,7 @@ private:
     GeneralInterrupt _interrupt;
     bool _isActiveHigh;
     volatile bool _isPressed;
+    volatile bool _hasChanged;
 };
 
 #endif
