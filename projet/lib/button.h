@@ -9,6 +9,8 @@ class Button
 public:
     Button(GeneralInterrupt interrupt, bool activeHigh);
 
+    void update();
+    bool getIsPressed();
     bool isButtonPressed() const;
     void setSenseControl(SenseControl control);
     void enable();
@@ -19,6 +21,7 @@ private:
     ReadPin _pin;
     GeneralInterrupt _interrupt;
     bool _isActiveHigh;
+    volatile bool _isPressed;
 };
 
 #endif

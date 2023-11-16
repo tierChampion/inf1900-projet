@@ -2,12 +2,23 @@
 
 #include <util/delay.h>
 
-const uint8_t DEBOUNCE_DELAY = 20;
+const uint8_t DEBOUNCE_DELAY = 10;
 
 Button::Button(GeneralInterrupt interrupt, bool activeHigh)
     : _interrupt(interrupt), _isActiveHigh(activeHigh)
 {
     _pin = _interrupt.getRequiredPin();
+}
+
+void Button::update()
+{
+    _isPressed = isButtonPressed();
+    clearButtonEvents();
+}
+
+bool Button::getIsPressed()
+{
+    return _isPressed;
 }
 
 bool Button::isButtonPressed() const
@@ -16,7 +27,7 @@ bool Button::isButtonPressed() const
     _delay_ms(DEBOUNCE_DELAY);
     uint8_t lecture2 = _pin.read();
 
-    return (lecture2 == _isActiveHigh) && (lecture1 == lecture2);
+    return (static_cast<bool>(lecture2) == _isActiveHigh) && (lecture1 == lecture2);
 }
 
 void Button::setSenseControl(SenseControl control)
