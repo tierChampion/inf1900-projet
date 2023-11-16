@@ -9,25 +9,29 @@ enum class LineStructure
     FORWARD,
     LEFT,
     RIGHT,
-    T
+    T,
+    CROSS,
+    RIGHT_FORWARD,
+    LEFT_FORWARD
+
 };
 
 inline const char *structureToString(LineStructure structure)
 {
     switch (structure)
     {
-        case LineStructure::NONE:
-            return "No line";
-        case LineStructure::FORWARD:
-            return "Straight line";
-        case LineStructure::LEFT:
-            return "Left turn";
-        case LineStructure::RIGHT:
-            return "Right turn";
-        case LineStructure::T:
-            return "T intersection";
-        default:
-            return "UNKNOWN!";
+    case LineStructure::NONE:
+        return "No line";
+    case LineStructure::FORWARD:
+        return "Straight line";
+    case LineStructure::LEFT:
+        return "Left turn";
+    case LineStructure::RIGHT:
+        return "Right turn";
+    case LineStructure::T:
+        return "T intersection";
+    default:
+        return "UNKNOWN!";
     }
 }
 
@@ -38,6 +42,8 @@ public:
     LineSensor();
     void updateDetection();
     LineStructure getStructure();
+    uint8_t readSensor(uint8_t index) const;
+    uint8_t readSensorArray() const;
 
 private:
     ReadPin _digitalInputLeft;

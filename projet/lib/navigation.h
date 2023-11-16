@@ -11,6 +11,7 @@ public:
     void pivot90(Side turn);
     void moveStraight(Orientation orientation, float speed);
     void moveStraight(Orientation orientation);
+    void adjustWheel(Side turn);
     void stop();
 
 private:
