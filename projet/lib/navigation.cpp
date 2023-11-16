@@ -48,7 +48,8 @@ void Navigation::stop()
     moveStraight(Orientation::FORWARD, 0);
 }
 
-void Navigation::pivot90(Side turn) {
+void Navigation::pivot90(Side turn)
+{
 
     if (turn == Side::LEFT)
     {
@@ -63,4 +64,20 @@ void Navigation::pivot90(Side turn) {
 
     _delay_ms(TURN_DELAY);
     stop();
+}
+
+void Navigation::adjustWheel(Side turn)
+{
+    if (turn == Side::LEFT)
+    {
+        _leftWheel.setSpeed(Orientation::FORWARD, 37);
+
+        _rightWheel.setSpeed(Orientation::FORWARD, 45);
+    }
+    else
+    {
+        _leftWheel.setSpeed(Orientation::FORWARD, 45);
+
+        _rightWheel.setSpeed(Orientation::FORWARD, 37);
+    }
 }
