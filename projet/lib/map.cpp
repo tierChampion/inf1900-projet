@@ -5,15 +5,17 @@ const uint8_t YELLOW_WEIGHT = 2;
 const uint8_t RED_WEIGHT = 5;
 
 MapNode::MapNode() : _verticalDistances(Map::DISCONNECTED),
-                     _lateralDistances(Map::DISCONNECTED) {}
+                     _lateralDistances(Map::DISCONNECTED),
+                     _distance(Map::NONE),
+                     _travelSettings(0x1F) {}
 
 MapNode::MapNode(uint8_t north,
                  uint8_t south,
                  uint8_t east,
                  uint8_t west) : _verticalDistances((north & 0x0F) | ((south & 0x0F) << 4)),
-                                 _lateralDistances((east & 0x0F) | ((west & 0x0F) << 4))
-{
-}
+                                 _lateralDistances((east & 0x0F) | ((west & 0x0F) << 4)),
+                                 _distance(Map::NONE),
+                                 _travelSettings(0x1F) {}
 
 uint8_t MapNode::getCardinalDist(Direction direction) const
 {
@@ -55,6 +57,32 @@ void MapNode::setCardinalDist(Direction direction, uint8_t newDist)
     }
 }
 
+void MapNode::setDistance(uint8_t newDist) { _distance = newDist; }
+
+uint8_t MapNode::getDistance() { return _distance; }
+
+Visited MapNode::getVisited() const
+{
+    return static_cast<Visited>(_travelSettings >> 5);
+}
+
+uint8_t MapNode::getPrev() const
+{
+    return _travelSettings & 0x1F;
+}
+
+void MapNode::setVisited(Visited visited)
+{
+    _travelSettings = (_travelSettings & 0x1F) |
+                      (static_cast<uint8_t>(visited) << 5);
+}
+
+void MapNode::setPrev(uint8_t prevPos)
+{
+    _travelSettings = (_travelSettings & 0xE0) |
+                      (prevPos & 0x1F);
+}
+
 Map::Map()
 {
     _pillar = NONE;
@@ -62,7 +90,12 @@ Map::Map()
     initialiseMap();
 }
 
-const MapNode &Map::getNode(uint8_t position) const
+const MapNode &Map::operator[](uint8_t position) const
+{
+    return _nodes[position];
+}
+
+MapNode& Map::operator[](uint8_t position) // wrong
 {
     return _nodes[position];
 }
@@ -100,22 +133,22 @@ void Map::removePillar()
     if (y > 0)
     {
         _nodes[getNorthPosition(_pillar)].setCardinalDist(Direction::SOUTH,
-                                                    _nodes[_pillar].getCardinalDist(Direction::NORTH));
+                                                          _nodes[_pillar].getCardinalDist(Direction::NORTH));
     }
     if (y < MAP_HEIGHT - 1)
     {
         _nodes[getSouthPosition(_pillar)].setCardinalDist(Direction::NORTH,
-                                                    _nodes[_pillar].getCardinalDist(Direction::SOUTH));
+                                                          _nodes[_pillar].getCardinalDist(Direction::SOUTH));
     }
     if (x > 0)
     {
         _nodes[getWestPosition(_pillar)].setCardinalDist(Direction::EAST,
-                                                   _nodes[_pillar].getCardinalDist(Direction::WEST));
+                                                         _nodes[_pillar].getCardinalDist(Direction::WEST));
     }
     if (x < MAP_WIDTH - 1)
     {
         _nodes[getEastPosition(_pillar)].setCardinalDist(Direction::WEST,
-                                                   _nodes[_pillar].getCardinalDist(Direction::EAST));
+                                                         _nodes[_pillar].getCardinalDist(Direction::EAST));
     }
 
     _pillar = NONE;

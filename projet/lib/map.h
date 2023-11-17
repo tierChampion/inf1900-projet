@@ -11,6 +11,12 @@ enum class Direction
     WEST
 };
 
+enum class Visited : uint8_t {
+    UNKNOWN = 0,
+    VISITED = 1,
+    FINISHED = 2
+};
+
 class MapNode
 {
 public:
@@ -19,10 +25,18 @@ public:
 
     uint8_t getCardinalDist(Direction direction) const;
     void setCardinalDist(Direction direction, uint8_t newDist);
+    void setDistance(uint8_t newDist);
+    uint8_t getDistance();
+    Visited getVisited() const;
+    uint8_t getPrev() const;
+    void setVisited(Visited visited);
+    void setPrev(uint8_t prevPos);
 
 private:
     uint8_t _verticalDistances;
     uint8_t _lateralDistances;
+    uint8_t _distance;
+    uint8_t _travelSettings;
 };
 
 class Map
@@ -30,7 +44,8 @@ class Map
 
 public:
     Map();
-    const MapNode &getNode(uint8_t position) const;
+    const MapNode& operator[](uint8_t position) const;
+    MapNode& operator[](uint8_t position);
     void placePillar(uint8_t position);
     void removePillar();
 
