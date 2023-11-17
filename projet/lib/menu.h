@@ -2,6 +2,8 @@
 #define MENU_H
 
 #include "button.h"
+#include "lcm_so1602dtr_m_fw.h"
+#include "customprocs.h"
 
 enum class MenuStep
 {
@@ -43,6 +45,7 @@ private:
     static bool _isYes;
     static uint8_t _line;
     static uint8_t _column;
+    static LCM lcd;
 };
 
 #endif
