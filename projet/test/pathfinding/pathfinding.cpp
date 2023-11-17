@@ -21,5 +21,5 @@ int main()
     map.placePillar(16);
     map.removePillar();
 
-    finder.findPath(map, 14, 22);
+    finder.findPath(14, 22);
 }

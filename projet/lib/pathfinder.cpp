@@ -2,9 +2,9 @@
 
 
 
-Pathfinder::Pathfinder() : _workSize(0) {}
+Pathfinder::Pathfinder() : _map(Map()), _workSize(0) {}
 
-void Pathfinder::findPath(const Map &map, uint8_t start, uint8_t dest)
+void Pathfinder::findPath(uint8_t start, uint8_t dest)
 {
     _map[start].setDistance(0);
     _map[start].setVisited(Visited::VISITED);
