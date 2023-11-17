@@ -162,14 +162,13 @@ void Menu::executeStep()
     case MenuStep::INIT:
         Menu::lcd.clear();
         Menu::lcd.write("CHOISIR MODE:");
-        _delay_ms(1000);
+        _delay_ms(600);
         PRINT("CHOISIR MODE:");
         break;
     case MenuStep::CORNERS:
         Menu::lcd.clear();
-        Menu::lcd.write("(X, Y)");
-        Menu::lcd.write("Z", LCM_FW_HALF_CH);
-        _delay_ms(1000);
+        Menu::lcd.write("(X, Y)          Z");
+        _delay_ms(600);
         PRINT("(X, Y) Z");
         break;
     case MenuStep::LINE_RELEASE:
@@ -198,14 +197,14 @@ void Menu::executeStep()
         char conf[32];
         sprintf(conf, "(%u, %u) OK?      %s", Menu::_line, Menu::_column, Menu::_isYes ? "OUI" : "NON");
         Menu::lcd.write(conf);
-        _delay_ms(1000);
+        _delay_ms(6000);
         PRINT("(L, C) OK?");
         PRINT(_isYes ? "OUI" : "NON");
         break;
     case MenuStep::PATH:
         Menu::lcd.clear();
-        Menu::lcd.write("TRAJET EN COURS");
-        _delay_ms(1000);
+        Menu::lcd.write("TRAJET EN COURS ****************");
+        _delay_ms(600);
         PRINT("TRAJET EN COURS");
         break;
     }
