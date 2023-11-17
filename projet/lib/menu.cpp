@@ -195,10 +195,11 @@ void Menu::executeStep()
     case MenuStep::CONFIRM_RELEASE:
     case MenuStep::CONFIRM:
         Menu::lcd.clear();
-        Menu::lcd.write("(L, C) OK?");
+        char conf[32];
+        sprintf(conf, "(%u, %u) OK?      %s", Menu::_line, Menu::_column, Menu::_isYes ? "OUI" : "NON");
+        Menu::lcd.write(conf);
         _delay_ms(1000);
         PRINT("(L, C) OK?");
-        Menu::lcd.write(Menu::_isYes ? "OUI" : "NON", LCM_FW_HALF_CH);
         PRINT(_isYes ? "OUI" : "NON");
         break;
     case MenuStep::PATH:
