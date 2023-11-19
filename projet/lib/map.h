@@ -3,15 +3,16 @@
 
 #include "commons.h"
 
-enum class Direction
+enum class Direction : uint8_t
 {
-    NORTH,
-    SOUTH,
-    EAST,
-    WEST
+    NORTH = 0,
+    SOUTH = 1,
+    EAST = 2,
+    WEST = 3
 };
 
-enum class Visited : uint8_t {
+enum class Visited : uint8_t
+{
     UNKNOWN = 0,
     VISITED = 1,
     FINISHED = 2
@@ -44,8 +45,10 @@ class Map
 
 public:
     Map();
-    const MapNode& operator[](uint8_t position) const;
-    MapNode& operator[](uint8_t position);
+    void reset();
+    const MapNode &operator[](uint8_t position) const;
+    MapNode &operator[](uint8_t position);
+
     void placePillar(uint8_t position);
     void removePillar();
 

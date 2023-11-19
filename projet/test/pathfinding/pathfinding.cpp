@@ -1,5 +1,5 @@
 #include "map.h"
-#include "pathfinder.h"
+#include "pathfindingMode.h"
 
 void pillarManipulationTest(Map &map)
 {
@@ -15,11 +15,7 @@ void pillarManipulationTest(Map &map)
 
 int main()
 {
-    Map map = Map();
-    Pathfinder finder = Pathfinder();
+    PathfindingMode mode = PathfindingMode();
 
-    map.placePillar(16);
-    map.removePillar();
-
-    finder.findPath(14, 22);
+    mode.run(3, 0);
 }
