@@ -90,6 +90,15 @@ Map::Map()
     initialiseMap();
 }
 
+void Map::reset()
+{
+    for (uint8_t i = 0; i < Map::NODE_COUNT; i++) {
+        _nodes[i].setPrev(0x1F);
+        _nodes[i].setDistance(Map::NONE);
+        _nodes[i].setVisited(Visited::UNKNOWN);
+    }
+}
+
 const MapNode &Map::operator[](uint8_t position) const
 {
     return _nodes[position];

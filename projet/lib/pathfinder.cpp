@@ -1,11 +1,11 @@
 #include "pathfinder.h"
 
-
-
 Pathfinder::Pathfinder() : _map(Map()), _workSize(0) {}
 
-void Pathfinder::findPath(uint8_t start, uint8_t dest)
+void Pathfinder::findPath(uint8_t start, uint8_t dest, uint8_t *path)
 {
+    _map.reset();
+
     _map[start].setDistance(0);
     _map[start].setVisited(Visited::VISITED);
 
@@ -47,6 +47,8 @@ void Pathfinder::findPath(uint8_t start, uint8_t dest)
 #ifdef DEBUG
     printInvertedPath(dest);
 #endif
+
+    getPath(dest, path);
 }
 
 uint8_t Pathfinder::popBestNode()
@@ -100,12 +102,39 @@ void Pathfinder::handleNeighbor(uint8_t position, uint8_t neighborPos, uint8_t w
 
 void Pathfinder::printInvertedPath(uint8_t dest) const
 {
+    PRINT("INVERTED PATH:");
     MapNode node = _map[dest];
-    PRINT("Inverted path:");
-    PRINT(dest);
+
     while (node.getPrev() != 0x1F)
     {
         PRINT(node.getPrev());
         node = _map[node.getPrev()];
+    }
+}
+
+void Pathfinder::getPath(uint8_t dest, uint8_t *path) const
+{
+    uint8_t size = 1;
+    MapNode node = _map[dest];
+
+    while (node.getPrev() != 0x1F)
+    {
+        ++size;
+        node = _map[node.getPrev()];
+    }
+
+    node = _map[dest];
+
+    for (uint8_t i = Pathfinder::MAX_PATH_LENGTH - 1; i >= 0; i--)
+    {
+        if (i > size)
+        {
+            path[i] = Map::NONE;
+        }
+        else
+        {
+            path[--size] = node.getPrev();
+            node = _map[node.getPrev()];
+        }
     }
 }
