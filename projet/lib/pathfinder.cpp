@@ -114,7 +114,7 @@ void Pathfinder::printInvertedPath(uint8_t dest) const
 
 void Pathfinder::getPath(uint8_t dest, uint8_t *path) const
 {
-    uint8_t size = 1;
+    uint8_t size = 0;
     MapNode node = _map[dest];
 
     while (node.getPrev() != 0x1F)
@@ -125,16 +125,24 @@ void Pathfinder::getPath(uint8_t dest, uint8_t *path) const
 
     node = _map[dest];
 
-    for (uint8_t i = Pathfinder::MAX_PATH_LENGTH - 1; i >= 0; i--)
+    for (int8_t i = Pathfinder::MAX_PATH_LENGTH - 1; i >= 0; i--)
     {
         if (i > size)
         {
             path[i] = Map::NONE;
         }
+        else if (i == size)
+        {
+            path[i] = dest;
+        }
         else
         {
-            path[--size] = node.getPrev();
+            path[i] = node.getPrev();
             node = _map[node.getPrev()];
         }
+
+        PRINT("PATH NODE:");
+        PRINT(path[i]);
+        PRINT(static_cast<uint8_t>(i));
     }
 }

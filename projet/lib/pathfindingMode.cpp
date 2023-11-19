@@ -35,18 +35,18 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
     while (index < Pathfinder::MAX_PATH_LENGTH - 1 && path[index + 1] != Map::NONE)
     {
         // forward case
-        if ((_direction == Direction::NORTH && path[index + 1] == Map::getNorthPosition(path[index])) ||
-            (_direction == Direction::SOUTH && path[index + 1] == Map::getSouthPosition(path[index])) ||
-            (_direction == Direction::EAST && path[index + 1] == Map::getEastPosition(path[index])) ||
-            (_direction == Direction::WEST && path[index + 1] == Map::getWestPosition(path[index])))
+        if ((currentDir == Direction::NORTH && path[index + 1] == Map::getNorthPosition(path[index])) ||
+            (currentDir == Direction::SOUTH && path[index + 1] == Map::getSouthPosition(path[index])) ||
+            (currentDir == Direction::EAST && path[index + 1] == Map::getEastPosition(path[index])) ||
+            (currentDir == Direction::WEST && path[index + 1] == Map::getWestPosition(path[index])))
         {
             moves[index++] = MovementCode::FORWARD;
         }
         // left case
-        else if ((_direction == Direction::NORTH && path[index + 1] == Map::getWestPosition(path[index])) ||
-                 (_direction == Direction::SOUTH && path[index + 1] == Map::getEastPosition(path[index])) ||
-                 (_direction == Direction::EAST && path[index + 1] == Map::getNorthPosition(path[index])) ||
-                 (_direction == Direction::WEST && path[index + 1] == Map::getSouthPosition(path[index])))
+        else if ((currentDir == Direction::NORTH && path[index + 1] == Map::getWestPosition(path[index])) ||
+                 (currentDir == Direction::SOUTH && path[index + 1] == Map::getEastPosition(path[index])) ||
+                 (currentDir == Direction::EAST && path[index + 1] == Map::getNorthPosition(path[index])) ||
+                 (currentDir == Direction::WEST && path[index + 1] == Map::getSouthPosition(path[index])))
         {
             moves[index++] = MovementCode::LEFT_FORWARD;
             // 0 - 3 - 1 - 2
@@ -62,10 +62,10 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
             }
         }
         // right case
-        else if ((_direction == Direction::NORTH && path[index + 1] == Map::getEastPosition(path[index])) ||
-                 (_direction == Direction::SOUTH && path[index + 1] == Map::getWestPosition(path[index])) ||
-                 (_direction == Direction::EAST && path[index + 1] == Map::getSouthPosition(path[index])) ||
-                 (_direction == Direction::WEST && path[index + 1] == Map::getNorthPosition(path[index])))
+        else if ((currentDir == Direction::NORTH && path[index + 1] == Map::getEastPosition(path[index])) ||
+                 (currentDir == Direction::SOUTH && path[index + 1] == Map::getWestPosition(path[index])) ||
+                 (currentDir == Direction::EAST && path[index + 1] == Map::getSouthPosition(path[index])) ||
+                 (currentDir == Direction::WEST && path[index + 1] == Map::getNorthPosition(path[index])))
         {
             moves[index++] = MovementCode::RIGHT_FORWARD;
             // 0 - 2 - 1 - 3
@@ -81,10 +81,10 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
             }
         }
         // uturn case
-        else if ((_direction == Direction::NORTH && path[index + 1] == Map::getSouthPosition(path[index])) ||
-                 (_direction == Direction::SOUTH && path[index + 1] == Map::getNorthPosition(path[index])) ||
-                 (_direction == Direction::EAST && path[index + 1] == Map::getWestPosition(path[index])) ||
-                 (_direction == Direction::WEST && path[index + 1] == Map::getEastPosition(path[index])))
+        else if ((currentDir == Direction::NORTH && path[index + 1] == Map::getSouthPosition(path[index])) ||
+                 (currentDir == Direction::SOUTH && path[index + 1] == Map::getNorthPosition(path[index])) ||
+                 (currentDir == Direction::EAST && path[index + 1] == Map::getWestPosition(path[index])) ||
+                 (currentDir == Direction::WEST && path[index + 1] == Map::getEastPosition(path[index])))
         {
             moves[index++] = MovementCode::UTURN_FORWARD;
             // 0 -- 1 2 -- 3
@@ -92,6 +92,12 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
                                                     ? static_cast<uint8_t>(currentDir) - 1
                                                     : static_cast<uint8_t>(currentDir) + 1);
         }
+
+        PRINT("MOVE:");
+        PRINT(static_cast<uint8_t>(moves[index - 1]));
+        PRINT(static_cast<uint8_t>(currentDir));
+        PRINT(static_cast<uint8_t>(path[index]));
+        PRINT(static_cast<uint8_t>(path[index + 1]));
     }
 }
 
