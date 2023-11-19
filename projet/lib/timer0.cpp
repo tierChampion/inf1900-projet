@@ -73,7 +73,7 @@ void Timer0::setWaveMode(TimerWaveMode mode)
 
         case TimerWaveMode::PWM_PHASE_CORRECT:
             TCCR0A &= ~(1 << WGM01);
-            TCCR0A |= (1 << WGM00);
+            TCCR0A |= (1 << WGM00);    
             TCCR0B &= ~(1 << WGM02);
             break;
     }
@@ -163,7 +163,9 @@ void Timer0::applyPrescalar(TimerPrescalar prescalar)
     switch (prescalar)
     {
         case TimerPrescalar::STOPPED:
-            TCCR0B &= ~(1 << CS00 | 1 << CS01 | 1 << CS02);
+            TCCR0B &= ~(1 << CS00);
+            TCCR0B &= ~(1 << CS01);
+            TCCR0B &= ~(1 << CS02);
             break;
 
         case TimerPrescalar::NO_PRESCALAR:

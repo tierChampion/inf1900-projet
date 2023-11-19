@@ -1,6 +1,6 @@
 #include "navigation.h"
 
-const float DEFAULT_SPEED_PERCENTAGE = 80.0f;
+const uint8_t DEFAULT_SPEED_PERCENTAGE = 150;
 const uint16_t TURN_DELAY = 650;
 
 Navigation::Navigation()
@@ -20,32 +20,48 @@ Navigation::Navigation()
     _leftWheel = Wheel(pinDirL, Side::LEFT, &_timerPWM);
     _rightWheel = Wheel(pinDirR, Side::RIGHT, &_timerPWM);
     _timerPWM.start();
-
-    _speed = 0.0f;
+    _speed = 0;
 }
 
 Navigation::~Navigation()
 {
     _timerPWM.stop();
+    _timerPWM.setCompareMode(TimerCompare::A, TimerCompareMode::DISCONNECTED);
+    _timerPWM.setCompareMode(TimerCompare::B, TimerCompareMode::DISCONNECTED);
+    //_leftEnablePin.clear();
+    //_rightEnablePin.clear();
 }
 
-void Navigation::moveStraight(Orientation orientation, float speed)
+void Navigation::moveStraight(Orientation orientation, uint8_t speed)
 {
+    //
     _speed = speed;
-    _leftWheel.setSpeed(orientation, speed);
+    _leftWheel.setSpeed(orientation, speed); // + 5
     _rightWheel.setSpeed(orientation, speed);
 }
 
 void Navigation::moveStraight(Orientation orientation)
 {
+    //_timerPWM.start();
     _speed = DEFAULT_SPEED_PERCENTAGE;
     _leftWheel.setSpeed(orientation, _speed);
     _rightWheel.setSpeed(orientation, _speed);
 }
 
+void Navigation::realForward()
+{
+    _speed = DEFAULT_SPEED_PERCENTAGE;
+    _leftWheel.setSpeed(Orientation::FORWARD, _speed + 5);
+    _rightWheel.setSpeed(Orientation::FORWARD, _speed);
+}
+
 void Navigation::stop()
 {
     moveStraight(Orientation::FORWARD, 0);
+    //_timerPWM.stop();
+    //_leftEnablePin.clear();
+    //_rightEnablePin.clear();
+    //_timerPWM.setCounterValue(0);
 }
 
 void Navigation::pivot90(Side turn)
@@ -66,18 +82,18 @@ void Navigation::pivot90(Side turn)
     stop();
 }
 
-void Navigation::adjustWheel(Side turn)
+void Navigation::adjustWheel(Side turn, uint8_t intensity)
 {
     if (turn == Side::LEFT)
     {
-        _leftWheel.setSpeed(Orientation::FORWARD, 37);
+        _leftWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED_PERCENTAGE - 5 - intensity + 5);
 
-        _rightWheel.setSpeed(Orientation::FORWARD, 45);
+        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED_PERCENTAGE);
     }
     else
     {
-        _leftWheel.setSpeed(Orientation::FORWARD, 45);
+        _leftWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED_PERCENTAGE + 5);
 
-        _rightWheel.setSpeed(Orientation::FORWARD, 37);
+        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED_PERCENTAGE - 5 - intensity);
     }
 }

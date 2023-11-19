@@ -3,16 +3,16 @@
 
 #include "pins.h"
 
-enum class LineStructure
+enum class LineStructure : uint8_t
 {
-    NONE,
-    FORWARD,
-    LEFT,
-    RIGHT,
-    T,
-    CROSS,
-    RIGHT_FORWARD,
-    LEFT_FORWARD
+    NONE = 0,
+    FORWARD = 1,
+    LEFT = 2,
+    RIGHT = 3,
+    T = 4,
+    CROSS = 5,
+    RIGHT_FORWARD = 6,
+    LEFT_FORWARD = 7
 
 };
 

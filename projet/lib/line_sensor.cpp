@@ -26,7 +26,7 @@ void LineSensor::updateDetection()
     {
         _structure = LineStructure::RIGHT;
     }
-    else if (((reading & 0b00100) == 0b00100))
+    else if (((reading & 0b00100) == 0b00100) || ((reading & 0b01000) == 0b01000) || ((reading & 0b00010) == 0b00010))
     {
         switch (_structure)
         {

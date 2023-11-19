@@ -24,7 +24,7 @@ class Wheel
 public:
     Wheel();
     Wheel(WritePin directionPin, Side side, Timer0 *timerPwm);
-    void setSpeed(Orientation orientation, float speed);
+    void setSpeed(Orientation orientation, uint8_t speed);
 
 private:
     WritePin _directionPin;

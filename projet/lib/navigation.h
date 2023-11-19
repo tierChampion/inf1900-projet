@@ -9,13 +9,14 @@ public:
     Navigation();
     ~Navigation();
     void pivot90(Side turn);
-    void moveStraight(Orientation orientation, float speed);
+    void moveStraight(Orientation orientation, uint8_t speed);
     void moveStraight(Orientation orientation);
-    void adjustWheel(Side turn);
+    void realForward();
+    void adjustWheel(Side turn, uint8_t intensity);
     void stop();
 
 private:
-    float _speed;
+    uint8_t _speed;
     Wheel _leftWheel;
     Wheel _rightWheel;
     WritePin _leftEnablePin;
