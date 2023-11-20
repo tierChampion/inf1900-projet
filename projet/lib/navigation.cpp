@@ -1,6 +1,6 @@
 #include "navigation.h"
 
-const uint8_t DEFAULT_SPEED_PERCENTAGE = 150;
+const uint8_t DEFAULT_SPEED_PERCENTAGE = 80;
 const uint16_t TURN_DELAY = 650;
 
 Navigation::Navigation()
@@ -28,21 +28,17 @@ Navigation::~Navigation()
     _timerPWM.stop();
     _timerPWM.setCompareMode(TimerCompare::A, TimerCompareMode::DISCONNECTED);
     _timerPWM.setCompareMode(TimerCompare::B, TimerCompareMode::DISCONNECTED);
-    //_leftEnablePin.clear();
-    //_rightEnablePin.clear();
 }
 
 void Navigation::moveStraight(Orientation orientation, uint8_t speed)
 {
-    //
     _speed = speed;
-    _leftWheel.setSpeed(orientation, speed); // + 5
+    _leftWheel.setSpeed(orientation, speed);
     _rightWheel.setSpeed(orientation, speed);
 }
 
 void Navigation::moveStraight(Orientation orientation)
 {
-    //_timerPWM.start();
     _speed = DEFAULT_SPEED_PERCENTAGE;
     _leftWheel.setSpeed(orientation, _speed);
     _rightWheel.setSpeed(orientation, _speed);
@@ -58,10 +54,6 @@ void Navigation::realForward()
 void Navigation::stop()
 {
     moveStraight(Orientation::FORWARD, 0);
-    //_timerPWM.stop();
-    //_leftEnablePin.clear();
-    //_rightEnablePin.clear();
-    //_timerPWM.setCounterValue(0);
 }
 
 void Navigation::pivot90(Side turn)
@@ -86,7 +78,7 @@ void Navigation::adjustWheel(Side turn, uint8_t intensity)
 {
     if (turn == Side::LEFT)
     {
-        _leftWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED_PERCENTAGE - 5 - intensity + 5);
+        _leftWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED_PERCENTAGE - intensity);
 
         _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED_PERCENTAGE);
     }

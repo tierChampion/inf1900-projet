@@ -41,7 +41,10 @@ class LineSensor
 public:
     LineSensor();
     void updateDetection();
-    LineStructure getStructure();
+    LineStructure getStructure() const;
+    bool needLeftAdjustment() const;
+    bool needRightAdjustment() const;
+    bool detectsIntersection() const;
     uint8_t readSensor(uint8_t index) const;
     uint8_t readSensorArray() const;
 
@@ -52,6 +55,7 @@ private:
     ReadPin _digitalInputMiddleRight;
     ReadPin _digitalInputRight;
     LineStructure _structure;
+    uint8_t _sensorArray;
 };
 
 #endif
