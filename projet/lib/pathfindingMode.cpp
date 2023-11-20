@@ -2,7 +2,8 @@
 
 PathfindingMode::PathfindingMode() : _pathfinder(Pathfinder()),
                                      _x(0), _y(0),
-                                     _direction(Direction::SOUTH) {}
+                                     _direction(Direction::SOUTH),
+                                     _navigation(MasterNavigation()) {}
 
 void PathfindingMode::run(uint8_t line, uint8_t column)
 {
@@ -104,4 +105,7 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
 void PathfindingMode::travelPath(MovementCode *moves)
 {
     // todo, execute the movementcodes. Probably a method of the driving system.
+    _navigation.executeMovementCodes(moves, 1);
+
+    _navigation.stop();
 }

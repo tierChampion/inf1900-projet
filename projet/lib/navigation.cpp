@@ -1,7 +1,7 @@
 #include "navigation.h"
 
 const uint8_t DEFAULT_SPEED = 90;  // 150 pour le robot 16. baisser a 80?
-const uint8_t DEFAULT_TURN_SPEED = 80; // pour le robot 16
+const uint8_t DEFAULT_TURN_SPEED = 90; // pour le robot 16
 const uint8_t LEFT_REAL_ADJUST = 10; // pour le robot 16
 const uint8_t DEFAULT_ADJUST = 5;   // pour le robot 16
 const uint16_t TURN_DELAY = 650;

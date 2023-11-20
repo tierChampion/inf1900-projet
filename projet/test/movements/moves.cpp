@@ -1,20 +1,17 @@
 #include "master_navigation.h"
+#include "pathfindingMode.h"
 
 int main()
 {
+    // MasterNavigation nav = MasterNavigation();
 
-    // LineSensor sen;
+    // MovementCode moves[3];
+    // moves[0] = MovementCode::FORWARD;
+    // moves[1] = MovementCode::RIGHT_FORWARD;
 
-    // while (true)
-    // {
-    //     sen.updateDetection();
-    //     PRINT(sen.needRightAdjustment() ? "YES" : "NO");
-    // }
-    MasterNavigation nav = MasterNavigation();
+    // nav.executeMovementCodes(moves, 2);
 
-    MovementCode moves[2];
-    moves[0] = MovementCode::FORWARD;
-    moves[1] = MovementCode::FORWARD;
+    PathfindingMode mode = PathfindingMode();
 
-    nav.executeMovementCodes(moves, 2);
+    mode.run(1, 0);
 }

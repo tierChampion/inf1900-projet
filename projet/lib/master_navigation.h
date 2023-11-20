@@ -23,6 +23,8 @@ public:
 
     void executeMovementCodes(MovementCode* codes, uint8_t length);
 
+    void stop();
+
 private:
     Navigation _navigation;
     LineSensor _lineSensor;

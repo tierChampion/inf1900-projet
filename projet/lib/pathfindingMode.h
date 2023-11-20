@@ -2,7 +2,7 @@
 #define PATHFINDING_MODE
 
 #include "pathfinder.h"
-#include "movement_code.h"
+#include "master_navigation.h"
 
 class PathfindingMode
 {
@@ -22,6 +22,7 @@ private:
     uint8_t _x;
     uint8_t _y;
     Direction _direction;
+    MasterNavigation _navigation;
 };
 
 #endif

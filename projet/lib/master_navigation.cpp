@@ -44,9 +44,9 @@ void MasterNavigation::driveToIntersection()
         {
             // if intersection, center on it and stop.
             _navigation.realForward();
-            _delay_ms(500); // crosses the intersection but doesnt center
+            _delay_ms(1000); // crosses the intersection but doesnt center
             _lineSensor.updateDetection();
-            PRINT(_lineSensor.detectsIntersection() ? "INT" : "NOPE");
+            // PRINT(_lineSensor.detectsIntersection() ? "INT" : "NOPE");
             _navigation.stop();
             running = false;
         }
@@ -104,8 +104,14 @@ void MasterNavigation::turnMesuredRight()
     // determine if the angle is about 180
 }
 
+void MasterNavigation::stop()
+{
+    _navigation.stop();
+}
+
 void MasterNavigation::executeMovementCodes(MovementCode *codes, uint8_t length)
 {
+    // TODO, the rotations are inversed?
     for (uint8_t i = 0; i < length; i++)
     {
         switch (codes[i])
@@ -114,18 +120,18 @@ void MasterNavigation::executeMovementCodes(MovementCode *codes, uint8_t length)
             driveToIntersection();
             break;
         case MovementCode::LEFT:
-            pivot(Side::LEFT);
-            break;
-        case MovementCode::RIGHT:
             pivot(Side::RIGHT);
             break;
-        case MovementCode::LEFT_FORWARD:
+        case MovementCode::RIGHT:
             pivot(Side::LEFT);
+            break;
+        case MovementCode::LEFT_FORWARD:
+            pivot(Side::RIGHT);
             _delay_ms(100);
             driveToIntersection();
             break;
         case MovementCode::RIGHT_FORWARD:
-            pivot(Side::RIGHT);
+            pivot(Side::LEFT);
             _delay_ms(100);
             driveToIntersection();
 
