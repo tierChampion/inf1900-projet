@@ -5,6 +5,7 @@
 #include "line_sensor.h"
 #include "timer1.h"
 #include "distance_sensor.h"
+#include "movement_code.h"
 
 class MasterNavigation
 {
@@ -16,11 +17,11 @@ public:
     // forward for one unit (mesured)
     void driveOneUnit();
     // turn left
-    void turnLeft();
-    // turn right
-    void turnRight();
+    void pivot(Side turn);
     // turn right and mesure the angle (mesured)
     void turnMesuredRight();
+
+    void executeMovementCodes(MovementCode* codes, uint8_t length);
 
 private:
     Navigation _navigation;

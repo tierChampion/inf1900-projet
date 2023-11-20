@@ -1,8 +1,9 @@
 #include "navigation.h"
 
-const uint8_t DEFAULT_SPEED = 150; // 150 pour le robot 16. baisser a 80?
-const uint8_t LEFT_REAL_ADJUST = 5; // pour le robot 16
-const uint8_t DEFAULT_ADJUST = 5; // pour le robot 16
+const uint8_t DEFAULT_SPEED = 90;  // 150 pour le robot 16. baisser a 80?
+const uint8_t DEFAULT_TURN_SPEED = 80; // pour le robot 16
+const uint8_t LEFT_REAL_ADJUST = 10; // pour le robot 16
+const uint8_t DEFAULT_ADJUST = 5;   // pour le robot 16
 const uint16_t TURN_DELAY = 650;
 // constants to start the robot if it doesnt move
 const uint8_t JUMP_START_SPEED = 150;
@@ -44,14 +45,14 @@ void Navigation::moveStraight(Orientation orientation, uint8_t speed)
 void Navigation::moveStraight(Orientation orientation)
 {
     _speed = DEFAULT_SPEED;
-    _leftWheel.setSpeed(orientation, _speed);
+    _leftWheel.setSpeed(orientation, _speed + LEFT_REAL_ADJUST);
     _rightWheel.setSpeed(orientation, _speed);
 }
 
 void Navigation::realForward()
 {
     _speed = DEFAULT_SPEED;
-    _leftWheel.setSpeed(Orientation::FORWARD, (_speed + LEFT_REAL_ADJUST));
+    _leftWheel.setSpeed(Orientation::FORWARD, (_speed + 20));
     _rightWheel.setSpeed(Orientation::FORWARD, _speed);
 }
 
@@ -78,11 +79,25 @@ void Navigation::pivot90(Side turn)
     stop();
 }
 
+void Navigation::pivot(Side turn)
+{
+    if (turn == Side::LEFT)
+    {
+        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_TURN_SPEED);
+        _leftWheel.setSpeed(Orientation::BACKWARD, DEFAULT_TURN_SPEED + LEFT_REAL_ADJUST);
+    }
+    else
+    {
+        _leftWheel.setSpeed(Orientation::FORWARD, DEFAULT_TURN_SPEED + LEFT_REAL_ADJUST);
+        _rightWheel.setSpeed(Orientation::BACKWARD, DEFAULT_TURN_SPEED);
+    }
+}
+
 void Navigation::adjustWheel(Side turn, uint8_t intensity)
 {
     if (turn == Side::LEFT)
     {
-        _leftWheel.setSpeed(Orientation::FORWARD, (DEFAULT_SPEED  + LEFT_REAL_ADJUST) - (intensity + DEFAULT_ADJUST));
+        _leftWheel.setSpeed(Orientation::FORWARD, (DEFAULT_SPEED + LEFT_REAL_ADJUST) - (intensity + DEFAULT_ADJUST));
 
         _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED);
     }

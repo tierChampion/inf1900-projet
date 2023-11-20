@@ -9,6 +9,7 @@ public:
     Navigation();
     ~Navigation();
     void pivot90(Side turn);
+    void pivot(Side turn);
     void moveStraight(Orientation orientation, uint8_t speed);
     void moveStraight(Orientation orientation);
     void realForward();

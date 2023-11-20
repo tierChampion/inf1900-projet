@@ -4,7 +4,7 @@
 
 const uint8_t LEFT_ADJUST = 10; // pour le robot 16, a 150 avec +5 a gauche
 const uint8_t RIGHT_ADJUST = 30; // pour le robot 16, a 150 avec +5 a gauche
-const uint8_t CENTERING_WAIT = 1000; // pour le robot 16 a 150 avec +5 a gauche
+const uint16_t CENTERING_WAIT = 1000; // pour le robot 16 a 150 avec +5 a gauche
 
 int main()
 {
