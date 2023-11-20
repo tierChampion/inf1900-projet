@@ -14,6 +14,7 @@ public:
     void realForward();
     void adjustWheel(Side turn, uint8_t intensity);
     void stop();
+    void jumpStart();
 
 private:
     uint8_t _speed;
