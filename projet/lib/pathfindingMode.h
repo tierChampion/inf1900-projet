@@ -16,6 +16,8 @@ private:
     void pathfind(uint8_t line, uint8_t column, MovementCode* moves);
     void processPath(uint8_t* path, MovementCode* moves);
     void travelPath(MovementCode* moves);
+    void updatePosition(MovementCode move);
+    Direction updateOrientation(MovementCode move, Direction currentDir);
 
 private:
     Pathfinder _pathfinder;
