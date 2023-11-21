@@ -22,7 +22,7 @@ public:
     void pivot(Side turn);
     void turn(Side turn);
     // turn right and mesure the angle (mesured)
-    void turnMesuredRight();
+    void uTurn();
 
     void stop();
 

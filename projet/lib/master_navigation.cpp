@@ -36,7 +36,7 @@ void MasterNavigation::driveOneUnit()
 {
     // launch the measure timer for the needed time (to determine)
 
-    driveDistance(80);
+    driveDistance(130);
     // drive forward while adjusting
 
     // if time is done, stop
@@ -115,20 +115,19 @@ void MasterNavigation::turn(Side turn)
     _navigation.pivot(turn);
 }
 
-void MasterNavigation::turnMesuredRight()
+void MasterNavigation::uTurn()
 {
 
     // launch the measure timer for the needed time (to determine)
+    _navigation.turnJumpStart(Side::LEFT);
+    EventTimer::resetNavigationCounter();
+    _navigation.pivot(Side::LEFT);
 
-    // pivot right
+    while (EventTimer::getNavigationCounter() <= 90)
+    {
+    }
 
-    // check for a new line
-
-    // if centered on the new line stop
-
-    // stop the timer and check the time measured
-
-    // determine if the angle is about 180
+    pivot(Side::LEFT);
 }
 
 void MasterNavigation::stop()
@@ -146,6 +145,10 @@ void MasterNavigation::executeMovementCodes(MovementCode *codes, uint8_t length)
         case MovementCode::FORWARD:
             driveToIntersection();
             break;
+
+        case MovementCode::FORWARD_1:
+            driveOneUnit();
+            break;
         case MovementCode::LEFT:
             pivot(Side::LEFT);
             break;
@@ -161,7 +164,8 @@ void MasterNavigation::executeMovementCodes(MovementCode *codes, uint8_t length)
             pivot(Side::RIGHT);
             _delay_ms(100);
             driveToIntersection();
-
+        case MovementCode::UTURN:
+            uTurn();
         default:
             break;
         }

@@ -13,7 +13,7 @@ int main()
 // 90
 
     MovementCode moves[1];
-    moves[0] = MovementCode::FORWARD;
+    moves[0] = MovementCode::UTURN;
     // moves[1] = MovementCode::LEFT_FORWARD;
 
     nav.executeMovementCodes(moves, 1);
