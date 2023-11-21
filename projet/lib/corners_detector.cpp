@@ -18,17 +18,17 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
         lineSensor.updateDetection();
         if (lineSensor.detectsIntersection())
         {
-            navigation.goStraight();
-            _delay_ms(50);
+            navigation.drive();
+            _delay_ms(400);
             lineSensor.updateDetection();
             scan(lineSensor);
         }
     }
     PRINT("");
-    distanceTotal = EventTimer::getNavigationCounter();
-    navigation.uTurn();
-    navigation.driveDistance(distanceTotal);
-    navigation.uTurn();
+    //  distanceTotal = EventTimer::getNavigationCounter();
+    // navigation.uTurn();
+    //  navigation.driveDistance(distanceTotal);
+    // navigation.uTurn();
     return detect();
 }
 void CornersDetector::scan(LineSensor lineSensor)
@@ -54,6 +54,8 @@ void CornersDetector::scan(LineSensor lineSensor)
 
         break;
     case LineStructure::LEFT_FORWARD:
+        _detector |= (!_detector && EventTimer::getNavigationCounter() > ONE_UNIT_DISTANCE) ? (0b11 << 6) : 0;
+
         _detector |= 0b101 << tempScan;
 
         break;
