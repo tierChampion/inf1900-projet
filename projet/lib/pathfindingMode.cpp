@@ -93,12 +93,6 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
                                                     ? static_cast<uint8_t>(currentDir) - 1
                                                     : static_cast<uint8_t>(currentDir) + 1);
         }
-
-        PRINT("MOVE:");
-        PRINT(static_cast<uint8_t>(moves[index - 1]));
-        PRINT(static_cast<uint8_t>(currentDir));
-        PRINT(static_cast<uint8_t>(path[index]));
-        PRINT(static_cast<uint8_t>(path[index + 1]));
     }
 }
 
@@ -108,4 +102,6 @@ void PathfindingMode::travelPath(MovementCode *moves)
     _navigation.executeMovementCodes(moves, 1);
 
     _navigation.stop();
+
+    // update the position and orientation. check for a pipe collision
 }

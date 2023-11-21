@@ -1,9 +1,9 @@
 #include "navigation.h"
 
-const uint8_t DEFAULT_SPEED = 90;  // 150 pour le robot 16. baisser a 80?
-const uint8_t DEFAULT_TURN_SPEED = 90; // pour le robot 16
-const uint8_t LEFT_REAL_ADJUST = 10; // pour le robot 16
-const uint8_t DEFAULT_ADJUST = 5;   // pour le robot 16
+const uint8_t DEFAULT_SPEED = 110;      // 150 pour le robot 16. baisser a 80?
+const uint8_t DEFAULT_TURN_SPEED = 100; // pour le robot 16
+const uint8_t LEFT_REAL_ADJUST = 10;    // pour le robot 16
+const uint8_t DEFAULT_ADJUST = 5;       // pour le robot 16
 const uint16_t TURN_DELAY = 650;
 // constants to start the robot if it doesnt move
 const uint8_t JUMP_START_SPEED = 150;
@@ -52,7 +52,7 @@ void Navigation::moveStraight(Orientation orientation)
 void Navigation::realForward()
 {
     _speed = DEFAULT_SPEED;
-    _leftWheel.setSpeed(Orientation::FORWARD, (_speed + 20));
+    _leftWheel.setSpeed(Orientation::FORWARD, (_speed + 30));
     _rightWheel.setSpeed(Orientation::FORWARD, _speed);
 }
 
@@ -112,5 +112,20 @@ void Navigation::adjustWheel(Side turn, uint8_t intensity)
 void Navigation::jumpStart()
 {
     moveStraight(Orientation::FORWARD, JUMP_START_SPEED);
+    _delay_ms(JUMP_START_DELAY);
+}
+
+void Navigation::turnJumpStart(Side turn)
+{
+    if (turn == Side::LEFT)
+    {
+        _rightWheel.setSpeed(Orientation::FORWARD, JUMP_START_SPEED);
+        _leftWheel.setSpeed(Orientation::BACKWARD, JUMP_START_SPEED + LEFT_REAL_ADJUST);
+    }
+    else
+    {
+        _leftWheel.setSpeed(Orientation::FORWARD, JUMP_START_SPEED + LEFT_REAL_ADJUST);
+        _rightWheel.setSpeed(Orientation::BACKWARD, JUMP_START_SPEED);
+    }
     _delay_ms(JUMP_START_DELAY);
 }

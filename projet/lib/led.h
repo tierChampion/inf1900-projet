@@ -15,6 +15,7 @@ enum class LedColor
 class Led
 {
 public:
+    Led();
     Led(Port port, uint8_t greenPosition, uint8_t redPosition);
     void setColor(LedColor color);
 

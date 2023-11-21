@@ -2,11 +2,11 @@
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
                                        _lineSensor(LineSensor()),
-                                       _distSensor(DistanceSensor()),
-                                       _mesureTimer(Timer1())
+                                       _distSensor(DistanceSensor())
+                                       //, _mesureTimer(Timer1())
 {
     // setting of the timer1
-
+    //_mesureTimer.setCounterValue(0);
     // what mode?
     // what prescalar?
     // which compare for the measures? (leave 1 for the flashing led)
@@ -64,6 +64,11 @@ void MasterNavigation::driveOneUnit()
     // stop the timer
 }
 
+void MasterNavigation::drive()
+{
+    _navigation.realForward();
+}
+
 void MasterNavigation::pivot(Side turn)
 {
     // pivot left
@@ -86,6 +91,11 @@ void MasterNavigation::pivot(Side turn)
     }
 
     // if centered on the new line stop
+}
+
+void MasterNavigation::turn(Side turn) {
+    _navigation.turnJumpStart(turn);
+    _navigation.pivot(turn);
 }
 
 void MasterNavigation::turnMesuredRight()
@@ -111,7 +121,7 @@ void MasterNavigation::stop()
 
 void MasterNavigation::executeMovementCodes(MovementCode *codes, uint8_t length)
 {
-    // TODO, the rotations are inversed?
+    // TODO, the rotations are inversed (with red/white on 3/2)
     for (uint8_t i = 0; i < length; i++)
     {
         switch (codes[i])
@@ -120,18 +130,18 @@ void MasterNavigation::executeMovementCodes(MovementCode *codes, uint8_t length)
             driveToIntersection();
             break;
         case MovementCode::LEFT:
-            pivot(Side::RIGHT);
-            break;
-        case MovementCode::RIGHT:
             pivot(Side::LEFT);
             break;
-        case MovementCode::LEFT_FORWARD:
+        case MovementCode::RIGHT:
             pivot(Side::RIGHT);
+            break;
+        case MovementCode::LEFT_FORWARD:
+            pivot(Side::LEFT);
             _delay_ms(100);
             driveToIntersection();
             break;
         case MovementCode::RIGHT_FORWARD:
-            pivot(Side::LEFT);
+            pivot(Side::RIGHT);
             _delay_ms(100);
             driveToIntersection();
 

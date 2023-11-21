@@ -16,20 +16,23 @@ public:
     void driveToIntersection();
     // forward for one unit (mesured)
     void driveOneUnit();
+
+    void drive();
     // turn left
     void pivot(Side turn);
+    void turn(Side turn);
     // turn right and mesure the angle (mesured)
     void turnMesuredRight();
 
-    void executeMovementCodes(MovementCode* codes, uint8_t length);
-
     void stop();
+
+    void executeMovementCodes(MovementCode* codes, uint8_t length);
 
 private:
     Navigation _navigation;
     LineSensor _lineSensor;
     DistanceSensor _distSensor;
-    Timer1 _mesureTimer;
+    //Timer1 _mesureTimer;
 };
 
 #endif

@@ -16,6 +16,7 @@ public:
     void adjustWheel(Side turn, uint8_t intensity);
     void stop();
     void jumpStart();
+    void turnJumpStart(Side turn);
 
 private:
     uint8_t _speed;
