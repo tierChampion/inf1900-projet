@@ -1,15 +1,10 @@
 #include "master_navigation.h"
+#include "event_timer.h"
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
                                        _lineSensor(LineSensor()),
                                        _distSensor(DistanceSensor())
-                                       //, _mesureTimer(Timer1())
 {
-    // setting of the timer1
-    //_mesureTimer.setCounterValue(0);
-    // what mode?
-    // what prescalar?
-    // which compare for the measures? (leave 1 for the flashing led)
 }
 
 void MasterNavigation::driveToIntersection()
@@ -22,32 +17,16 @@ void MasterNavigation::driveToIntersection()
 
     while (running)
     {
-        _lineSensor.updateDetection();
-
-        if (_lineSensor.getStructure() == LineStructure::FORWARD)
-        {
-            if (_lineSensor.needLeftAdjustment())
-            {
-                _navigation.adjustWheel(Side::LEFT, 10);
-            }
-            else if (_lineSensor.needRightAdjustment())
-            {
-                _navigation.adjustWheel(Side::RIGHT, 30);
-            }
-            else
-            {
-                _navigation.moveStraight(Orientation::FORWARD);
-            }
-        }
+        goStraight();
         // check for intersections.
-        else if (_lineSensor.detectsIntersection())
+        if (_lineSensor.detectsIntersection())
         {
             // if intersection, center on it and stop.
             _navigation.realForward();
-            _delay_ms(1000); // crosses the intersection but doesnt center
-            _lineSensor.updateDetection();
-            // PRINT(_lineSensor.detectsIntersection() ? "INT" : "NOPE");
-            _navigation.stop();
+            _delay_ms(200); // crosses the intersection but doesnt center TO CHANGE
+
+            driveDistance(42);
+            // start timer and center
             running = false;
         }
     }
@@ -57,11 +36,48 @@ void MasterNavigation::driveOneUnit()
 {
     // launch the measure timer for the needed time (to determine)
 
+    driveDistance(80);
     // drive forward while adjusting
 
     // if time is done, stop
 
     // stop the timer
+}
+
+void MasterNavigation::driveDistance(uint16_t distance)
+{
+    _navigation.jumpStart();
+    _navigation.moveStraight(Orientation::FORWARD);
+
+    EventTimer::resetNavigationCounter();
+
+    while (EventTimer::getNavigationCounter() <= distance)
+    {
+        goStraight();
+    }
+
+    _navigation.stop();
+}
+
+void MasterNavigation::goStraight()
+{
+    _lineSensor.updateDetection();
+
+    if (_lineSensor.getStructure() == LineStructure::FORWARD)
+    {
+        if (_lineSensor.needLeftAdjustment())
+        {
+            _navigation.adjustWheel(Side::LEFT, 10);
+        }
+        else if (_lineSensor.needRightAdjustment())
+        {
+            _navigation.adjustWheel(Side::RIGHT, 30);
+        }
+        else
+        {
+            _navigation.moveStraight(Orientation::FORWARD);
+        }
+    }
 }
 
 void MasterNavigation::drive()
@@ -93,7 +109,8 @@ void MasterNavigation::pivot(Side turn)
     // if centered on the new line stop
 }
 
-void MasterNavigation::turn(Side turn) {
+void MasterNavigation::turn(Side turn)
+{
     _navigation.turnJumpStart(turn);
     _navigation.pivot(turn);
 }

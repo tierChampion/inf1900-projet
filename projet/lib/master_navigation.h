@@ -26,13 +26,17 @@ public:
 
     void stop();
 
-    void executeMovementCodes(MovementCode* codes, uint8_t length);
+    void executeMovementCodes(MovementCode *codes, uint8_t length);
+
+private:
+    void driveDistance(uint16_t distance);
+    void goStraight();
 
 private:
     Navigation _navigation;
     LineSensor _lineSensor;
     DistanceSensor _distSensor;
-    //Timer1 _mesureTimer;
+    // Timer1 _mesureTimer;
 };
 
 #endif
