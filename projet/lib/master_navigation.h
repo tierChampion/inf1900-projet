@@ -28,10 +28,11 @@ public:
 
     void executeMovementCode(MovementCode code);
 
-private:
+    // en mode public pour les tests de detection de corners
     void driveDistance(uint16_t distance);
     void goStraight();
 
+private:
 private:
     Navigation _navigation;
     LineSensor _lineSensor;
