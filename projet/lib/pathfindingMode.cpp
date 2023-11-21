@@ -1,7 +1,7 @@
 #include "pathfindingMode.h"
 
 PathfindingMode::PathfindingMode() : _pathfinder(Pathfinder()),
-                                     _x(0), _y(0),
+                                     _position(0),
                                      _direction(Direction::SOUTH),
                                      _navigation(MasterNavigation()) {}
 
@@ -18,24 +18,28 @@ void PathfindingMode::run(uint8_t line, uint8_t column)
 
 void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves)
 {
-    uint8_t start = _y * Map::MAP_WIDTH + _x;
     uint8_t dest = line * Map::MAP_WIDTH + column;
 
     uint8_t path[Pathfinder::MAX_PATH_LENGTH];
 
-    _pathfinder.findPath(start, dest, path);
+    _pathfinder.findPath(_position, dest, path);
 
     processPath(path, moves);
 }
 
 void PathfindingMode::travelPath(MovementCode *moves)
 {
-    // todo, execute the movementcodes. Probably a method of the driving system.
-    _navigation.executeMovementCodes(moves, 1);
+    uint8_t i = 0;
+    while (i < Pathfinder::MAX_PATH_LENGTH)
+    {
+        _navigation.executeMovementCode(moves[i]);
+
+        // position update, change this part in case of collision with pipe TODO
+        _direction = updateOrientation(moves[i], _direction);
+        _position = updatePosition(moves[i], _direction, _position);
+    }
 
     _navigation.stop();
-
-    // update the position and orientation. check for a pipe collision
 }
 
 void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
@@ -90,8 +94,38 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
     }
 }
 
-void PathfindingMode::updatePosition(MovementCode move)
+uint8_t PathfindingMode::updatePosition(MovementCode move, Direction currentDir, uint8_t currentPos)
 {
+    if ((currentDir == Direction::NORTH && (move == MovementCode::FORWARD || move == MovementCode::FORWARD_1)) ||
+        (currentDir == Direction::SOUTH && (move == MovementCode::UTURN_FORWARD)) ||
+        (currentDir == Direction::EAST && (move == MovementCode::LEFT_FORWARD)) ||
+        (currentDir == Direction::WEST && (move == MovementCode::RIGHT_FORWARD)))
+    {
+        return Map::getNorthPosition(currentPos);
+    }
+    else if ((currentDir == Direction::SOUTH && (move == MovementCode::FORWARD || move == MovementCode::FORWARD_1)) ||
+             (currentDir == Direction::NORTH && (move == MovementCode::UTURN_FORWARD)) ||
+             (currentDir == Direction::WEST && (move == MovementCode::LEFT_FORWARD)) ||
+             (currentDir == Direction::EAST && (move == MovementCode::RIGHT_FORWARD)))
+    {
+        return Map::getSouthPosition(currentPos);
+    }
+    else if ((currentDir == Direction::EAST && (move == MovementCode::FORWARD || move == MovementCode::FORWARD_1)) ||
+             (currentDir == Direction::WEST && (move == MovementCode::UTURN_FORWARD)) ||
+             (currentDir == Direction::SOUTH && (move == MovementCode::LEFT_FORWARD)) ||
+             (currentDir == Direction::NORTH && (move == MovementCode::RIGHT_FORWARD)))
+    {
+        return Map::getEastPosition(currentPos);
+    }
+    else if ((currentDir == Direction::WEST && (move == MovementCode::FORWARD || move == MovementCode::FORWARD_1)) ||
+             (currentDir == Direction::EAST && (move == MovementCode::UTURN_FORWARD)) ||
+             (currentDir == Direction::NORTH && (move == MovementCode::LEFT_FORWARD)) ||
+             (currentDir == Direction::SOUTH && (move == MovementCode::RIGHT_FORWARD)))
+    {
+        return Map::getWestPosition(currentPos);
+    }
+
+    return currentPos;
 }
 
 Direction PathfindingMode::updateOrientation(MovementCode move, Direction currentDir)
@@ -141,4 +175,6 @@ Direction PathfindingMode::updateOrientation(MovementCode move, Direction curren
     default:
         break;
     }
+
+    return currentDir;
 }

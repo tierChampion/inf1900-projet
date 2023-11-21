@@ -16,13 +16,12 @@ private:
     void pathfind(uint8_t line, uint8_t column, MovementCode* moves);
     void processPath(uint8_t* path, MovementCode* moves);
     void travelPath(MovementCode* moves);
-    void updatePosition(MovementCode move);
+    uint8_t updatePosition(MovementCode move, Direction currentDir, uint8_t currentPos);
     Direction updateOrientation(MovementCode move, Direction currentDir);
 
 private:
     Pathfinder _pathfinder;
-    uint8_t _x;
-    uint8_t _y;
+    uint8_t _position;
     Direction _direction;
     MasterNavigation _navigation;
 };

@@ -26,7 +26,7 @@ public:
 
     void stop();
 
-    void executeMovementCodes(MovementCode *codes, uint8_t length);
+    void executeMovementCode(MovementCode code);
 
 private:
     void driveDistance(uint16_t distance);

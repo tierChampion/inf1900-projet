@@ -1,6 +1,17 @@
 #include "master_navigation.h"
 #include "event_timer.h"
 
+const uint8_t INTERSECTION_CROSSING_DELAY = 200;
+const uint16_t PIVOT_DELAY = 500;
+const uint8_t STABLEZING_DELAY = 100;
+
+const uint8_t INTERSECTION_CENTERING_COUNT = 42;
+const uint8_t ONE_UNIT_COUNT = 130;
+const uint8_t UTURN_COUNT = 90;
+
+const uint8_t LEFT_ADJUST_STRENGTH = 10;
+const uint8_t RIGHT_ADJUST_STRENGTH = 30;
+
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
                                        _lineSensor(LineSensor()),
                                        _distSensor(DistanceSensor())
@@ -23,9 +34,9 @@ void MasterNavigation::driveToIntersection()
         {
             // if intersection, center on it and stop.
             _navigation.realForward();
-            _delay_ms(200); // crosses the intersection but doesnt center TO CHANGE
+            _delay_ms(INTERSECTION_CROSSING_DELAY); // crosses the intersection but doesnt center TO CHANGE
 
-            driveDistance(42);
+            driveDistance(INTERSECTION_CENTERING_COUNT);
             // start timer and center
             running = false;
         }
@@ -34,14 +45,7 @@ void MasterNavigation::driveToIntersection()
 
 void MasterNavigation::driveOneUnit()
 {
-    // launch the measure timer for the needed time (to determine)
-
-    driveDistance(130);
-    // drive forward while adjusting
-
-    // if time is done, stop
-
-    // stop the timer
+    driveDistance(ONE_UNIT_COUNT);
 }
 
 void MasterNavigation::driveDistance(uint16_t distance)
@@ -67,11 +71,11 @@ void MasterNavigation::goStraight()
     {
         if (_lineSensor.needLeftAdjustment())
         {
-            _navigation.adjustWheel(Side::LEFT, 10);
+            _navigation.adjustWheel(Side::LEFT, LEFT_ADJUST_STRENGTH);
         }
         else if (_lineSensor.needRightAdjustment())
         {
-            _navigation.adjustWheel(Side::RIGHT, 30);
+            _navigation.adjustWheel(Side::RIGHT, RIGHT_ADJUST_STRENGTH);
         }
         else
         {
@@ -87,18 +91,16 @@ void MasterNavigation::drive()
 
 void MasterNavigation::pivot(Side turn)
 {
-    // pivot left
     _navigation.pivot(turn);
 
-    _delay_ms(500);
+    _delay_ms(PIVOT_DELAY);
 
     bool running = true;
-    // check for a new line
+
     while (running)
     {
         _lineSensor.updateDetection();
 
-        // mix with t?
         if (_lineSensor.getStructure() == LineStructure::FORWARD)
         {
             _navigation.stop();
@@ -123,7 +125,7 @@ void MasterNavigation::uTurn()
     EventTimer::resetNavigationCounter();
     _navigation.pivot(Side::LEFT);
 
-    while (EventTimer::getNavigationCounter() <= 90)
+    while (EventTimer::getNavigationCounter() <= UTURN_COUNT)
     {
     }
 
@@ -135,39 +137,48 @@ void MasterNavigation::stop()
     _navigation.stop();
 }
 
-void MasterNavigation::executeMovementCodes(MovementCode *codes, uint8_t length)
+void MasterNavigation::executeMovementCode(MovementCode code)
 {
-    // TODO, the rotations are inversed (with red/white on 3/2)
-    for (uint8_t i = 0; i < length; i++)
+    switch (code)
     {
-        switch (codes[i])
-        {
-        case MovementCode::FORWARD:
-            driveToIntersection();
-            break;
+    case MovementCode::FORWARD:
+        driveToIntersection();
+        break;
 
-        case MovementCode::FORWARD_1:
-            driveOneUnit();
-            break;
-        case MovementCode::LEFT:
-            pivot(Side::LEFT);
-            break;
-        case MovementCode::RIGHT:
-            pivot(Side::RIGHT);
-            break;
-        case MovementCode::LEFT_FORWARD:
-            pivot(Side::LEFT);
-            _delay_ms(100);
-            driveToIntersection();
-            break;
-        case MovementCode::RIGHT_FORWARD:
-            pivot(Side::RIGHT);
-            _delay_ms(100);
-            driveToIntersection();
-        case MovementCode::UTURN:
-            uTurn();
-        default:
-            break;
-        }
+    case MovementCode::FORWARD_1:
+        driveOneUnit();
+        break;
+
+    case MovementCode::LEFT:
+        pivot(Side::LEFT);
+        break;
+
+    case MovementCode::RIGHT:
+        pivot(Side::RIGHT);
+        break;
+
+    case MovementCode::LEFT_FORWARD:
+        pivot(Side::LEFT);
+        _delay_ms(STABLEZING_DELAY);
+        driveToIntersection();
+        break;
+
+    case MovementCode::RIGHT_FORWARD:
+        pivot(Side::RIGHT);
+        _delay_ms(STABLEZING_DELAY);
+        driveToIntersection();
+        break;
+
+    case MovementCode::UTURN:
+        uTurn();
+        break;
+
+    case MovementCode::UTURN_FORWARD:
+        uTurn();
+        driveToIntersection();
+        break;
+
+    default:
+        break;
     }
 }
