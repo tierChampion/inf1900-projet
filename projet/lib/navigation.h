@@ -19,12 +19,11 @@ public:
     void turnJumpStart(Side turn);
 
 private:
-    uint8_t _speed;
+    Timer0 _timerPWM;
     Wheel _leftWheel;
     Wheel _rightWheel;
     WritePin _leftEnablePin;
     WritePin _rightEnablePin;
-    Timer0 _timerPWM;
 };
 
 #endif

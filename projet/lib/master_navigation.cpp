@@ -1,15 +1,21 @@
 #include "master_navigation.h"
+#include "event_timer.h"
+
+const uint8_t INTERSECTION_CROSSING_DELAY = 200;
+const uint16_t PIVOT_DELAY = 500;
+const uint8_t STABILIZING_DELAY = 100;
+
+const uint8_t INTERSECTION_CENTERING_COUNT = 42;
+const uint8_t ONE_UNIT_COUNT = 130;
+const uint8_t UTURN_COUNT = 90;
+
+const uint8_t LEFT_ADJUST_STRENGTH = 10;
+const uint8_t RIGHT_ADJUST_STRENGTH = 30;
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
                                        _lineSensor(LineSensor()),
                                        _distSensor(DistanceSensor())
-                                       //, _mesureTimer(Timer1())
 {
-    // setting of the timer1
-    //_mesureTimer.setCounterValue(0);
-    // what mode?
-    // what prescalar?
-    // which compare for the measures? (leave 1 for the flashing led)
 }
 
 void MasterNavigation::driveToIntersection()
@@ -22,32 +28,15 @@ void MasterNavigation::driveToIntersection()
 
     while (running)
     {
-        _lineSensor.updateDetection();
-
-        if (_lineSensor.getStructure() == LineStructure::FORWARD)
-        {
-            if (_lineSensor.needLeftAdjustment())
-            {
-                _navigation.adjustWheel(Side::LEFT, 10);
-            }
-            else if (_lineSensor.needRightAdjustment())
-            {
-                _navigation.adjustWheel(Side::RIGHT, 30);
-            }
-            else
-            {
-                _navigation.moveStraight(Orientation::FORWARD);
-            }
-        }
+        goStraight();
         // check for intersections.
-        else if (_lineSensor.detectsIntersection())
+        if (_lineSensor.detectsIntersection())
         {
-            // if intersection, center on it and stop.
             _navigation.realForward();
-            _delay_ms(1000); // crosses the intersection but doesnt center
-            _lineSensor.updateDetection();
-            // PRINT(_lineSensor.detectsIntersection() ? "INT" : "NOPE");
-            _navigation.stop();
+            _delay_ms(INTERSECTION_CROSSING_DELAY); 
+
+            driveDistance(INTERSECTION_CENTERING_COUNT);
+            
             running = false;
         }
     }
@@ -55,13 +44,43 @@ void MasterNavigation::driveToIntersection()
 
 void MasterNavigation::driveOneUnit()
 {
-    // launch the measure timer for the needed time (to determine)
+    driveDistance(ONE_UNIT_COUNT);
+}
 
-    // drive forward while adjusting
+void MasterNavigation::driveDistance(uint16_t distance)
+{
+    _navigation.jumpStart();
+    _navigation.moveStraight(Orientation::FORWARD);
 
-    // if time is done, stop
+    EventTimer::resetNavigationCounter();
 
-    // stop the timer
+    while (EventTimer::getNavigationCounter() <= distance)
+    {
+        goStraight();
+    }
+
+    _navigation.stop();
+}
+
+void MasterNavigation::goStraight()
+{
+    _lineSensor.updateDetection();
+
+    if (_lineSensor.getStructure() == LineStructure::FORWARD)
+    {
+        if (_lineSensor.needLeftAdjustment())
+        {
+            _navigation.adjustWheel(Side::LEFT, LEFT_ADJUST_STRENGTH);
+        }
+        else if (_lineSensor.needRightAdjustment())
+        {
+            _navigation.adjustWheel(Side::RIGHT, RIGHT_ADJUST_STRENGTH);
+        }
+        else
+        {
+            _navigation.moveStraight(Orientation::FORWARD);
+        }
+    }
 }
 
 void MasterNavigation::drive()
@@ -71,47 +90,41 @@ void MasterNavigation::drive()
 
 void MasterNavigation::pivot(Side turn)
 {
-    // pivot left
     _navigation.pivot(turn);
 
-    _delay_ms(500);
+    _delay_ms(PIVOT_DELAY);
 
     bool running = true;
-    // check for a new line
+
     while (running)
     {
         _lineSensor.updateDetection();
 
-        // mix with t?
         if (_lineSensor.getStructure() == LineStructure::FORWARD)
         {
             _navigation.stop();
             running = false;
         }
     }
-
-    // if centered on the new line stop
 }
 
-void MasterNavigation::turn(Side turn) {
+void MasterNavigation::turn(Side turn)
+{
     _navigation.turnJumpStart(turn);
     _navigation.pivot(turn);
 }
 
-void MasterNavigation::turnMesuredRight()
+void MasterNavigation::uTurn()
 {
+    _navigation.turnJumpStart(Side::LEFT);
+    EventTimer::resetNavigationCounter();
+    _navigation.pivot(Side::LEFT);
 
-    // launch the measure timer for the needed time (to determine)
+    while (EventTimer::getNavigationCounter() <= UTURN_COUNT)
+    {
+    }
 
-    // pivot right
-
-    // check for a new line
-
-    // if centered on the new line stop
-
-    // stop the timer and check the time measured
-
-    // determine if the angle is about 180
+    pivot(Side::LEFT);
 }
 
 void MasterNavigation::stop()
@@ -119,34 +132,48 @@ void MasterNavigation::stop()
     _navigation.stop();
 }
 
-void MasterNavigation::executeMovementCodes(MovementCode *codes, uint8_t length)
+void MasterNavigation::executeMovementCode(MovementCode code)
 {
-    // TODO, the rotations are inversed (with red/white on 3/2)
-    for (uint8_t i = 0; i < length; i++)
+    switch (code)
     {
-        switch (codes[i])
-        {
-        case MovementCode::FORWARD:
-            driveToIntersection();
-            break;
-        case MovementCode::LEFT:
-            pivot(Side::LEFT);
-            break;
-        case MovementCode::RIGHT:
-            pivot(Side::RIGHT);
-            break;
-        case MovementCode::LEFT_FORWARD:
-            pivot(Side::LEFT);
-            _delay_ms(100);
-            driveToIntersection();
-            break;
-        case MovementCode::RIGHT_FORWARD:
-            pivot(Side::RIGHT);
-            _delay_ms(100);
-            driveToIntersection();
+    case MovementCode::FORWARD:
+        driveToIntersection();
+        break;
 
-        default:
-            break;
-        }
+    case MovementCode::FORWARD_1:
+        driveOneUnit();
+        break;
+
+    case MovementCode::LEFT:
+        pivot(Side::LEFT);
+        break;
+
+    case MovementCode::RIGHT:
+        pivot(Side::RIGHT);
+        break;
+
+    case MovementCode::LEFT_FORWARD:
+        pivot(Side::LEFT);
+        _delay_ms(STABILIZING_DELAY);
+        driveToIntersection();
+        break;
+
+    case MovementCode::RIGHT_FORWARD:
+        pivot(Side::RIGHT);
+        _delay_ms(STABILIZING_DELAY);
+        driveToIntersection();
+        break;
+
+    case MovementCode::UTURN:
+        uTurn();
+        break;
+
+    case MovementCode::UTURN_FORWARD:
+        uTurn();
+        driveToIntersection();
+        break;
+
+    default:
+        break;
     }
 }
