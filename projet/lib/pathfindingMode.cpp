@@ -94,6 +94,14 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
                                                     : static_cast<uint8_t>(currentDir) + 1);
         }
     }
+
+    for (uint8_t i = 1; i < Pathfinder::MAX_PATH_LENGTH; i++)
+    {
+        if (moves[i] == MovementCode::FORWARD && moves[i - 1] == MovementCode::FORWARD)
+        {
+            moves[i - 1] = MovementCode::FORWARD_1;
+        }
+    }
 }
 
 void PathfindingMode::travelPath(MovementCode *moves)
