@@ -1,15 +1,16 @@
 #include "master_navigation.h"
 #include "led.h"
 #include "pathfindingMode.h"
-
+#include "corners_detector.h"
 volatile uint16_t gCounter = 0;
 volatile uint16_t gNavCounter = 0;
 volatile uint8_t toggle = 0;
 
 Led led;
-
+CornersDetector detector;
 ISR(TIMER1_COMPA_vect)
 {
+    detector.intRoutineTimer1();
     gCounter++;
     gNavCounter++;
 
@@ -30,7 +31,7 @@ ISR(TIMER1_COMPA_vect)
 }
 
 int main()
-{
+{ ////
     MasterNavigation nav = MasterNavigation();
 
     Timer1 eventTimer = Timer1();
@@ -46,24 +47,25 @@ int main()
     eventTimer.setInterrupt(TimerInterrupt::COMPARE_A);
 
     nav.turn(Side::LEFT);
-
+    LineSensor lineSensor;
     eventTimer.start();
-    bool running = true;
-
-// 195 => 25 ms
-// 42 => center on intersection
-// 60 ~ 90 degrees
-// 90
-
-    while (running)
-    {
-        if (gNavCounter >= 90) {
-            nav.stop();
-            running = false;
-            gNavCounter = 0;
+    // bool running = true;
+    detector.detectCorner(nav, lineSensor);
+    // 195 => 25 ms
+    // 42 => center on intersection
+    // 60 ~ 90 degrees
+    // 90
+    /*
+        while (running)
+        {
+            if (gNavCounter >= 90)
+            {
+                nav.stop();
+                running = false;
+                gNavCounter = 0;
+            }
         }
-    }
-
+    */
     // MovementCode moves[3];
     // moves[0] = MovementCode::FORWARD;
     // moves[1] = MovementCode::LEFT_FORWARD;

@@ -1,7 +1,7 @@
 #ifndef CORNERS_DECTECTOR_H
 #define CORNERS_DECTECTOR_H
 #include <line_sensor.h>
-#include <navigation.h>
+#include <master_navigation.h>
 enum class ScanState : uint8_t
 {
     FIRST = 0,
@@ -13,12 +13,12 @@ class CornersDetector
 {
 public:
     CornersDetector();
-    char *detectCorner();
+    const char *detectCorner(MasterNavigation navigation, LineSensor lineSensor);
+    void intRoutineTimer1();
 
 private:
-    void scan();
-    char *detect();
-    void intRoutineTimer1();
+    void scan(LineSensor lineSensor);
+    const char *detect();
     uint16_t _distanceCounter;
     bool _isDetecting;
     uint8_t _detector;
