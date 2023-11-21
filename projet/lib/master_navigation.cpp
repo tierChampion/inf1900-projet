@@ -3,7 +3,7 @@
 
 const uint8_t INTERSECTION_CROSSING_DELAY = 200;
 const uint16_t PIVOT_DELAY = 500;
-const uint8_t STABLEZING_DELAY = 100;
+const uint8_t STABILIZING_DELAY = 100;
 
 const uint8_t INTERSECTION_CENTERING_COUNT = 42;
 const uint8_t ONE_UNIT_COUNT = 130;
@@ -32,12 +32,11 @@ void MasterNavigation::driveToIntersection()
         // check for intersections.
         if (_lineSensor.detectsIntersection())
         {
-            // if intersection, center on it and stop.
             _navigation.realForward();
-            _delay_ms(INTERSECTION_CROSSING_DELAY); // crosses the intersection but doesnt center TO CHANGE
+            _delay_ms(INTERSECTION_CROSSING_DELAY); 
 
             driveDistance(INTERSECTION_CENTERING_COUNT);
-            // start timer and center
+            
             running = false;
         }
     }
@@ -107,8 +106,6 @@ void MasterNavigation::pivot(Side turn)
             running = false;
         }
     }
-
-    // if centered on the new line stop
 }
 
 void MasterNavigation::turn(Side turn)
@@ -119,8 +116,6 @@ void MasterNavigation::turn(Side turn)
 
 void MasterNavigation::uTurn()
 {
-
-    // launch the measure timer for the needed time (to determine)
     _navigation.turnJumpStart(Side::LEFT);
     EventTimer::resetNavigationCounter();
     _navigation.pivot(Side::LEFT);
@@ -159,13 +154,13 @@ void MasterNavigation::executeMovementCode(MovementCode code)
 
     case MovementCode::LEFT_FORWARD:
         pivot(Side::LEFT);
-        _delay_ms(STABLEZING_DELAY);
+        _delay_ms(STABILIZING_DELAY);
         driveToIntersection();
         break;
 
     case MovementCode::RIGHT_FORWARD:
         pivot(Side::RIGHT);
-        _delay_ms(STABLEZING_DELAY);
+        _delay_ms(STABILIZING_DELAY);
         driveToIntersection();
         break;
 

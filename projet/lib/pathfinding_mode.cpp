@@ -1,4 +1,4 @@
-#include "pathfindingMode.h"
+#include "pathfinding_mode.h"
 
 PathfindingMode::PathfindingMode() : _pathfinder(Pathfinder()),
                                      _position(0),
@@ -7,9 +7,9 @@ PathfindingMode::PathfindingMode() : _pathfinder(Pathfinder()),
 
 void PathfindingMode::run(uint8_t line, uint8_t column)
 {
-    MovementCode moves[Pathfinder::MAX_PATH_LENGTH];
+    MovementCode moves[2 * Pathfinder::MAX_PATH_LENGTH];
 
-    for (uint8_t i = 0; i < Pathfinder::MAX_PATH_LENGTH; i++)
+    for (uint8_t i = 0; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
         moves[i] = MovementCode::NOTHING;
 
     pathfind(line, column, moves);
@@ -63,7 +63,9 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
                  (currentDir == Direction::EAST && path[index + 1] == Map::getNorthPosition(path[index])) ||
                  (currentDir == Direction::WEST && path[index + 1] == Map::getSouthPosition(path[index])))
         {
-            moves[index++] = MovementCode::LEFT_FORWARD;
+            moves[index++] = MovementCode::LEFT;
+            currentDir = updateOrientation(moves[index - 1], currentDir);
+            moves[index++] = MovementCode::FORWARD;
         }
         // right case
         else if ((currentDir == Direction::NORTH && path[index + 1] == Map::getEastPosition(path[index])) ||
@@ -71,7 +73,9 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
                  (currentDir == Direction::EAST && path[index + 1] == Map::getSouthPosition(path[index])) ||
                  (currentDir == Direction::WEST && path[index + 1] == Map::getNorthPosition(path[index])))
         {
-            moves[index++] = MovementCode::RIGHT_FORWARD;
+            moves[index++] = MovementCode::RIGHT;
+            currentDir = updateOrientation(moves[index - 1], currentDir);
+            moves[index++] = MovementCode::FORWARD;
         }
         // uturn case
         else if ((currentDir == Direction::NORTH && path[index + 1] == Map::getSouthPosition(path[index])) ||
@@ -79,13 +83,13 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
                  (currentDir == Direction::EAST && path[index + 1] == Map::getWestPosition(path[index])) ||
                  (currentDir == Direction::WEST && path[index + 1] == Map::getEastPosition(path[index])))
         {
-            moves[index++] = MovementCode::UTURN_FORWARD;
+            moves[index++] = MovementCode::UTURN;
+            currentDir = updateOrientation(moves[index - 1], currentDir);
+            moves[index++] = MovementCode::FORWARD;
         }
-
-        currentDir = updateOrientation(moves[index - 1], currentDir);
     }
 
-    for (uint8_t i = 1; i < Pathfinder::MAX_PATH_LENGTH; i++)
+    for (uint8_t i = 1; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
     {
         if (moves[i] == MovementCode::FORWARD && moves[i - 1] == MovementCode::FORWARD)
         {

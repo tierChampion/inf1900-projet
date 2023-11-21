@@ -1,24 +1,15 @@
 #include "master_navigation.h"
 #include "led.h"
-#include "pathfindingMode.h"
+#include "pathfinding_mode.h"
 #include "event_timer.h"
 
 int main()
 {
-    MasterNavigation nav = MasterNavigation();
+    //MasterNavigation nav = MasterNavigation();
 
-// 195 => 25 ms
-// 42 => center on intersection
-// 60 ~ 90 degrees
-// 90
+    PRINT("PATH MODE SIZE IN BYTES:");
+    PRINT(static_cast<uint16_t>(sizeof(PathfindingMode)));
 
-    MovementCode moves[1];
-    moves[0] = MovementCode::UTURN;
-    // moves[1] = MovementCode::LEFT_FORWARD;
-
-    nav.executeMovementCodes(moves, 1);
-
-    // PathfindingMode mode = PathfindingMode();
-
-    // mode.run(1, 0);
+    PRINT("MAP SIZE IN BYTES:");
+    PRINT(static_cast<uint16_t>(sizeof(Map)));
 }

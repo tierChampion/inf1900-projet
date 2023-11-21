@@ -5,9 +5,10 @@ const uint8_t DEFAULT_TURN_SPEED = 100; // pour le robot 16
 const uint8_t LEFT_REAL_ADJUST = 10;    // pour le robot 16
 const uint8_t DEFAULT_ADJUST = 5;       // pour le robot 16
 const uint16_t TURN_DELAY = 650;
+
 // constants to start the robot if it doesnt move
 const uint8_t JUMP_START_SPEED = 150;
-const uint8_t JUMP_START_DELAY = 25;
+const uint8_t JUMP_START_DELAY = 50;
 
 Navigation::Navigation() : _timerPWM(Timer0()),
                            _leftEnablePin(WritePin(Port::B, PB3)),
@@ -48,7 +49,7 @@ void Navigation::moveStraight(Orientation orientation)
 
 void Navigation::realForward()
 {
-    _leftWheel.setSpeed(Orientation::FORWARD, (DEFAULT_SPEED + 30));
+    _leftWheel.setSpeed(Orientation::FORWARD, (DEFAULT_SPEED + LEFT_REAL_ADJUST)); // to test (was 30)
     _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED);
 }
 
