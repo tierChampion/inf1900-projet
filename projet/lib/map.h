@@ -60,6 +60,8 @@ public:
     static uint8_t getEastPosition(uint8_t position);
     static uint8_t getWestPosition(uint8_t position);
 
+    bool isLinePosition(uint8_t position);
+
     void printMap() const;
 
 private:

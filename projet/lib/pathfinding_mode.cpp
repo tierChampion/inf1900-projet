@@ -22,9 +22,9 @@ void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves
 
     uint8_t path[Pathfinder::MAX_PATH_LENGTH];
 
-    _pathfinder.findPath(_position, dest, path);
+    bool isDestInMiddle = _pathfinder.findPath(_position, dest, path);
 
-    processPath(path, moves);
+    processPath(path, isDestInMiddle, moves);
 }
 
 void PathfindingMode::travelPath(MovementCode *moves)
@@ -42,7 +42,7 @@ void PathfindingMode::travelPath(MovementCode *moves)
     _navigation.stop();
 }
 
-void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
+void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode *moves)
 {
     uint8_t index = 0;
     Direction currentDir = _direction;
@@ -92,6 +92,10 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
     for (uint8_t i = 1; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
     {
         if (moves[i] == MovementCode::FORWARD && moves[i - 1] == MovementCode::FORWARD)
+        {
+            moves[i - 1] = MovementCode::FORWARD_1;
+        }
+        else if (moves[i] == MovementCode::NOTHING && moves[i - 1] == MovementCode::FORWARD && isDestMiddle)
         {
             moves[i - 1] = MovementCode::FORWARD_1;
         }

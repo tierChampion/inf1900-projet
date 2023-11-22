@@ -2,7 +2,7 @@
 
 Pathfinder::Pathfinder() : _map(Map()), _workSize(0) {}
 
-void Pathfinder::findPath(uint8_t start, uint8_t dest, uint8_t *path)
+bool Pathfinder::findPath(uint8_t start, uint8_t dest, uint8_t *path)
 {
     _map.reset();
 
@@ -49,6 +49,8 @@ void Pathfinder::findPath(uint8_t start, uint8_t dest, uint8_t *path)
 #endif
 
     getPath(dest, path);
+
+    return _map.isLinePosition(dest);
 }
 
 uint8_t Pathfinder::popBestNode()

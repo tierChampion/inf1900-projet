@@ -9,7 +9,7 @@ class Pathfinder
 public:
     Pathfinder();
 
-    void findPath(uint8_t start, uint8_t dest, uint8_t* path);
+    bool findPath(uint8_t start, uint8_t dest, uint8_t* path);
 
 private:
     uint8_t popBestNode();

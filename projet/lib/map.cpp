@@ -57,7 +57,6 @@ void MapNode::setCardinalDist(Direction direction, uint8_t newDist)
     }
 }
 
-
 void MapNode::setDistance(uint8_t newDist) { _distance = newDist; }
 
 uint8_t MapNode::getDistance() { return _distance; }
@@ -93,7 +92,8 @@ Map::Map()
 
 void Map::reset()
 {
-    for (uint8_t i = 0; i < Map::NODE_COUNT; i++) {
+    for (uint8_t i = 0; i < Map::NODE_COUNT; i++)
+    {
         _nodes[i].setPrev(0x1F);
         _nodes[i].setDistance(Map::NONE);
         _nodes[i].setVisited(Visited::UNKNOWN);
@@ -105,7 +105,7 @@ const MapNode &Map::operator[](uint8_t position) const
     return _nodes[position];
 }
 
-MapNode& Map::operator[](uint8_t position) // wrong
+MapNode &Map::operator[](uint8_t position) // wrong
 {
     return _nodes[position];
 }
@@ -200,6 +200,18 @@ uint8_t Map::getWestPosition(uint8_t position)
     if (getPositionX(position) == 0)
         return Map::NONE;
     return position - 1;
+}
+
+bool Map::isLinePosition(uint8_t position)
+{
+    return (_nodes[position].getCardinalDist(Direction::NORTH) > 0 &&
+            _nodes[position].getCardinalDist(Direction::SOUTH) > 0 &&
+            _nodes[position].getCardinalDist(Direction::EAST) == 0 &&
+            _nodes[position].getCardinalDist(Direction::WEST) == 0) ||
+           (_nodes[position].getCardinalDist(Direction::EAST) > 0 &&
+            _nodes[position].getCardinalDist(Direction::WEST) > 0 &&
+            _nodes[position].getCardinalDist(Direction::NORTH) == 0 &&
+            _nodes[position].getCardinalDist(Direction::SOUTH) == 0);
 }
 
 void Map::printMap() const
