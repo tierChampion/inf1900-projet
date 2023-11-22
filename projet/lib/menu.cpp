@@ -2,6 +2,9 @@
 
 #include "avr/interrupt.h"
 
+#define DEMO_DDR	DDRC // `Data Direction Register' AVR occup� par l'aff.
+#define DEMO_PORT	PORTC // Port AVR occup� par l'afficheur
+
 bool Menu::_isInitialised = false;
 Button Menu::_modeButton = Button(GeneralInterruptType::INT_2, true);
 Button Menu::_selectionButton = Button(GeneralInterruptType::INT_0, false);
@@ -10,6 +13,8 @@ MenuStep Menu::_step;
 bool Menu::_isYes;
 uint8_t Menu::_line;
 uint8_t Menu::_column;
+
+LCM Menu::lcd(&DEMO_DDR, &DEMO_PORT);
 
 ISR(INT0_vect)
 {
@@ -155,28 +160,52 @@ void Menu::executeStep()
     switch (Menu::_step)
     {
     case MenuStep::INIT:
+        Menu::lcd.clear();
+        Menu::lcd.write("CHOISIR MODE:");
+        _delay_ms(600);
         PRINT("CHOISIR MODE:");
         break;
     case MenuStep::CORNERS:
+        Menu::lcd.clear();
+        Menu::lcd.write("(X, Y)          Z");
+        _delay_ms(600);
         PRINT("(X, Y) Z");
         break;
     case MenuStep::LINE_RELEASE:
     case MenuStep::LINE:
+        Menu::lcd.clear();
+        char lin[32];
+        sprintf(lin, "LIGNE           %u", Menu::_line);
+        Menu::lcd.write(lin);
+        _delay_ms(600);
         PRINT("LIGNE");
         PRINT(Menu::_line);
         break;
     case MenuStep::COLUMN_RELEASE:
     case MenuStep::COLUMN:
+        Menu::lcd.clear();
+        char col[32];
+        sprintf(col, "COLONNE         %u", Menu::_column);
+        Menu::lcd.write(col);
+        _delay_ms(600);
         PRINT("COLONNE");
         PRINT(_column);
         break;
     case MenuStep::CONFIRM_RELEASE:
     case MenuStep::CONFIRM:
+        Menu::lcd.clear();
+        char conf[32];
+        sprintf(conf, "(%u, %u) OK?      %s", Menu::_line, Menu::_column, Menu::_isYes ? "OUI" : "NON");
+        Menu::lcd.write(conf);
+        _delay_ms(6000);
         PRINT("(L, C) OK?");
         PRINT(_isYes ? "OUI" : "NON");
         break;
     case MenuStep::PATH:
-        PRINT("TRAJET EN COURS...");
+        Menu::lcd.clear();
+        Menu::lcd.write("TRAJET EN COURS ****************");
+        _delay_ms(600);
+        PRINT("TRAJET EN COURS");
         break;
     }
 }
