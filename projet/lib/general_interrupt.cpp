@@ -38,14 +38,20 @@ void GeneralInterrupt::setFlags()
         case GeneralInterruptType::INT_0:
             _maskFlag = INT0;
             _interruptFlag = INTF0;
+            _controlFlag1 = ISC00;
+            _controlFlag2 = ISC01;
             break;
         case GeneralInterruptType::INT_1:
             _maskFlag = INT1;
             _interruptFlag = INTF1;
+            _controlFlag1 = ISC10;
+            _controlFlag2 = ISC11;
             break;
         case GeneralInterruptType::INT_2:
             _maskFlag = INT2;
             _interruptFlag = INTF2;
+            _controlFlag1 = ISC20;
+            _controlFlag2 = ISC21;
             break;
     }
 }
