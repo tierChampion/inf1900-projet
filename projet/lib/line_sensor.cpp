@@ -16,7 +16,6 @@ void LineSensor::updateDetection()
 
     if (((_sensorArray & 0b10001) == 0b10001))
     {
-
         _structure = LineStructure::T;
     }
     else if (((_sensorArray & 0b00011) == 0b00011))
@@ -44,6 +43,9 @@ void LineSensor::updateDetection()
             _structure = LineStructure::FORWARD;
             break;
         }
+    }
+    else if (_sensorArray == 0)
+    {
     }
     else
     {

@@ -21,6 +21,6 @@ private:
     const char *detect();
     bool _isDetecting;
     uint8_t _detector;
-    ScanState _scanState;
+    uint8_t _scan;
 };
 #endif

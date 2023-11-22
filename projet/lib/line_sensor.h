@@ -30,6 +30,10 @@ inline const char *structureToString(LineStructure structure)
         return "Right turn";
     case LineStructure::T:
         return "T intersection";
+    case LineStructure::LEFT_FORWARD:
+        return "Left forward";
+    case LineStructure::RIGHT_FORWARD:
+        return "Right forward";
     default:
         return "UNKNOWN!";
     }

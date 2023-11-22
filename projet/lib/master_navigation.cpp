@@ -33,10 +33,10 @@ void MasterNavigation::driveToIntersection()
         if (_lineSensor.detectsIntersection())
         {
             _navigation.realForward();
-            _delay_ms(INTERSECTION_CROSSING_DELAY); 
+            _delay_ms(INTERSECTION_CROSSING_DELAY);
 
             driveDistance(INTERSECTION_CENTERING_COUNT);
-            
+
             running = false;
         }
     }
@@ -94,18 +94,10 @@ void MasterNavigation::pivot(Side turn)
 
     _delay_ms(PIVOT_DELAY);
 
-    bool running = true;
-
-    while (running)
+    while (_lineSensor.readSensorArray() != 0b00100)
     {
-        _lineSensor.updateDetection();
-
-        if (_lineSensor.getStructure() == LineStructure::FORWARD)
-        {
-            _navigation.stop();
-            running = false;
-        }
     }
+    _navigation.stop();
 }
 
 void MasterNavigation::turn(Side turn)
