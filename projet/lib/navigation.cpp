@@ -1,14 +1,14 @@
 #include "navigation.h"
 
 const uint8_t DEFAULT_SPEED = 110;      // 150 pour le robot 16. baisser a 80?
-const uint8_t DEFAULT_TURN_SPEED = 100; // pour le robot 16
+const uint8_t DEFAULT_TURN_SPEED = 90; // pour le robot 16
 const uint8_t LEFT_REAL_ADJUST = 10;    // pour le robot 16
 const uint8_t DEFAULT_ADJUST = 5;       // pour le robot 16
 const uint16_t TURN_DELAY = 650;
 
 // constants to start the robot if it doesnt move
-const uint8_t JUMP_START_SPEED = 150;
-const uint8_t JUMP_START_DELAY = 50;
+const uint8_t JUMP_START_SPEED = 250;
+const uint8_t JUMP_START_DELAY = 150;
 
 Navigation::Navigation() : _timerPWM(Timer0()),
                            _leftEnablePin(WritePin(Port::B, PB3)),

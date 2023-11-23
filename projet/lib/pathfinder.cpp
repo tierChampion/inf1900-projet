@@ -46,7 +46,7 @@ void Pathfinder::findPath(uint8_t start, uint8_t dest, uint8_t *path)
     }
 
 #ifdef DEBUG
-    printInvertedPath(dest);
+    //printInvertedPath(dest);
 #endif
 
     getPath(dest, path);
@@ -143,9 +143,9 @@ void Pathfinder::getPath(uint8_t dest, uint8_t *path) const
             node = _map[node.getPrev()];
         }
 
-        PRINT("PATH NODE:");
-        PRINT(path[i]);
-        PRINT(static_cast<uint8_t>(i));
+        //PRINT("PATH NODE:");
+        //PRINT(path[i]);
+        //PRINT(static_cast<uint8_t>(i));
     }
 }
 

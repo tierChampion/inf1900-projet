@@ -3,7 +3,7 @@
 
 const uint8_t INTERSECTION_CROSSING_DELAY = 200;
 const uint16_t PIVOT_DELAY = 500;
-const uint8_t STABILIZING_DELAY = 100;
+const uint8_t STABILIZING_DELAY = 250;
 
 const uint8_t INTERSECTION_CENTERING_COUNT = 42;
 const uint8_t ONE_UNIT_COUNT = 130;
@@ -104,6 +104,7 @@ void MasterNavigation::pivot(Side turn)
             _navigation.stop();
             running = false;
         }
+        // PRINT("STILL");
     }
 }
 
@@ -137,18 +138,22 @@ void MasterNavigation::executeMovementCode(MovementCode code)
     {
     case MovementCode::FORWARD:
         driveToIntersection();
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::FORWARD_1:
         driveOneUnit();
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::LEFT:
         pivot(Side::LEFT);
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::RIGHT:
         pivot(Side::RIGHT);
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::LEFT_FORWARD:
@@ -165,10 +170,12 @@ void MasterNavigation::executeMovementCode(MovementCode code)
 
     case MovementCode::UTURN:
         uTurn();
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::UTURN_FORWARD:
         uTurn();
+        _delay_ms(STABILIZING_DELAY);
         driveToIntersection();
         break;
 
