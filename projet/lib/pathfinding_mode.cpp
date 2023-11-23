@@ -1,9 +1,12 @@
 #include "pathfinding_mode.h"
 
-PathfindingMode::PathfindingMode() : _pathfinder(Pathfinder()),
+PathfindingMode::PathfindingMode() : _navigation(MasterNavigation()),
+                                     _distSensor(DistanceSensor()),
+                                     _pathfinder(Pathfinder()),
                                      _position(0),
-                                     _direction(Direction::SOUTH),
-                                     _navigation(MasterNavigation()) {}
+                                     _direction(Direction::SOUTH)
+{
+}
 
 void PathfindingMode::run(uint8_t line, uint8_t column)
 {
@@ -12,8 +15,12 @@ void PathfindingMode::run(uint8_t line, uint8_t column)
     for (uint8_t i = 0; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
         moves[i] = MovementCode::NOTHING;
 
-    pathfind(line, column, moves);
-    travelPath(moves);
+    bool pathSuccess = false;
+    while (!pathSuccess)
+    {
+        pathfind(line, column, moves);
+        pathSuccess = travelPath(moves);
+    }
 }
 
 void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves)
@@ -27,11 +34,21 @@ void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves
     processPath(path, moves);
 }
 
-void PathfindingMode::travelPath(MovementCode *moves)
+bool PathfindingMode::travelPath(MovementCode *moves)
 {
     uint8_t i = 0;
     while (i < Pathfinder::MAX_PATH_LENGTH)
     {
+        if (moves[i] == MovementCode::FORWARD || moves[i] == MovementCode::FORWARD_1)
+        {
+            if (_distSensor.isClose())
+            {
+                _pathfinder.modifyMap(updatePosition(moves[i], _direction, _position));
+
+                return false;
+            }
+        }
+
         _navigation.executeMovementCode(moves[i]);
 
         // position update, change this part in case of collision with pipe TODO
@@ -40,6 +57,7 @@ void PathfindingMode::travelPath(MovementCode *moves)
     }
 
     _navigation.stop();
+    return true;
 }
 
 void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)

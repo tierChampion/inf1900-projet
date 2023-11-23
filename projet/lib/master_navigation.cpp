@@ -13,8 +13,7 @@ const uint8_t LEFT_ADJUST_STRENGTH = 10;
 const uint8_t RIGHT_ADJUST_STRENGTH = 30;
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
-                                       _lineSensor(LineSensor()),
-                                       _distSensor(DistanceSensor())
+                                       _lineSensor(LineSensor())
 {
 }
 
@@ -33,10 +32,10 @@ void MasterNavigation::driveToIntersection()
         if (_lineSensor.detectsIntersection())
         {
             _navigation.realForward();
-            _delay_ms(INTERSECTION_CROSSING_DELAY); 
+            _delay_ms(INTERSECTION_CROSSING_DELAY);
 
             driveDistance(INTERSECTION_CENTERING_COUNT);
-            
+
             running = false;
         }
     }

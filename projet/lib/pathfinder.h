@@ -10,6 +10,7 @@ public:
     Pathfinder();
 
     void findPath(uint8_t start, uint8_t dest, uint8_t* path);
+    void modifyMap(uint8_t pipePos);
 
 private:
     uint8_t popBestNode();

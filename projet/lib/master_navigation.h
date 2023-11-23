@@ -35,8 +35,6 @@ private:
 private:
     Navigation _navigation;
     LineSensor _lineSensor;
-    DistanceSensor _distSensor;
-    // Timer1 _mesureTimer;
 };
 
 #endif

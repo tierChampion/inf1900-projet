@@ -1,5 +1,5 @@
 #include "map.h"
-#include "pathfindingMode.h"
+#include "pathfinding_mode.h"
 
 void pillarManipulationTest(Map &map)
 {
@@ -15,7 +15,14 @@ void pillarManipulationTest(Map &map)
 
 int main()
 {
-    PathfindingMode mode = PathfindingMode();
+    // PathfindingMode mode = PathfindingMode();
 
-    mode.run(3, 0);
+    // mode.run(3, 0);
+
+    DistanceSensor sensor = DistanceSensor();
+
+    while (true)
+    {
+        PRINT(sensor.isClose() ? "OUI" : "NON");
+    }
 }
