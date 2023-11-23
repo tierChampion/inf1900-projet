@@ -91,20 +91,25 @@ void MasterNavigation::pivot(Side turn)
 {
     _navigation.pivot(turn);
 
-    _delay_ms(PIVOT_DELAY);
+    //_delay_ms(PIVOT_DELAY);
 
     bool running = true;
+    uint8_t lineDetected = 0;
 
-    while (running)
+    while (lineDetected < 2)
     {
         _lineSensor.updateDetection();
 
-        if (_lineSensor.getStructure() == LineStructure::FORWARD)
+        if (_lineSensor.getStructure() == LineStructure::NONE && lineDetected == 0) {
+            lineDetected = 1;
+        }
+
+        if (_lineSensor.getStructure() == LineStructure::FORWARD && lineDetected == 1)
         {
             _navigation.stop();
             running = false;
+            lineDetected = 2;
         }
-        // PRINT("STILL");
     }
 }
 
