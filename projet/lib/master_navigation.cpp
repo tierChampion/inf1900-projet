@@ -25,11 +25,13 @@ void MasterNavigation::driveToIntersection()
     _navigation.jumpStart();
     _navigation.moveStraight(Orientation::FORWARD);
 
+    EventTimer::resetNavigationCounter();
+
     while (running)
     {
         goStraight();
         // check for intersections.
-        if (_lineSensor.detectsIntersection())
+        if (_lineSensor.detectsIntersection() && EventTimer::getNavigationCounter() >= 35) // to test
         {
             _navigation.realForward();
             _delay_ms(INTERSECTION_CROSSING_DELAY);
