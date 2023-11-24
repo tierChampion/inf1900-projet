@@ -71,7 +71,7 @@ bool LineSensor::detectsIntersection() const
 {
     return _structure != LineStructure::NONE && _structure != LineStructure::FORWARD;
 }
-bool LineSensor::notIntersection()
+bool LineSensor::intersection()
 {
     _sensorArray = readSensorArray();
     return ((_sensorArray & 0b10001) == 0b10001) || ((_sensorArray & 0b00011) == 0b00011) || ((_sensorArray & 0b11000) == 0b11000);

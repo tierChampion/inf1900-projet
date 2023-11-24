@@ -21,9 +21,10 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
         lineSensor.updateDetection();
         if (lineSensor.getStructure() == LineStructure::RIGHT || lineSensor.getStructure() == LineStructure::LEFT)
         {
-            while (lineSensor.notIntersection())
+            while (lineSensor.intersection())
             {
             }
+
             lineSensor.updateDetection();
             scan(lineSensor);
             navigation.driveDistance(42);
