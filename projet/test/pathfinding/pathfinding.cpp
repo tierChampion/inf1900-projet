@@ -1,5 +1,6 @@
 #include "map.h"
-#include "pathfindingMode.h"
+#include "pathfinding_mode.h"
+#include "led.h"
 
 void pillarManipulationTest(Map &map)
 {
@@ -16,6 +17,12 @@ void pillarManipulationTest(Map &map)
 int main()
 {
     PathfindingMode mode = PathfindingMode();
+    mode.run(0, 2);
 
-    mode.run(3, 0);
+    Led led = Led(Port::D, PD0, PD1);
+    led.setColor(LedColor::GREEN);
+
+    // MasterNavigation nav = MasterNavigation();
+    // nav.executeMovementCode(MovementCode::FORWARD_1);
+
 }

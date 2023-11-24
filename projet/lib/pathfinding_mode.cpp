@@ -1,9 +1,12 @@
 #include "pathfinding_mode.h"
 
-PathfindingMode::PathfindingMode() : _pathfinder(Pathfinder()),
+PathfindingMode::PathfindingMode() : _navigation(MasterNavigation()),
+                                     _distSensor(DistanceSensor()),
+                                     _pathfinder(Pathfinder()),
                                      _position(0),
-                                     _direction(Direction::SOUTH),
-                                     _navigation(MasterNavigation()) {}
+                                     _direction(Direction::SOUTH)
+{
+}
 
 void PathfindingMode::run(uint8_t line, uint8_t column)
 {
@@ -12,8 +15,12 @@ void PathfindingMode::run(uint8_t line, uint8_t column)
     for (uint8_t i = 0; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
         moves[i] = MovementCode::NOTHING;
 
-    pathfind(line, column, moves);
-    travelPath(moves);
+    bool pathSuccess = false;
+    while (!pathSuccess)
+    {
+        pathfind(line, column, moves);
+        pathSuccess = travelPath(moves);
+    }
 }
 
 void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves)
@@ -27,24 +34,43 @@ void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves
     processPath(path, isDestInMiddle, moves);
 }
 
-void PathfindingMode::travelPath(MovementCode *moves)
+bool PathfindingMode::travelPath(MovementCode *moves)
 {
     uint8_t i = 0;
-    while (i < Pathfinder::MAX_PATH_LENGTH)
+    while (i < 2 * Pathfinder::MAX_PATH_LENGTH)
     {
+        if (moves[i] == MovementCode::FORWARD || moves[i] == MovementCode::FORWARD_1)
+        {
+            if (_distSensor.isClose())
+            {
+                _pathfinder.modifyMap(updatePosition(moves[i], _direction, _position));
+
+                PRINT("PILLAR!");
+
+                return false;
+            }
+        }
+
+        PRINT("MOVE:");
+        PRINT(static_cast<uint8_t>(moves[i]));
+
         _navigation.executeMovementCode(moves[i]);
 
         // position update, change this part in case of collision with pipe TODO
         _direction = updateOrientation(moves[i], _direction);
         _position = updatePosition(moves[i], _direction, _position);
+
+        i++;
     }
 
     _navigation.stop();
+    return true;
 }
 
 void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode *moves)
 {
     uint8_t index = 0;
+    uint8_t moveIndex = 0;
     Direction currentDir = _direction;
 
     while (index < Pathfinder::MAX_PATH_LENGTH - 1 && path[index + 1] != Map::NONE)
@@ -55,7 +81,7 @@ void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode
             (currentDir == Direction::EAST && path[index + 1] == Map::getEastPosition(path[index])) ||
             (currentDir == Direction::WEST && path[index + 1] == Map::getWestPosition(path[index])))
         {
-            moves[index++] = MovementCode::FORWARD;
+            moves[moveIndex++] = MovementCode::FORWARD;
         }
         // left case
         else if ((currentDir == Direction::NORTH && path[index + 1] == Map::getWestPosition(path[index])) ||
@@ -63,9 +89,9 @@ void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode
                  (currentDir == Direction::EAST && path[index + 1] == Map::getNorthPosition(path[index])) ||
                  (currentDir == Direction::WEST && path[index + 1] == Map::getSouthPosition(path[index])))
         {
-            moves[index++] = MovementCode::LEFT;
-            currentDir = updateOrientation(moves[index - 1], currentDir);
-            moves[index++] = MovementCode::FORWARD;
+            moves[moveIndex++] = MovementCode::LEFT;
+            currentDir = updateOrientation(moves[moveIndex - 1], currentDir);
+            moves[moveIndex++] = MovementCode::FORWARD;
         }
         // right case
         else if ((currentDir == Direction::NORTH && path[index + 1] == Map::getEastPosition(path[index])) ||
@@ -73,9 +99,9 @@ void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode
                  (currentDir == Direction::EAST && path[index + 1] == Map::getSouthPosition(path[index])) ||
                  (currentDir == Direction::WEST && path[index + 1] == Map::getNorthPosition(path[index])))
         {
-            moves[index++] = MovementCode::RIGHT;
-            currentDir = updateOrientation(moves[index - 1], currentDir);
-            moves[index++] = MovementCode::FORWARD;
+            moves[moveIndex++] = MovementCode::RIGHT;
+            currentDir = updateOrientation(moves[moveIndex - 1], currentDir);
+            moves[moveIndex++] = MovementCode::FORWARD;
         }
         // uturn case
         else if ((currentDir == Direction::NORTH && path[index + 1] == Map::getSouthPosition(path[index])) ||
@@ -83,10 +109,11 @@ void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode
                  (currentDir == Direction::EAST && path[index + 1] == Map::getWestPosition(path[index])) ||
                  (currentDir == Direction::WEST && path[index + 1] == Map::getEastPosition(path[index])))
         {
-            moves[index++] = MovementCode::UTURN;
-            currentDir = updateOrientation(moves[index - 1], currentDir);
-            moves[index++] = MovementCode::FORWARD;
+            moves[moveIndex++] = MovementCode::UTURN;
+            currentDir = updateOrientation(moves[moveIndex - 1], currentDir);
+            moves[moveIndex++] = MovementCode::FORWARD;
         }
+        index++;
     }
 
     for (uint8_t i = 1; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
