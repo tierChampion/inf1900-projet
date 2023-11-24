@@ -89,9 +89,8 @@ void MasterNavigation::drive()
 
 void MasterNavigation::pivot(Side turn)
 {
+    _navigation.turnJumpStart(turn);
     _navigation.pivot(turn);
-
-    //_delay_ms(PIVOT_DELAY);
 
     bool running = true;
     uint8_t lineDetected = 0;
