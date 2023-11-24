@@ -18,6 +18,13 @@ enum class MenuStep
     PATH
 };
 
+enum class UpdateType {
+    NONE,
+    MODE,
+    SELECT,
+    VALIDATE
+};
+
 class Menu
 {
 
@@ -43,6 +50,8 @@ private:
     static Button _validationButton;
     static MenuStep _step;
     static bool _isYes;
+    static UpdateType _updateType;
+    static bool _update;
     static uint8_t _line;
     static uint8_t _column;
     static LCM lcd;
