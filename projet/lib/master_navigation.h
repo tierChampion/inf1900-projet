@@ -23,7 +23,7 @@ public:
     void turn(Side turn);
     // turn right and mesure the angle (mesured)
     void uTurn();
-
+    void jumpStart();
     void stop();
 
     void executeMovementCode(MovementCode code);

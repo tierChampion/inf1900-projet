@@ -51,6 +51,7 @@ public:
     bool detectsIntersection() const;
     uint8_t readSensor(uint8_t index) const;
     uint8_t readSensorArray() const;
+    bool notIntersection();
 
 private:
     ReadPin _digitalInputLeft;

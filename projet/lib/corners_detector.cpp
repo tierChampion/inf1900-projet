@@ -1,5 +1,5 @@
 #include "corners_detector.h"
-const uint8_t ONE_UNIT_DISTANCE = 140;
+const uint8_t ONE_UNIT_DISTANCE = 150;
 CornersDetector::CornersDetector()
 {
     _detector = 0;
@@ -9,29 +9,35 @@ CornersDetector::CornersDetector()
 
 const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSensor lineSensor)
 {
-    uint16_t distanceTotal = 0;
     _scan = 0;
     _detector = 0;
     _isDetecting = true;
     EventTimer::resetNavigationCounter();
+    navigation.jumpStart();
+
     while (_isDetecting)
     {
         navigation.goStraight();
         lineSensor.updateDetection();
         if (lineSensor.getStructure() == LineStructure::RIGHT || lineSensor.getStructure() == LineStructure::LEFT)
         {
-            distanceTotal = EventTimer::getNavigationCounter();
-            navigation.drive();
-            _delay_ms(400);
+            while (lineSensor.notIntersection())
+            {
+            }
             lineSensor.updateDetection();
             scan(lineSensor);
+            navigation.driveDistance(42);
         }
         PRINT(_detector);
     }
-    PRINT("");
-    navigation.uTurn();
-    navigation.driveDistance(distanceTotal);
-    navigation.uTurn();
+    PRINT("FIRST UTURN");
+    navigation.executeMovementCode(MovementCode::UTURN);
+    if (_detector == 0b010011 || _detector == 0b011011)
+        navigation.driveToIntersection();
+    navigation.driveToIntersection();
+    PRINT("SECOND UTURN");
+    navigation.executeMovementCode(MovementCode::UTURN);
+
     return detect();
 }
 void CornersDetector::scan(LineSensor lineSensor)

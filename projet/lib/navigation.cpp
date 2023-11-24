@@ -7,7 +7,7 @@ const uint8_t DEFAULT_ADJUST = 5;       // pour le robot 16
 const uint16_t TURN_DELAY = 650;
 
 // constants to start the robot if it doesnt move
-const uint8_t JUMP_START_SPEED = 150;
+const uint8_t JUMP_START_SPEED = 200;
 const uint8_t JUMP_START_DELAY = 50;
 
 Navigation::Navigation() : _timerPWM(Timer0()),
