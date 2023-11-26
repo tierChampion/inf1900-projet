@@ -63,6 +63,11 @@ void MasterNavigation::driveDistance(uint16_t distance)
     _navigation.stop();
 }
 
+void MasterNavigation::jumpStart()
+{
+    _navigation.jumpStart();
+}
+
 void MasterNavigation::goStraight()
 {
     _lineSensor.updateDetection();
@@ -100,7 +105,8 @@ void MasterNavigation::pivot(Side turn)
     {
         _lineSensor.updateDetection();
 
-        if (_lineSensor.getStructure() == LineStructure::NONE && lineDetected == 0) {
+        if (_lineSensor.getStructure() == LineStructure::NONE && lineDetected == 0)
+        {
             lineDetected = 1;
         }
 
@@ -120,13 +126,11 @@ void MasterNavigation::turn(Side turn)
 
 void MasterNavigation::uTurn()
 {
-    _navigation.turnJumpStart(Side::LEFT);
     EventTimer::resetNavigationCounter();
-    _navigation.pivot(Side::LEFT);
+    turn(Side::LEFT);
 
     while (EventTimer::getNavigationCounter() <= UTURN_COUNT)
-    {
-    }
+    {}
 
     pivot(Side::LEFT);
 }

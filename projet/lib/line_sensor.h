@@ -30,6 +30,10 @@ inline const char *structureToString(LineStructure structure)
         return "Right turn";
     case LineStructure::T:
         return "T intersection";
+    case LineStructure::LEFT_FORWARD:
+        return "Left forward";
+    case LineStructure::RIGHT_FORWARD:
+        return "Right forward";
     default:
         return "UNKNOWN!";
     }
@@ -47,6 +51,7 @@ public:
     bool detectsIntersection() const;
     uint8_t readSensor(uint8_t index) const;
     uint8_t readSensorArray() const;
+    bool detectsSimpleIntersection() const;
 
 private:
     ReadPin _digitalInputLeft;

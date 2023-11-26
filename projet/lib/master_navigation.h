@@ -23,14 +23,19 @@ public:
     void turn(Side turn);
     // turn right and mesure the angle (mesured)
     void uTurn();
-
+    void jumpStart();
     void stop();
 
     void executeMovementCode(MovementCode code);
 
-private:
+    // en mode public pour les tests de detection de corners
     void driveDistance(uint16_t distance);
     void goStraight();
+
+public:
+    static const uint16_t ONE_UNIT_COUNT = 130;
+
+    // tc / t = 14 / 26 ~ 1/2
 
 private:
     Navigation _navigation;

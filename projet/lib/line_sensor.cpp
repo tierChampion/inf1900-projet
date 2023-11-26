@@ -16,7 +16,6 @@ void LineSensor::updateDetection()
 
     if (((_sensorArray & 0b10001) == 0b10001))
     {
-
         _structure = LineStructure::T;
     }
     else if (((_sensorArray & 0b00011) == 0b00011))
@@ -67,7 +66,12 @@ bool LineSensor::needRightAdjustment() const
 
 bool LineSensor::detectsIntersection() const
 {
-    return _structure != LineStructure::FORWARD;
+    return _structure != LineStructure::NONE && _structure != LineStructure::FORWARD;
+}
+
+bool LineSensor::detectsSimpleIntersection() const
+{
+    return _structure == LineStructure::LEFT || _structure == LineStructure::RIGHT || _structure == LineStructure::T;
 }
 
 uint8_t LineSensor::readSensorArray() const
