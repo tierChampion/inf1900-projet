@@ -34,7 +34,12 @@ void MasterNavigation::driveToIntersection()
         if (_lineSensor.detectsIntersection() && EventTimer::getNavigationCounter() >= 35) // to test
         {
             _navigation.realForward();
-            _delay_ms(INTERSECTION_CROSSING_DELAY);
+
+            // _delay_ms(INTERSECTION_CROSSING_DELAY);
+            while (_lineSensor.detectsSimpleIntersection())
+            {
+                _lineSensor.updateDetection();
+            }
 
             driveDistance(INTERSECTION_CENTERING_COUNT);
 

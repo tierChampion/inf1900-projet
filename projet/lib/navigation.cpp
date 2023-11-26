@@ -1,14 +1,13 @@
 #include "navigation.h"
 
-const uint8_t DEFAULT_SPEED = 110;      // 150 pour le robot 16. baisser a 80?
+const uint8_t DEFAULT_SPEED = 110;     // 150 pour le robot 16. baisser a 80?
 const uint8_t DEFAULT_TURN_SPEED = 90; // pour le robot 16
-const uint8_t LEFT_REAL_ADJUST = 10;    // pour le robot 16
-const uint8_t DEFAULT_ADJUST = 5;       // pour le robot 16
-const uint16_t TURN_DELAY = 650;
+const uint8_t LEFT_REAL_ADJUST = 10;   // pour le robot 16
+const uint8_t RIGHT_REAL_ADJUST = 0;   // pour le robot 16
+const uint8_t DEFAULT_ADJUST = 5;      // pour le robot 16
 
 // constants to start the robot if it doesnt move
-const uint8_t JUMP_START_SPEED = 245;
-const uint8_t JUMP_START_DELAY = 150;
+const uint8_t JUMP_START_DELAY = 50;
 
 Navigation::Navigation() : _timerPWM(Timer0()),
                            _leftEnablePin(WritePin(Port::B, PB3)),
@@ -44,13 +43,13 @@ void Navigation::moveStraight(Orientation orientation, uint8_t speed)
 void Navigation::moveStraight(Orientation orientation)
 {
     _leftWheel.setSpeed(orientation, DEFAULT_SPEED + LEFT_REAL_ADJUST);
-    _rightWheel.setSpeed(orientation, DEFAULT_SPEED);
+    _rightWheel.setSpeed(orientation, DEFAULT_SPEED + RIGHT_REAL_ADJUST);
 }
 
 void Navigation::realForward()
 {
     _leftWheel.setSpeed(Orientation::FORWARD, (DEFAULT_SPEED + LEFT_REAL_ADJUST)); // to test (was 30)
-    _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED);
+    _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED + RIGHT_REAL_ADJUST);
 }
 
 void Navigation::stop()
@@ -58,35 +57,17 @@ void Navigation::stop()
     moveStraight(Orientation::FORWARD, 0);
 }
 
-void Navigation::pivot90(Side turn)
-{
-
-    if (turn == Side::LEFT)
-    {
-        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED);
-        _leftWheel.setSpeed(Orientation::BACKWARD, DEFAULT_SPEED);
-    }
-    else
-    {
-        _leftWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED);
-        _rightWheel.setSpeed(Orientation::BACKWARD, DEFAULT_SPEED);
-    }
-
-    _delay_ms(TURN_DELAY);
-    stop();
-}
-
 void Navigation::pivot(Side turn)
 {
     if (turn == Side::LEFT)
     {
-        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_TURN_SPEED);
+        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_TURN_SPEED + RIGHT_REAL_ADJUST);
         _leftWheel.setSpeed(Orientation::BACKWARD, DEFAULT_TURN_SPEED + LEFT_REAL_ADJUST);
     }
     else
     {
         _leftWheel.setSpeed(Orientation::FORWARD, DEFAULT_TURN_SPEED + LEFT_REAL_ADJUST);
-        _rightWheel.setSpeed(Orientation::BACKWARD, DEFAULT_TURN_SPEED);
+        _rightWheel.setSpeed(Orientation::BACKWARD, DEFAULT_TURN_SPEED + RIGHT_REAL_ADJUST);
     }
 }
 
@@ -96,19 +77,19 @@ void Navigation::adjustWheel(Side turn, uint8_t intensity)
     {
         _leftWheel.setSpeed(Orientation::FORWARD, (DEFAULT_SPEED + LEFT_REAL_ADJUST) - (intensity + DEFAULT_ADJUST));
 
-        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED);
+        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED + RIGHT_REAL_ADJUST);
     }
     else
     {
         _leftWheel.setSpeed(Orientation::FORWARD, (DEFAULT_SPEED + LEFT_REAL_ADJUST));
 
-        _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED - (intensity + DEFAULT_ADJUST));
+        _rightWheel.setSpeed(Orientation::FORWARD, (DEFAULT_SPEED + RIGHT_REAL_ADJUST) - (intensity + DEFAULT_ADJUST));
     }
 }
 
 void Navigation::jumpStart()
 {
-    moveStraight(Orientation::FORWARD, JUMP_START_SPEED);
+    moveStraight(Orientation::FORWARD, MAXIMUM_8BIT - LEFT_REAL_ADJUST - RIGHT_REAL_ADJUST);
     _delay_ms(JUMP_START_DELAY);
 }
 
@@ -116,13 +97,13 @@ void Navigation::turnJumpStart(Side turn)
 {
     if (turn == Side::LEFT)
     {
-        _rightWheel.setSpeed(Orientation::FORWARD, JUMP_START_SPEED);
-        _leftWheel.setSpeed(Orientation::BACKWARD, JUMP_START_SPEED + LEFT_REAL_ADJUST);
+        _rightWheel.setSpeed(Orientation::FORWARD, MAXIMUM_8BIT - LEFT_REAL_ADJUST);
+        _leftWheel.setSpeed(Orientation::BACKWARD, MAXIMUM_8BIT - RIGHT_REAL_ADJUST);
     }
     else
     {
-        _leftWheel.setSpeed(Orientation::FORWARD, JUMP_START_SPEED + LEFT_REAL_ADJUST);
-        _rightWheel.setSpeed(Orientation::BACKWARD, JUMP_START_SPEED);
+        _leftWheel.setSpeed(Orientation::FORWARD, MAXIMUM_8BIT - RIGHT_REAL_ADJUST);
+        _rightWheel.setSpeed(Orientation::BACKWARD, MAXIMUM_8BIT - LEFT_REAL_ADJUST);
     }
     _delay_ms(JUMP_START_DELAY);
 }
