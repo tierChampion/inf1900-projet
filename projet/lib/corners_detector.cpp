@@ -10,6 +10,7 @@ CornersDetector::CornersDetector()
 
 const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSensor lineSensor)
 {
+    EventTimer::setToggling(true);
     _scan = 0;
     _detector = 0;
     _isDetecting = true;
@@ -31,7 +32,6 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
                 lineSensor.updateDetection();
             }
 
-            //lineSensor.updateDetection();
             scan(lineSensor);
 
             // center
@@ -65,6 +65,8 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
     {
         navigation.executeMovementCode(MovementCode::LEFT);
     }
+
+    EventTimer::setToggling(false);
 
     return detect();
 }

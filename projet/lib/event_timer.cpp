@@ -1,11 +1,11 @@
 #include "event_timer.h"
 
 Timer1 EventTimer::_timer = Timer1();
-Led EventTimer::_led = Led(Port::D, PD0, PD1);
+Led EventTimer::_led = Led(Port::A, PA6, PA7);
 uint8_t EventTimer::_ledCounter = 0;
 uint16_t EventTimer::_navCounter = 0;
-bool EventTimer::_toggleLed = false;
-bool EventTimer::_ledToggled = true;
+bool EventTimer::_isToggling = false;
+bool EventTimer::_isLedToggled = true;
 
 bool EventTimer::_isInitialised = false;
 
@@ -37,15 +37,15 @@ void EventTimer::update()
     EventTimer::_ledCounter++;
     EventTimer::_navCounter++;
 
-    if (EventTimer::_toggleLed)
+    if (EventTimer::_isToggling)
         toggleLed();
 }
 
 void EventTimer::toggleLed()
 {
-    if (_navCounter % 5 == 0)
+    if (_ledCounter % 5 == 0)
     {
-        if (!_ledToggled)
+        if (!EventTimer::_isLedToggled)
         {
             _led.setColor(LedColor::GREEN);
         }
@@ -54,8 +54,18 @@ void EventTimer::toggleLed()
             _led.setColor(LedColor::OFF);
         }
 
-        _ledToggled = !_ledToggled;
-        _navCounter = 0;
+        EventTimer::_isLedToggled = !EventTimer::_isLedToggled;
+        _ledCounter = 0;
+    }
+}
+
+void EventTimer::setToggling(bool newToggling)
+{
+    EventTimer::_isToggling = newToggling;
+
+    if (!EventTimer::_isToggling)
+    {
+        _led.setColor(LedColor::OFF);
     }
 }
 
