@@ -94,7 +94,6 @@ void MasterNavigation::pivot(Side turn)
     _navigation.turnJumpStart(turn);
     _navigation.pivot(turn);
 
-    bool running = true;
     uint8_t lineDetected = 0;
 
     while (lineDetected < 2)
@@ -108,7 +107,6 @@ void MasterNavigation::pivot(Side turn)
         if (_lineSensor.getStructure() == LineStructure::FORWARD && lineDetected == 1)
         {
             _navigation.stop();
-            running = false;
             lineDetected = 2;
         }
     }

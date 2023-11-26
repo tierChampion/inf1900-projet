@@ -16,7 +16,7 @@ bool Menu::_isYes = false;
 uint8_t Menu::_line = 0;
 uint8_t Menu::_column = 0;
 UpdateType Menu::_updateType = UpdateType::NONE;
-bool Menu::_update = true;
+bool Menu::_updateScreen = true;
 
 LCM Menu::lcd(&DEMO_DDR, &DEMO_PORT);
 
@@ -102,7 +102,7 @@ void Menu::updateStep()
     if (Menu::_updateType == UpdateType::MODE)
     {
         Menu::_step = MenuStep::CORNERS;
-        Menu::_update = true;
+        Menu::_updateScreen = true;
     }
 
     // switch to line select
@@ -112,14 +112,14 @@ void Menu::updateStep()
         Menu::_step = MenuStep::LINE;
         Menu::_line = 0;
         Menu::_column = 0;
-        Menu::_update = true;
+        Menu::_updateScreen = true;
     }
 
     // line select
     else if (Menu::_step == MenuStep::LINE && Menu::_updateType == UpdateType::VALIDATE)
     {
         Menu::_line = (Menu::_line + 1) % 4;
-        Menu::_update = true;
+        Menu::_updateScreen = true;
     }
 
     // switch to column select
@@ -127,14 +127,14 @@ void Menu::updateStep()
              (Menu::_updateType == UpdateType::SELECT))
     {
         Menu::_step = MenuStep::COLUMN;
-        Menu::_update = true;
+        Menu::_updateScreen = true;
     }
 
     // column select
     else if (Menu::_step == MenuStep::COLUMN && Menu::_updateType == UpdateType::VALIDATE)
     {
         Menu::_column = (Menu::_column + 1) % 7;
-        Menu::_update = true;
+        Menu::_updateScreen = true;
     }
 
     // switch to confirmation
@@ -142,14 +142,14 @@ void Menu::updateStep()
              (Menu::_updateType == UpdateType::SELECT))
     {
         Menu::_step = MenuStep::CONFIRM;
-        Menu::_update = true;
+        Menu::_updateScreen = true;
     }
 
     // confirmation select
     else if (Menu::_step == MenuStep::CONFIRM && Menu::_updateType == UpdateType::SELECT)
     {
         Menu::_isYes = !Menu::_isYes;
-        Menu::_update = true;
+        Menu::_updateScreen = true;
     }
 
     // switch to path
@@ -166,7 +166,7 @@ void Menu::updateStep()
             _line = 0;
             _column = 0;
         }
-        Menu::_update = true;
+        Menu::_updateScreen = true;
     }
 
     _updateType = UpdateType::NONE;
@@ -175,7 +175,7 @@ void Menu::updateStep()
 void Menu::executeStep()
 {
 
-    if (!Menu::_update)
+    if (!Menu::_updateScreen)
         return;
 
     switch (Menu::_step)
@@ -230,5 +230,5 @@ void Menu::executeStep()
         break;
     }
 
-    Menu::_update = false;
+    Menu::_updateScreen = false;
 }

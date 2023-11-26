@@ -49,11 +49,11 @@ private:
     static Button _selectionButton;
     static Button _validationButton;
     static MenuStep _step;
-    static bool _isYes;
     static UpdateType _updateType;
-    static bool _update;
+    static bool _updateScreen;
     static uint8_t _line;
     static uint8_t _column;
+    static bool _isYes;
     static LCM lcd;
 };
 
