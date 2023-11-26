@@ -62,6 +62,7 @@ pathfinding-test-debug: pathfinding-test
 
 clean:
 	$(MAKE) -C $(LIBDIR) clean
+	$(MAKE) -C app clean
 	$(MAKE) -C test/line-sensor clean
 	$(MAKE) -C test/distance-sensor clean
 	$(MAKE) -C test/corners clean

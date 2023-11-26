@@ -44,19 +44,12 @@ bool PathfindingMode::travelPath(MovementCode *moves)
             if (_distSensor.isClose())
             {
                 _pathfinder.modifyMap(updatePosition(moves[i], _direction, _position));
-
-                PRINT("PILLAR!");
-
                 return false;
             }
         }
 
-        PRINT("MOVE:");
-        PRINT(static_cast<uint8_t>(moves[i]));
-
         _navigation.executeMovementCode(moves[i]);
 
-        // position update, change this part in case of collision with pipe TODO
         _direction = updateOrientation(moves[i], _direction);
         _position = updatePosition(moves[i], _direction, _position);
 
