@@ -3,6 +3,7 @@
 
 #include "pathfinder.h"
 #include "master_navigation.h"
+#include "piezo.h"
 
 class PathfindingMode
 {
@@ -18,6 +19,9 @@ private:
     void processPath(uint8_t* path, bool isDestMiddle, MovementCode* moves);
     bool travelPath(MovementCode* moves);
 
+    void foundPillar(MovementCode currentMove);
+    void finishedPath();
+
     uint8_t updatePosition(MovementCode move, Direction currentDir, uint8_t currentPos);
     Direction updateOrientation(MovementCode move, Direction currentDir);
 
@@ -27,6 +31,7 @@ private:
     Pathfinder _pathfinder;
     uint8_t _position;
     Direction _direction;
+    Piezo _piezo;
 };
 
 #endif

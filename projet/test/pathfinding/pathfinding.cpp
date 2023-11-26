@@ -17,9 +17,10 @@ void pillarManipulationTest(Map &map)
 int main()
 {
     PathfindingMode mode = PathfindingMode();
-    mode.run(0, 2);
+    mode.run(1, 0);
+    mode.run(0, 3);
 
-    Led led = Led(Port::D, PD0, PD1);
+    Led led = Led(Port::A, PA6, PA7);
     led.setColor(LedColor::GREEN);
 
     // MasterNavigation nav = MasterNavigation();

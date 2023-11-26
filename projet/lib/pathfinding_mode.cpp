@@ -3,6 +3,7 @@
 PathfindingMode::PathfindingMode() : _navigation(MasterNavigation()),
                                      _distSensor(DistanceSensor()),
                                      _pathfinder(Pathfinder()),
+                                     _piezo(Piezo()),
                                      _position(0),
                                      _direction(Direction::SOUTH)
 {
@@ -23,6 +24,8 @@ void PathfindingMode::run(uint8_t line, uint8_t column)
         pathfind(line, column, moves);
         pathSuccess = travelPath(moves);
     }
+
+    finishedPath();
 }
 
 void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves)
@@ -45,9 +48,7 @@ bool PathfindingMode::travelPath(MovementCode *moves)
         {
             if (_distSensor.isClose())
             {
-                PRINT("PIPE");
-                PRINT(updatePosition(moves[i], _direction, _position));
-                _pathfinder.modifyMap(updatePosition(moves[i], _direction, _position));
+                foundPillar(moves[i]);
                 return false;
             }
         }
@@ -62,6 +63,26 @@ bool PathfindingMode::travelPath(MovementCode *moves)
 
     _navigation.stop();
     return true;
+}
+
+void PathfindingMode::foundPillar(MovementCode currentMove)
+{
+    _piezo.play(45);
+    _delay_ms(2000);
+    _piezo.stop();
+
+    _pathfinder.modifyMap(updatePosition(currentMove, _direction, _position));
+}
+
+void PathfindingMode::finishedPath()
+{
+    for (uint8_t i = 0; i < 5; i++) {
+        _piezo.play(75 + i);
+        _delay_ms(200);
+
+        _piezo.stop();
+        _delay_ms(100);
+    }
 }
 
 void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode *moves)
