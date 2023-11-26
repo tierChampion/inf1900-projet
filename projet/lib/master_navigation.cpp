@@ -128,7 +128,10 @@ void MasterNavigation::uTurn()
 {
     EventTimer::resetNavigationCounter();
     turn(Side::LEFT);
-    _delay_ms(3500);
+
+    while (EventTimer::getNavigationCounter() <= UTURN_COUNT)
+    {}
+
     pivot(Side::LEFT);
 }
 

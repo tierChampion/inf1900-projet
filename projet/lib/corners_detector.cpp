@@ -1,5 +1,7 @@
 #include "corners_detector.h"
+
 const uint8_t ONE_UNIT_DISTANCE = 150;
+
 CornersDetector::CornersDetector()
 {
     _detector = 0;
@@ -21,23 +23,43 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
         lineSensor.updateDetection();
         if (lineSensor.getStructure() == LineStructure::RIGHT || lineSensor.getStructure() == LineStructure::LEFT)
         {
+            _intersection = lineSensor.getStructure();
             while (lineSensor.intersection())
             {
             }
 
             lineSensor.updateDetection();
             scan(lineSensor);
+
+            // center
             navigation.driveDistance(42);
         }
         PRINT(_detector);
     }
     PRINT("FIRST UTURN");
-    navigation.executeMovementCode(MovementCode::UTURN);
+
+    if (_intersection == LineStructure::RIGHT || _intersection == LineStructure::RIGHT_FORWARD)
+    {
+        navigation.executeMovementCode(MovementCode::LEFT);
+    }
+    else
+    {
+        navigation.executeMovementCode(MovementCode::RIGHT);
+    }
+
     if (_detector == 0b010011 || _detector == 0b011011)
         navigation.driveToIntersection();
     navigation.driveToIntersection();
     PRINT("SECOND UTURN");
-    navigation.executeMovementCode(MovementCode::UTURN);
+
+    if (_intersection == LineStructure::RIGHT || _intersection == LineStructure::RIGHT_FORWARD)
+    {
+        navigation.executeMovementCode(MovementCode::RIGHT);
+    }
+    else
+    {
+        navigation.executeMovementCode(MovementCode::LEFT);
+    }
 
     return detect();
 }
@@ -47,7 +69,9 @@ void CornersDetector::scan(LineSensor lineSensor)
     _isDetecting = false;
     _detector |= (_detector == 0 && EventTimer::getNavigationCounter() > ONE_UNIT_DISTANCE) ? (0b11 << 6) : 0;
 
-    switch (lineSensor.getStructure())
+    LineStructure detection = lineSensor.getStructure() == LineStructure::NONE ? _intersection : lineSensor.getStructure();
+
+    switch (detection)
     {
     case LineStructure::RIGHT:
         _detector |= 0b010 << _scan;
@@ -75,7 +99,7 @@ void CornersDetector::scan(LineSensor lineSensor)
     {
         _isDetecting = false;
     }
-    PRINT(structureToString(lineSensor.getStructure()));
+    PRINT(structureToString(detection));
 }
 const char *CornersDetector::detect()
 {
