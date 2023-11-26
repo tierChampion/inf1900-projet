@@ -1,12 +1,11 @@
 #include "corners_detector.h"
 
-const uint8_t ONE_UNIT_DISTANCE = 150;
-
 CornersDetector::CornersDetector()
+    : _detector(0),
+      _isDetecting(false),
+      _scan(0),
+      _intersection(LineStructure::NONE)
 {
-    _detector = 0;
-    _isDetecting = false;
-    _scan = 0;
 }
 
 const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSensor lineSensor)
@@ -14,6 +13,7 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
     _scan = 0;
     _detector = 0;
     _isDetecting = true;
+
     EventTimer::resetNavigationCounter();
     navigation.jumpStart();
 
@@ -21,11 +21,14 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
     {
         navigation.goStraight();
         lineSensor.updateDetection();
+
         if (lineSensor.getStructure() == LineStructure::RIGHT || lineSensor.getStructure() == LineStructure::LEFT)
         {
             _intersection = lineSensor.getStructure();
-            while (lineSensor.intersection())
+
+            while (lineSensor.detectsSimpleIntersection())
             {
+                lineSensor.updateDetection();
             }
 
             lineSensor.updateDetection();
@@ -36,9 +39,10 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
         }
         PRINT(_detector);
     }
+
     PRINT("FIRST UTURN");
 
-    if (_intersection == LineStructure::RIGHT || _intersection == LineStructure::RIGHT_FORWARD)
+    if (_intersection == LineStructure::RIGHT)
     {
         navigation.executeMovementCode(MovementCode::LEFT);
     }
@@ -49,10 +53,11 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
 
     if (_detector == 0b010011 || _detector == 0b011011)
         navigation.driveToIntersection();
+
     navigation.driveToIntersection();
     PRINT("SECOND UTURN");
 
-    if (_intersection == LineStructure::RIGHT || _intersection == LineStructure::RIGHT_FORWARD)
+    if (_intersection == LineStructure::RIGHT)
     {
         navigation.executeMovementCode(MovementCode::RIGHT);
     }
@@ -63,11 +68,18 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
 
     return detect();
 }
+
 void CornersDetector::scan(LineSensor lineSensor)
 {
 
     _isDetecting = false;
-    _detector |= (_detector == 0 && EventTimer::getNavigationCounter() > ONE_UNIT_DISTANCE) ? (0b11 << 6) : 0;
+    _detector |= (_detector == 0 &&
+                  EventTimer::getNavigationCounter() > (MasterNavigation::ONE_UNIT_COUNT + (MasterNavigation::ONE_UNIT_COUNT >> 2)))
+                     ? (0b11 << 6)
+                     : 0;
+
+    PRINT("TIME TAKEN");
+    PRINT(EventTimer::getNavigationCounter());
 
     LineStructure detection = lineSensor.getStructure() == LineStructure::NONE ? _intersection : lineSensor.getStructure();
 
@@ -134,6 +146,7 @@ const char *CornersDetector::detect()
     default:
         break;
     }
+
     PRINT(corner);
     return corner;
 }

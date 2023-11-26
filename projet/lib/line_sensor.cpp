@@ -44,9 +44,6 @@ void LineSensor::updateDetection()
             break;
         }
     }
-    else if (_sensorArray == 0)
-    {
-    }
     else
     {
         _structure = LineStructure::NONE;
@@ -71,11 +68,12 @@ bool LineSensor::detectsIntersection() const
 {
     return _structure != LineStructure::NONE && _structure != LineStructure::FORWARD;
 }
-bool LineSensor::intersection()
+
+bool LineSensor::detectsSimpleIntersection() const
 {
-    _sensorArray = readSensorArray();
-    return ((_sensorArray & 0b10001) == 0b10001) || ((_sensorArray & 0b00011) == 0b00011) || ((_sensorArray & 0b11000) == 0b11000);
+    return _structure == LineStructure::LEFT || _structure == LineStructure::RIGHT || _structure == LineStructure::T;
 }
+
 uint8_t LineSensor::readSensorArray() const
 {
     return (_digitalInputLeft.read() |

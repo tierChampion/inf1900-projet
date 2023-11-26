@@ -62,10 +62,12 @@ void MasterNavigation::driveDistance(uint16_t distance)
 
     _navigation.stop();
 }
+
 void MasterNavigation::jumpStart()
 {
     _navigation.jumpStart();
 }
+
 void MasterNavigation::goStraight()
 {
     _lineSensor.updateDetection();

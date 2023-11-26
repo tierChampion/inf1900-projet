@@ -32,7 +32,11 @@ public:
     void driveDistance(uint16_t distance);
     void goStraight();
 
-private:
+public:
+    static const uint16_t ONE_UNIT_COUNT = 130;
+
+    // tc / t = 14 / 26 ~ 1/2
+
 private:
     Navigation _navigation;
     LineSensor _lineSensor;
