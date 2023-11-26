@@ -31,7 +31,7 @@ const char *CornersDetector::detectCorner(MasterNavigation navigation, LineSenso
                 lineSensor.updateDetection();
             }
 
-            lineSensor.updateDetection();
+            //lineSensor.updateDetection();
             scan(lineSensor);
 
             // center
