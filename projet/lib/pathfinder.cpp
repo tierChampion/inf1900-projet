@@ -4,7 +4,7 @@ Pathfinder::Pathfinder() : _map(Map()), _workSize(0) {}
 
 bool Pathfinder::findPath(uint8_t start, uint8_t dest, uint8_t *path)
 {
-    _map.removePillar();
+    //_map.removePillar();
     _map.reset();
 
     _map[start].setDistance(0);
@@ -46,7 +46,7 @@ bool Pathfinder::findPath(uint8_t start, uint8_t dest, uint8_t *path)
     }
 
 #ifdef DEBUG
-    //printInvertedPath(dest);
+    printInvertedPath(dest);
 #endif
 
     getPath(dest, path);
@@ -144,14 +144,15 @@ void Pathfinder::getPath(uint8_t dest, uint8_t *path) const
             path[i] = node.getPrev();
             node = _map[node.getPrev()];
         }
-
-        //PRINT("PATH NODE:");
-        //PRINT(path[i]);
-        //PRINT(static_cast<uint8_t>(i));
     }
 }
 
 void Pathfinder::modifyMap(uint8_t pipe)
 {
     _map.placePillar(pipe);
+}
+
+void Pathfinder::resetMap()
+{
+    _map.removePillar();
 }

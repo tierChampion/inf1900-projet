@@ -155,7 +155,7 @@ void MasterNavigation::executeMovementCode(MovementCode code)
         break;
 
     case MovementCode::FORWARD_1:
-        driveOneUnit();
+        driveDistance(150); // forward one unit
         _delay_ms(STABILIZING_DELAY);
         break;
 

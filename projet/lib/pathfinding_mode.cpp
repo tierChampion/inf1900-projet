@@ -12,12 +12,14 @@ void PathfindingMode::run(uint8_t line, uint8_t column)
 {
     MovementCode moves[2 * Pathfinder::MAX_PATH_LENGTH];
 
-    for (uint8_t i = 0; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
-        moves[i] = MovementCode::NOTHING;
+    _pathfinder.resetMap();
 
     bool pathSuccess = false;
     while (!pathSuccess)
     {
+        for (uint8_t i = 0; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
+            moves[i] = MovementCode::NOTHING;
+
         pathfind(line, column, moves);
         pathSuccess = travelPath(moves);
     }
@@ -43,6 +45,8 @@ bool PathfindingMode::travelPath(MovementCode *moves)
         {
             if (_distSensor.isClose())
             {
+                PRINT("PIPE");
+                PRINT(updatePosition(moves[i], _direction, _position));
                 _pathfinder.modifyMap(updatePosition(moves[i], _direction, _position));
                 return false;
             }
@@ -68,6 +72,10 @@ void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode
 
     while (index < Pathfinder::MAX_PATH_LENGTH - 1 && path[index + 1] != Map::NONE)
     {
+
+        PRINT("pos");
+        PRINT(path[index]);
+
         // forward case
         if ((currentDir == Direction::NORTH && path[index + 1] == Map::getNorthPosition(path[index])) ||
             (currentDir == Direction::SOUTH && path[index + 1] == Map::getSouthPosition(path[index])) ||
@@ -107,7 +115,10 @@ void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode
             moves[moveIndex++] = MovementCode::FORWARD;
         }
         index++;
+        PRINT(static_cast<uint8_t>(currentDir));
     }
+
+    PRINT("MOVES:");
 
     for (uint8_t i = 1; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
     {
@@ -119,6 +130,8 @@ void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode
         {
             moves[i - 1] = MovementCode::FORWARD_1;
         }
+
+        PRINT(static_cast<uint8_t>(moves[i - 1]));
     }
 }
 
@@ -181,7 +194,7 @@ Direction PathfindingMode::updateOrientation(MovementCode move, Direction curren
                                                 ? static_cast<uint8_t>(currentDir) - 2
                                                 : static_cast<uint8_t>(currentDir) + 2);
 
-        if (static_cast<uint8_t>(currentDir) <= 2)
+        if (static_cast<uint8_t>(currentDir) < 2)
         {
             currentDir = static_cast<Direction>((static_cast<uint8_t>(currentDir) % 2) == 1
                                                     ? static_cast<uint8_t>(currentDir) - 1

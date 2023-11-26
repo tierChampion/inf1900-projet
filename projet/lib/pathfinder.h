@@ -11,6 +11,7 @@ public:
 
     bool findPath(uint8_t start, uint8_t dest, uint8_t* path);
     void modifyMap(uint8_t pipePos);
+    void resetMap();
 
 private:
     uint8_t popBestNode();
