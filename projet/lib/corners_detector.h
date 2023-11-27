@@ -22,8 +22,8 @@ public:
 private:
     void scan();
     const char *detect();
-    // const char *findCorner();
-    // const char *comeBack();
+    void findCorner();
+    void comeBack();
 
 private:
     bool _isDetecting;

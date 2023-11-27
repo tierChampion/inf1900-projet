@@ -13,6 +13,13 @@ CornersDetector::CornersDetector(MasterNavigation *navigation)
 
 const char *CornersDetector::run()
 {
+    findCorner();
+    comeBack();
+    return detect();
+}
+
+void CornersDetector::findCorner()
+{
     _scan = 0;
     _detector = 0;
     _isDetecting = true;
@@ -37,6 +44,10 @@ const char *CornersDetector::run()
         PRINT(_detector);
     }
     PRINT("FIRST UTURN");
+}
+
+void CornersDetector::comeBack()
+{
     if (_intersection == LineStructure::RIGHT)
     {
         _navigation->executeMovementCode(MovementCode::LEFT);
@@ -57,9 +68,7 @@ const char *CornersDetector::run()
     {
         _navigation->executeMovementCode(MovementCode::LEFT);
     }
-    return detect();
 }
-
 void CornersDetector::scan()
 {
 
