@@ -36,6 +36,7 @@ public:
     void play(uint8_t val);
     void play(Note note, Octave octave);
     void stop();
+    void successMelody();
 
 private:
     

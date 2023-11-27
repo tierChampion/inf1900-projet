@@ -101,3 +101,26 @@ void Piezo::stop()
     _timer.setCompareValue(TimerCompare::A, 0);
     _timer.stop();
 }
+
+void Piezo::successMelody()
+{
+    play(NOTE::C, Octave::MEDIUM);
+    _delay_ms(200);
+    stop();
+    _delay_ms(100);
+    play(NOTE::E, Octave::MEDIUM);
+    _delay_ms(200);
+    stop();
+    _delay_ms(100);
+    play(NOTE::G, Octave::MEDIUM);
+    _delay_ms(200);
+    stop();
+    _delay_ms(100);
+    play(NOTE::B, Octave::MEDIUM);
+    _delay_ms(200);
+    stop();
+    _delay_ms(100);
+    play(NOTE::D, Octave::HIGH);
+    _delay_ms(200);
+    stop();
+}
