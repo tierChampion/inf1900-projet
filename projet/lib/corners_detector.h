@@ -15,17 +15,22 @@ enum class ScanState : uint8_t
 class CornersDetector
 {
 public:
-    CornersDetector();
-    const char *detectCorner(MasterNavigation navigation, LineSensor lineSensor);
+    CornersDetector(MasterNavigation *navigation);
+
+    const char *run();
 
 private:
-    void scan(LineSensor lineSensor);
+    void scan();
     const char *detect();
+    // const char *findCorner();
+    // const char *comeBack();
 
 private:
     bool _isDetecting;
     uint8_t _detector;
     uint8_t _scan;
     LineStructure _intersection;
+    MasterNavigation *_navigation;
+    LineSensor *_lineSensor;
 };
 #endif
