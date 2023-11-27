@@ -106,21 +106,65 @@ void Piezo::successMelody()
 {
     play(NOTE::C, Octave::MEDIUM);
     _delay_ms(200);
+
     stop();
     _delay_ms(100);
+
+    for (int i = 0; i < 10; i++) {
+        play(NOTE::C, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::E, Octave::MEDIUM);
+        _delay_ms(10);
+    }
+
+    stop();
+    _delay_ms(100);
+
+    for (int i = 0; i < 6; i++) {
+        play(NOTE::C, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::E, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::G, Octave::MEDIUM);
+        _delay_ms(10);
+    }
+
+    play(NOTE::C, Octave::MEDIUM);
+    _delay_ms(10);
     play(NOTE::E, Octave::MEDIUM);
-    _delay_ms(200);
+    _delay_ms(10);
+    
+    
     stop();
     _delay_ms(100);
-    play(NOTE::G, Octave::MEDIUM);
-    _delay_ms(200);
+
+    for (int i = 0; i < 5; i++) {
+        play(NOTE::C, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::E, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::G, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::B, Octave::MEDIUM);
+        _delay_ms(10);
+
+    }
+
     stop();
     _delay_ms(100);
-    play(NOTE::B, Octave::MEDIUM);
-    _delay_ms(200);
-    stop();
-    _delay_ms(100);
-    play(NOTE::D, Octave::HIGH);
-    _delay_ms(200);
+
+    for (int i = 0; i < 4; i++) {
+        play(NOTE::C, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::E, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::G, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::B, Octave::MEDIUM);
+        _delay_ms(10);
+        play(NOTE::D, Octave::HIGH);
+        _delay_ms(10);
+    }
+    
     stop();
 }
