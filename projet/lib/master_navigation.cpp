@@ -1,7 +1,6 @@
 #include "master_navigation.h"
 #include "event_timer.h"
 
-const uint8_t INTERSECTION_CROSSING_DELAY = 200;
 const uint8_t STABILIZING_DELAY = 250;
 
 const uint8_t INTERSECTION_CENTERING_COUNT = 42;
@@ -16,10 +15,12 @@ MasterNavigation::MasterNavigation() : _navigation(Navigation()),
 {
 }
 
-void MasterNavigation::driveToIntersection()
+uint16_t MasterNavigation::driveToIntersection()
 {
     // drive forward while adjusting.
     bool running = true;
+
+    uint16_t calibration = 0;
 
     _navigation.jumpStart();
     _navigation.moveStraight(Orientation::FORWARD);
@@ -30,11 +31,11 @@ void MasterNavigation::driveToIntersection()
     {
         goStraight();
         // check for intersections.
-        if (_lineSensor.detectsIntersection() && EventTimer::getNavigationCounter() >= 35) // to test
+        if (_lineSensor.detectsIntersection() && EventTimer::getNavigationCounter() >= 35) // 3/4 du centrage
         {
+            calibration = EventTimer::getNavigationCounter();
             _navigation.realForward();
 
-            // _delay_ms(INTERSECTION_CROSSING_DELAY);
             while (_lineSensor.detectsSimpleIntersection())
             {
                 _lineSensor.updateDetection();
@@ -45,6 +46,8 @@ void MasterNavigation::driveToIntersection()
             running = false;
         }
     }
+
+    return calibration;
 }
 
 void MasterNavigation::driveOneUnit()

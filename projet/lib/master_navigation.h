@@ -13,7 +13,7 @@ public:
     MasterNavigation();
 
     // forward until intersection
-    void driveToIntersection();
+    uint16_t driveToIntersection();
     // forward for one unit (mesured)
     void driveOneUnit();
 

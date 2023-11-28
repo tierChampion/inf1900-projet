@@ -180,6 +180,11 @@ void Menu::updateStep()
         Menu::_updateScreen = true;
     }
 
+    else if ((Menu::_step == MenuStep::PATH)) {
+        Menu::_step = MenuStep::LINE;
+        Menu::_updateScreen = true;
+    }
+
     _updateType = UpdateType::NONE;
 }
 
@@ -239,7 +244,10 @@ void Menu::executeStep()
         _delay_ms(LCD_DELAY);
         PRINT("TRAJET EN COURS");
         Menu::_pathMode->run(Menu::_line, Menu::_column);
-        Menu::_step = MenuStep::LINE;
+        char pos[32];
+        sprintf(pos, "(%u)", Menu::_pathMode->getPosition());
+        Menu::lcd.write(pos);
+        _delay_ms(LCD_DELAY);
         break;
     }
 
