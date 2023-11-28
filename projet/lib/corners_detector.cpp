@@ -19,7 +19,6 @@ const char *CornersDetector::run()
     _piezo->stop();
     EventTimer::setToggling(false, LedColor::GREEN);
     comeBack();
-    EventTimer::setToggling(false);
     return detect();
 }
 
@@ -43,18 +42,20 @@ void CornersDetector::findCorner()
                 _lineSensor->updateDetection();
             }
 
-            // lineSensor.updateDetection();
+            _lineSensor->updateDetection();
             scanIntersection();
             // center
             _navigation->driveDistance(42);
         }
         PRINT(_detector);
     }
-    PRINT("FIRST UTURN");
 }
 
 void CornersDetector::comeBack()
 {
+    PRINT("FIRST UTURN");
+    _navigation->stop();
+    _delay_ms(200);
     if (_intersection == LineStructure::RIGHT)
     {
         _navigation->executeMovementCode(MovementCode::LEFT);
@@ -67,6 +68,8 @@ void CornersDetector::comeBack()
         _navigation->driveToIntersection();
     _navigation->driveToIntersection();
     PRINT("SECOND UTURN");
+    _navigation->stop();
+    _delay_ms(200);
     if (_intersection == LineStructure::RIGHT)
     {
         _navigation->executeMovementCode(MovementCode::RIGHT);
@@ -87,12 +90,23 @@ void CornersDetector::scanIntersection()
 
     PRINT("TIME TAKEN");
     PRINT(EventTimer::getNavigationCounter());
-
-    LineStructure detection = _lineSensor->getStructure() == LineStructure::NONE ? _intersection : _lineSensor->getStructure();
+    LineStructure detection;
+    if (_lineSensor->getStructure() == LineStructure::FORWARD)
+    {
+        if (_intersection == LineStructure::RIGHT)
+            detection = LineStructure::RIGHT_FORWARD;
+        else if (_intersection == LineStructure::LEFT)
+            detection = LineStructure::LEFT_FORWARD;
+    }
+    else
+    {
+        detection = _intersection;
+    }
 
     switch (detection)
     {
     case LineStructure::RIGHT:
+
         _detector |= 0b010 << _scan;
         break;
     case LineStructure::RIGHT_FORWARD:

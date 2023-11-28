@@ -28,21 +28,22 @@ void LineSensor::updateDetection()
     }
     else if (((_sensorArray & 0b00100) == 0b00100) || ((_sensorArray & 0b01000) == 0b01000) || ((_sensorArray & 0b00010) == 0b00010))
     {
-        switch (_structure)
-        {
-        case LineStructure::T:
-            _structure = LineStructure::CROSS;
-            break;
-        case LineStructure::RIGHT:
-            _structure = LineStructure::RIGHT_FORWARD;
-            break;
-        case LineStructure::LEFT:
-            _structure = LineStructure::LEFT_FORWARD;
-            break;
-        default:
-            _structure = LineStructure::FORWARD;
-            break;
-        }
+        /*  switch (_structure)
+          {
+          case LineStructure::T:
+              _structure = LineStructure::CROSS;
+              break;
+          case LineStructure::RIGHT:
+              _structure = LineStructure::RIGHT_FORWARD;
+              break;
+          case LineStructure::LEFT:
+              _structure = LineStructure::LEFT_FORWARD;
+              break;
+          default:
+              _structure = LineStructure::FORWARD;
+              break;
+          } */
+        _structure = LineStructure::FORWARD;
     }
     else
     {
