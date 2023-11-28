@@ -77,8 +77,12 @@ void PathfindingMode::foundPillar(MovementCode currentMove)
 void PathfindingMode::finishedPath()
 {
     for (uint8_t i = 0; i < 5; i++) {
-        _piezo.play(75 + i);
-        _delay_ms(200);
+        for(uint8_t j = 0; j < 13; j++ ) {
+            _piezo.play(75 + i);
+            _delay_ms(15.36);
+            _piezo.play(75 + i + 7);
+            _delay_ms(15.36);
+        }
 
         _piezo.stop();
         _delay_ms(100);
