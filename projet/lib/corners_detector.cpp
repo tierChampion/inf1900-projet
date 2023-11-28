@@ -1,19 +1,23 @@
 #include "corners_detector.h"
 
-CornersDetector::CornersDetector(MasterNavigation *navigation)
+CornersDetector::CornersDetector(MasterNavigation *navigation, Piezo *piezo)
     : _detector(0),
       _isDetecting(false),
       _scan(0),
       _intersection(LineStructure::NONE),
       _navigation(navigation),
-      _lineSensor(navigation->getLineSensor())
-
+      _lineSensor(navigation->getLineSensor()),
+      _piezo(piezo)
 {
 }
 
 const char *CornersDetector::run()
 {
     findCorner();
+    _piezo->play(Note::G, Octave::TOP);
+    _delay_ms(1000);
+    _piezo->stop();
+    EventTimer::setToggling(false, LedColor::GREEN);
     comeBack();
     return detect();
 }
@@ -39,7 +43,7 @@ void CornersDetector::findCorner()
             }
 
             // lineSensor.updateDetection();
-            scan();
+            scanIntersection();
             // center
             _navigation->driveDistance(42);
         }
@@ -71,7 +75,7 @@ void CornersDetector::comeBack()
         _navigation->executeMovementCode(MovementCode::LEFT);
     }
 }
-void CornersDetector::scan()
+void CornersDetector::scanIntersection()
 {
 
     _isDetecting = false;

@@ -31,7 +31,7 @@ class Menu
 
 public:
     static void initialiseMenu(PathfindingMode *pathMode,
-         CornersDetector *cornerMode);
+                               CornersDetector *cornerMode);
     static void interrupt0();
     static void interrupt1();
     static void interrupt2();

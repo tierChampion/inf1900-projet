@@ -39,7 +39,7 @@ ISR(INT2_vect)
 }
 
 void Menu::initialiseMenu(PathfindingMode *pathMode,
-         CornersDetector *cornerMode)
+                          CornersDetector *cornerMode)
 {
     _menu = Menu(pathMode, cornerMode);
 }
@@ -100,7 +100,8 @@ void Menu::interrupt2()
 
 void Menu::updateStep()
 {
-    if (!Menu::_isInitialised) {
+    if (!Menu::_isInitialised)
+    {
         PRINT("WARNING: MENU IS NOT INITIALISED!");
         return;
     }
@@ -200,6 +201,7 @@ void Menu::executeStep()
         Menu::lcd.write("(X, Y)          Z");
         _delay_ms(LCD_DELAY);
         PRINT("(X, Y) Z");
+        EventTimer::setToggling(false);
         _delay_ms(2000);
         Menu::lcd.write(Menu::_cornerMode->run());
         _delay_ms(LCD_DELAY);

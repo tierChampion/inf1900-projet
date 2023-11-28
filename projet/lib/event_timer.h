@@ -10,7 +10,7 @@ public:
     static void initialiseEventTimer();
     static uint16_t getNavigationCounter();
     static void resetNavigationCounter();
-    static void setToggling(bool newToggling);
+    static void setToggling(bool newToggling, LedColor ledColor = LedColor::OFF);
     static void update();
 
 private:

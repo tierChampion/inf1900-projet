@@ -59,13 +59,13 @@ void EventTimer::toggleLed()
     }
 }
 
-void EventTimer::setToggling(bool newToggling)
+void EventTimer::setToggling(bool newToggling, LedColor ledColor)
 {
     EventTimer::_isToggling = newToggling;
 
     if (!EventTimer::_isToggling)
     {
-        _led.setColor(LedColor::OFF);
+        _led.setColor(ledColor);
     }
 }
 

@@ -4,6 +4,7 @@
 #include <line_sensor.h>
 #include <master_navigation.h>
 #include <event_timer.h>
+#include <piezo.h>
 
 enum class ScanState : uint8_t
 {
@@ -15,12 +16,12 @@ enum class ScanState : uint8_t
 class CornersDetector
 {
 public:
-    CornersDetector(MasterNavigation *navigation);
+    CornersDetector(MasterNavigation *navigation, Piezo *piezo);
 
     const char *run();
 
 private:
-    void scan();
+    void scanIntersection();
     const char *detect();
     void findCorner();
     void comeBack();
@@ -32,5 +33,6 @@ private:
     LineStructure _intersection;
     MasterNavigation *_navigation;
     LineSensor *_lineSensor;
+    Piezo *_piezo;
 };
 #endif
