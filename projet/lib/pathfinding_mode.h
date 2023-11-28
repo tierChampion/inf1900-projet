@@ -9,7 +9,7 @@ class PathfindingMode
 {
 
 public:
-    PathfindingMode();
+    PathfindingMode(MasterNavigation* navigation);
 
     void run(uint8_t line, uint8_t column);
 
@@ -26,7 +26,7 @@ private:
     Direction updateOrientation(MovementCode move, Direction currentDir);
 
 private:
-    MasterNavigation _navigation;
+    MasterNavigation *_navigation;
     DistanceSensor _distSensor;
     Pathfinder _pathfinder;
     uint8_t _position;

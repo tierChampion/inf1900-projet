@@ -18,6 +18,9 @@ uint8_t Menu::_column = 0;
 UpdateType Menu::_updateType = UpdateType::NONE;
 bool Menu::_updateScreen = true;
 
+PathfindingMode *Menu::_pathMode;
+CornersDetector *Menu::_cornerMode;
+
 LCM Menu::lcd(&DEMO_DDR, &DEMO_PORT);
 
 ISR(INT0_vect)
@@ -35,12 +38,14 @@ ISR(INT2_vect)
     Menu::interrupt2();
 }
 
-void Menu::initialiseMenu()
+void Menu::initialiseMenu(PathfindingMode *pathMode,
+         CornersDetector *cornerMode)
 {
-    _menu = Menu();
+    _menu = Menu(pathMode, cornerMode);
 }
 
-Menu::Menu()
+Menu::Menu(PathfindingMode *pathMode,
+           CornersDetector *cornerMode)
 {
     Menu::_selectionButton = Button(GeneralInterruptType::INT_0, false);
     Menu::_selectionButton.setSenseControl(SenseControl::FALLING_EDGE);
@@ -57,6 +62,9 @@ Menu::Menu()
     Menu::_modeButton.enable();
     Menu::_selectionButton.enable();
     Menu::_validationButton.enable();
+
+    Menu::_pathMode = pathMode;
+    Menu::_cornerMode = cornerMode;
 
     Menu::_isInitialised = true;
 }
@@ -92,8 +100,10 @@ void Menu::interrupt2()
 
 void Menu::updateStep()
 {
-    if (!Menu::_isInitialised)
-        initialiseMenu();
+    if (!Menu::_isInitialised) {
+        PRINT("WARNING: MENU IS NOT INITIALISED!");
+        return;
+    }
 
     if (Menu::_updateType == UpdateType::NONE)
         return;
@@ -174,7 +184,6 @@ void Menu::updateStep()
 
 void Menu::executeStep()
 {
-
     if (!Menu::_updateScreen)
         return;
 
@@ -191,8 +200,10 @@ void Menu::executeStep()
         Menu::lcd.write("(X, Y)          Z");
         _delay_ms(LCD_DELAY);
         PRINT("(X, Y) Z");
+        _delay_ms(2000);
+        Menu::lcd.write(Menu::_cornerMode->run());
+        _delay_ms(LCD_DELAY);
         break;
-    case MenuStep::LINE_RELEASE:
     case MenuStep::LINE:
         Menu::lcd.clear();
         char lin[32];
@@ -202,7 +213,6 @@ void Menu::executeStep()
         PRINT("LIGNE");
         PRINT(Menu::_line);
         break;
-    case MenuStep::COLUMN_RELEASE:
     case MenuStep::COLUMN:
         Menu::lcd.clear();
         char col[32];
@@ -212,7 +222,6 @@ void Menu::executeStep()
         PRINT("COLONNE");
         PRINT(_column);
         break;
-    case MenuStep::CONFIRM_RELEASE:
     case MenuStep::CONFIRM:
         Menu::lcd.clear();
         char conf[32];
@@ -227,6 +236,7 @@ void Menu::executeStep()
         Menu::lcd.write("TRAJET EN COURS ****************");
         _delay_ms(LCD_DELAY);
         PRINT("TRAJET EN COURS");
+        Menu::_pathMode->run(Menu::_line, Menu::_column);
         break;
     }
 

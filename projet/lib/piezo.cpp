@@ -1,7 +1,7 @@
 #include "piezo.h"
 
-const uint8_t STARTING_NOTE = 45;
-const uint8_t NOTES_PER_OCTAVE = 12;
+const uint8_t STARTING_Note = 45;
+const uint8_t NoteS_PER_OCTAVE = 12;
 const uint8_t OCTAVE_COUNT = 4;
 
 Piezo::Piezo()
@@ -15,9 +15,9 @@ Piezo::Piezo()
 
 void Piezo::play(uint8_t val)
 {
-    uint8_t baseVal = val - STARTING_NOTE;
-    uint8_t noteVal = baseVal % NOTES_PER_OCTAVE;
-    uint8_t octaveVal = (baseVal / NOTES_PER_OCTAVE) % OCTAVE_COUNT;
+    uint8_t baseVal = val - STARTING_Note;
+    uint8_t noteVal = baseVal % NoteS_PER_OCTAVE;
+    uint8_t octaveVal = (baseVal / NoteS_PER_OCTAVE) % OCTAVE_COUNT;
 
     Note note = static_cast<Note>(noteVal);
     Octave octave = static_cast<Octave>(octaveVal);
@@ -104,49 +104,43 @@ void Piezo::stop()
 
 void Piezo::successMelody()
 {
-    play(NOTE::C, Octave::MEDIUM);
+    play(Note::C, Octave::MEDIUM);
     _delay_ms(200);
 
     stop();
     _delay_ms(100);
 
     for (int i = 0; i < 10; i++) {
-        play(NOTE::C, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::E, Octave::MEDIUM);
-        _delay_ms(10);
+        play(Note::C, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::E, Octave::MEDIUM);
+        _delay_ms(16);
     }
 
     stop();
     _delay_ms(100);
 
     for (int i = 0; i < 6; i++) {
-        play(NOTE::C, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::E, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::G, Octave::MEDIUM);
-        _delay_ms(10);
-    }
-
-    play(NOTE::C, Octave::MEDIUM);
-    _delay_ms(10);
-    play(NOTE::E, Octave::MEDIUM);
-    _delay_ms(10);
-    
+        play(Note::C, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::E, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::G, Octave::MEDIUM);
+        _delay_ms(16);
+    }    
     
     stop();
     _delay_ms(100);
 
     for (int i = 0; i < 5; i++) {
-        play(NOTE::C, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::E, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::G, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::B, Octave::MEDIUM);
-        _delay_ms(10);
+        play(Note::C, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::E, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::G, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::B, Octave::MEDIUM);
+        _delay_ms(16);
 
     }
 
@@ -154,17 +148,17 @@ void Piezo::successMelody()
     _delay_ms(100);
 
     for (int i = 0; i < 4; i++) {
-        play(NOTE::C, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::E, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::G, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::B, Octave::MEDIUM);
-        _delay_ms(10);
-        play(NOTE::D, Octave::HIGH);
-        _delay_ms(10);
+        play(Note::C, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::E, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::G, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::B, Octave::MEDIUM);
+        _delay_ms(16);
+        play(Note::D, Octave::HIGH);
+        _delay_ms(16);
     }
-    
+    _delay_ms(100);
     stop();
 }

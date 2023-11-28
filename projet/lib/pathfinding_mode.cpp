@@ -1,6 +1,6 @@
 #include "pathfinding_mode.h"
 
-PathfindingMode::PathfindingMode() : _navigation(MasterNavigation()),
+PathfindingMode::PathfindingMode(MasterNavigation* navigation) : _navigation(navigation),
                                      _distSensor(DistanceSensor()),
                                      _pathfinder(Pathfinder()),
                                      _piezo(Piezo()),
@@ -53,7 +53,7 @@ bool PathfindingMode::travelPath(MovementCode *moves)
             }
         }
 
-        _navigation.executeMovementCode(moves[i]);
+        _navigation->executeMovementCode(moves[i]);
 
         _direction = updateOrientation(moves[i], _direction);
         _position = updatePosition(moves[i], _direction, _position);
@@ -61,7 +61,7 @@ bool PathfindingMode::travelPath(MovementCode *moves)
         i++;
     }
 
-    _navigation.stop();
+    _navigation->stop();
     return true;
 }
 

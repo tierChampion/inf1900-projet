@@ -5,20 +5,21 @@
 #include "lcm_so1602dtr_m_fw.h"
 #include "customprocs.h"
 
+#include "pathfinding_mode.h"
+#include "corners_detector.h"
+
 enum class MenuStep
 {
     INIT,
     CORNERS,
-    LINE_RELEASE,
     LINE,
-    COLUMN_RELEASE,
     COLUMN,
-    CONFIRM_RELEASE,
     CONFIRM,
     PATH
 };
 
-enum class UpdateType {
+enum class UpdateType
+{
     NONE,
     MODE,
     SELECT,
@@ -29,7 +30,8 @@ class Menu
 {
 
 public:
-    static void initialiseMenu();
+    static void initialiseMenu(PathfindingMode *pathMode,
+         CornersDetector *cornerMode);
     static void interrupt0();
     static void interrupt1();
     static void interrupt2();
@@ -38,12 +40,16 @@ public:
     static void executeStep();
 
 private:
-    Menu();
+    Menu(PathfindingMode *pathMode,
+         CornersDetector *cornerMode);
 
 private:
     static Menu _menu;
 
     static bool _isInitialised;
+
+    static PathfindingMode *_pathMode;
+    static CornersDetector *_cornerMode;
 
     static Button _modeButton;
     static Button _selectionButton;
