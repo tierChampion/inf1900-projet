@@ -20,7 +20,7 @@ Navigation::Navigation() : _timerPWM(Timer0()),
     _timerPWM.setWaveMode(TimerWaveMode::PWM_PHASE_CORRECT);
 
     WritePin pinDirL = WritePin(Port::B, PB5);
-    WritePin pinDirR = WritePin(Port::B, PB2);
+    WritePin pinDirR = WritePin(Port::B, PB6);
     _leftWheel = Wheel(pinDirL, Side::LEFT, &_timerPWM);
     _rightWheel = Wheel(pinDirR, Side::RIGHT, &_timerPWM);
 
