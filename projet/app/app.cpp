@@ -6,6 +6,7 @@ int main() {
 
 
     MasterNavigation nav = MasterNavigation();
+    //Piezo piez = Piezo();
 
     PathfindingMode mode1 = PathfindingMode(&nav);
     CornersDetector mode2 = CornersDetector(&nav);

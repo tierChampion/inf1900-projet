@@ -2,8 +2,8 @@
 
 const uint8_t DEFAULT_SPEED = 110;     // 150 pour le robot 16. baisser a 80?
 const uint8_t DEFAULT_TURN_SPEED = 90; // pour le robot 16
-const uint8_t LEFT_REAL_ADJUST = 10;   // pour le robot 16
-const uint8_t RIGHT_REAL_ADJUST = 0;   // pour le robot 16
+const uint8_t LEFT_REAL_ADJUST = 0;   // pour le robot 16
+const uint8_t RIGHT_REAL_ADJUST = 5;   // pour le robot 16
 const uint8_t DEFAULT_ADJUST = 5;      // pour le robot 16
 
 // constants to start the robot if it doesnt move

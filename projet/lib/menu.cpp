@@ -237,6 +237,7 @@ void Menu::executeStep()
         _delay_ms(LCD_DELAY);
         PRINT("TRAJET EN COURS");
         Menu::_pathMode->run(Menu::_line, Menu::_column);
+        Menu::_step = MenuStep::LINE;
         break;
     }
 

@@ -37,7 +37,7 @@ public:
     }
 
 public:
-    static const uint16_t ONE_UNIT_COUNT = 130;
+    static const uint16_t ONE_UNIT_COUNT = 150;
 
     // tc / t = 14 / 26 ~ 1/2
 

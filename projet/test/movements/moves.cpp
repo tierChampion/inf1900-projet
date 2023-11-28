@@ -5,11 +5,7 @@
 
 int main()
 {
-    // MasterNavigation nav = MasterNavigation();
+    MasterNavigation nav = MasterNavigation();
+    nav.driveOneUnit();
 
-    PRINT("PATH MODE SIZE IN BYTES:");
-    PRINT(static_cast<uint16_t>(sizeof(PathfindingMode)));
-
-    PRINT("MAP SIZE IN BYTES:");
-    PRINT(static_cast<uint16_t>(sizeof(Map)));
 }

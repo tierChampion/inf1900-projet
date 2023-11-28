@@ -6,7 +6,6 @@ const uint16_t PIVOT_DELAY = 500;
 const uint8_t STABILIZING_DELAY = 250;
 
 const uint8_t INTERSECTION_CENTERING_COUNT = 42;
-const uint8_t ONE_UNIT_COUNT = 130;
 const uint8_t UTURN_COUNT = 90;
 
 const uint8_t LEFT_ADJUST_STRENGTH = 10;
@@ -50,7 +49,7 @@ void MasterNavigation::driveToIntersection()
 
 void MasterNavigation::driveOneUnit()
 {
-    driveDistance(ONE_UNIT_COUNT);
+    driveDistance(MasterNavigation::ONE_UNIT_COUNT);
 }
 
 void MasterNavigation::driveDistance(uint16_t distance)
@@ -96,6 +95,7 @@ void MasterNavigation::goStraight()
 
 void MasterNavigation::drive()
 {
+    _navigation.jumpStart();
     _navigation.realForward();
 }
 
@@ -155,7 +155,7 @@ void MasterNavigation::executeMovementCode(MovementCode code)
         break;
 
     case MovementCode::FORWARD_1:
-        driveDistance(150); // forward one unit
+        driveOneUnit(); // forward one unit
         _delay_ms(STABILIZING_DELAY);
         break;
 
