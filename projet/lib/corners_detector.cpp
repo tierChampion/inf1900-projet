@@ -123,28 +123,28 @@ const char *CornersDetector::detect()
     {                  // 3 bits du milieu pour la 2eme
 
     case 0b11000011: // RIGHT_FORWARD Long
-        return "(1,1) EAST";
+        corner = "(1,1)           EAST";
         break;
     case 0b100: // LEFT
-        corner = "(1,1) SOUTH";
+        corner = "(1,1)           SOUTH";
         break;
     case 0b11000100: // LEFT long
-        corner = "(1,4) EAST";
+        corner = "(1,4)           EAST";
         break;
     case 0b010: // RIGHT
-        corner = "(1,4) NORTH";
+        corner = "(1,4)           NORTH";
         break;
     case 0b011011: // RIGHT_FORWARD  and RIGHT_FORWARD
-        corner = "(4,7) WEST";
+        corner = "(4,7)           WEST";
         break;
     case 0b11000101: // LEFT_FORWARD long
-        corner = "(4,7) NORTH";
+        corner = "(4,7)           NORTH";
         break;
     case 0b010011: // RIGHT_FORWARD and RIGHT
-        return "(1,7) SOUTH";
+        corner = "(1,7)           SOUTH";
         break;
     case 0b101: // LEFT_FORWARD
-        return "(1,7) WEST";
+        corner = "(1,7)           WEST";
         break;
     default:
         break;
