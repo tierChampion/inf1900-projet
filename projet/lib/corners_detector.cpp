@@ -19,6 +19,7 @@ const char *CornersDetector::run()
     _piezo->stop();
     EventTimer::setToggling(false, LedColor::GREEN);
     comeBack();
+    EventTimer::setToggling(false);
     return detect();
 }
 
