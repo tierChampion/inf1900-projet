@@ -2,12 +2,12 @@
 #include "event_timer.h"
 
 const uint8_t INTERSECTION_CROSSING_DELAY = 200;
-const uint16_t PIVOT_DELAY = 500;
 const uint8_t STABILIZING_DELAY = 250;
 
 const uint8_t INTERSECTION_CENTERING_COUNT = 42;
 const uint8_t UTURN_COUNT = 90;
 
+// robot 1
 const uint8_t LEFT_ADJUST_STRENGTH = 10;
 const uint8_t RIGHT_ADJUST_STRENGTH = 30;
 

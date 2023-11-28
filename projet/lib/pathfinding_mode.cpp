@@ -244,3 +244,9 @@ Direction PathfindingMode::updateOrientation(MovementCode move, Direction curren
 
     return currentDir;
 }
+
+void PathfindingMode::setPosition(uint8_t line, uint8_t column, Direction dir)
+{
+    _position = line * Map::MAP_WIDTH + column;
+    _direction = dir;
+}

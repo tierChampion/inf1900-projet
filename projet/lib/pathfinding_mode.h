@@ -13,6 +13,8 @@ public:
 
     void run(uint8_t line, uint8_t column);
 
+    void setPosition(uint8_t line, uint8_t column, Direction dir);
+
 private:
     void pathfind(uint8_t line, uint8_t column, MovementCode* moves);
 
