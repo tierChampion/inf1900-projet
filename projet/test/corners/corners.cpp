@@ -2,9 +2,8 @@
 #include <corners_detector.h>
 int main()
 {
-    LineSensor sensor;
     MasterNavigation navigation;
-    CornersDetector detector;
-    const char *corner = detector.detectCorner(navigation, sensor);
+    CornersDetector detector(&navigation);
+    const char *corner = detector.run();
     PRINT(corner);
 }
