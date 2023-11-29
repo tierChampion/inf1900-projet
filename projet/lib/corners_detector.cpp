@@ -1,13 +1,13 @@
 #include "corners_detector.h"
 
 CornersDetector::CornersDetector(MasterNavigation *navigation, Piezo *piezo)
-    : _detector(0),
-      _isDetecting(false),
-      _scan(0),
-      _intersection(LineStructure::NONE),
-      _navigation(navigation),
+    : _navigation(navigation),
       _lineSensor(navigation->getLineSensor()),
-      _piezo(piezo)
+      _piezo(piezo),
+      _isDetecting(false),
+      _detector(0),
+      _scan(0),
+      _intersection(LineStructure::NONE)
 {
 }
 
@@ -84,23 +84,20 @@ void CornersDetector::scanIntersection()
 
     _isDetecting = false;
     _detector |= (_detector == 0 &&
-                  EventTimer::getNavigationCounter() > (MasterNavigation::ONE_UNIT_COUNT + (MasterNavigation::ONE_UNIT_COUNT >> 2)))
+                  EventTimer::getNavigationCounter() > (_navigation->getUnitCount() + (_navigation->getUnitCount() >> 2)))
                      ? (0b11 << 6)
                      : 0;
 
     PRINT("TIME TAKEN");
     PRINT(EventTimer::getNavigationCounter());
-    LineStructure detection;
+    LineStructure detection = _intersection;
+
     if (_lineSensor->getStructure() == LineStructure::FORWARD)
     {
         if (_intersection == LineStructure::RIGHT)
             detection = LineStructure::RIGHT_FORWARD;
         else if (_intersection == LineStructure::LEFT)
             detection = LineStructure::LEFT_FORWARD;
-    }
-    else
-    {
-        detection = _intersection;
     }
 
     switch (detection)
@@ -132,6 +129,7 @@ void CornersDetector::scanIntersection()
     {
         _isDetecting = false;
     }
+
     PRINT(structureToString(detection));
 }
 

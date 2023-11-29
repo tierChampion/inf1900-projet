@@ -9,7 +9,7 @@ class PathfindingMode
 {
 
 public:
-    PathfindingMode(MasterNavigation *navigation);
+    PathfindingMode(MasterNavigation *navigation, Piezo* piezo);
 
     void run(uint8_t line, uint8_t column);
 
@@ -30,11 +30,11 @@ private:
 
 private:
     MasterNavigation *_navigation;
+    Piezo* _piezo;
     DistanceSensor _distSensor;
     Pathfinder _pathfinder;
     uint8_t _position;
     Direction _direction;
-    Piezo _piezo;
 };
 
 #endif

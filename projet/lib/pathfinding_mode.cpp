@@ -1,11 +1,11 @@
 #include "pathfinding_mode.h"
 
-PathfindingMode::PathfindingMode(MasterNavigation* navigation) : _navigation(navigation),
-                                     _distSensor(DistanceSensor()),
-                                     _pathfinder(Pathfinder()),
-                                     _piezo(Piezo()),
-                                     _position(0),
-                                     _direction(Direction::SOUTH)
+PathfindingMode::PathfindingMode(MasterNavigation *navigation, Piezo *piezo) : _navigation(navigation),
+                                                                               _piezo(piezo),
+                                                                               _distSensor(DistanceSensor()),
+                                                                               _pathfinder(Pathfinder()),
+                                                                               _position(0),
+                                                                               _direction(Direction::SOUTH)
 {
 }
 
@@ -53,7 +53,11 @@ bool PathfindingMode::travelPath(MovementCode *moves)
             }
         }
 
-        _navigation->executeMovementCode(moves[i]);
+        // TO TEST!!! (see top of master navigation as well)
+        bool calibrate = (moves[i] == MovementCode::FORWARD) &&
+                         (i == 0 || moves[i - 1] != MovementCode::FORWARD_1);
+
+        _navigation->executeMovementCode(moves[i], calibrate);
 
         _direction = updateOrientation(moves[i], _direction);
         _position = updatePosition(moves[i], _direction, _position);
@@ -67,24 +71,26 @@ bool PathfindingMode::travelPath(MovementCode *moves)
 
 void PathfindingMode::foundPillar(MovementCode currentMove)
 {
-    _piezo.play(45);
+    _piezo->play(45);
     _delay_ms(2000);
-    _piezo.stop();
+    _piezo->stop();
 
     _pathfinder.modifyMap(updatePosition(currentMove, _direction, _position));
 }
 
 void PathfindingMode::finishedPath()
 {
-    for (uint8_t i = 0; i < 5; i++) {
-        for(uint8_t j = 0; j < 13; j++ ) {
-            _piezo.play(75 + i);
+    for (uint8_t i = 0; i < 5; i++)
+    {
+        for (uint8_t j = 0; j < 13; j++)
+        {
+            _piezo->play(75 + i);
             _delay_ms(15.36);
-            _piezo.play(75 + i + 7);
+            _piezo->play(75 + i + 7);
             _delay_ms(15.36);
         }
 
-        _piezo.stop();
+        _piezo->stop();
         _delay_ms(100);
     }
 }

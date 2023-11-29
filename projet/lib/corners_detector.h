@@ -27,12 +27,12 @@ private:
     void comeBack();
 
 private:
+    MasterNavigation *_navigation;
+    LineSensor *_lineSensor;
+    Piezo *_piezo;
     bool _isDetecting;
     uint8_t _detector;
     uint8_t _scan;
     LineStructure _intersection;
-    MasterNavigation *_navigation;
-    LineSensor *_lineSensor;
-    Piezo *_piezo;
 };
 #endif

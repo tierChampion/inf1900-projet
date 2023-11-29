@@ -12,8 +12,11 @@ class MasterNavigation
 public:
     MasterNavigation();
 
+    uint16_t getUnitCount() const;
+
     // forward until intersection
-    uint16_t driveToIntersection();
+    void driveToIntersection(bool calibrate = false);
+
     // forward for one unit (mesured)
     void driveOneUnit();
 
@@ -26,24 +29,28 @@ public:
     void jumpStart();
     void stop();
 
-    void executeMovementCode(MovementCode code);
+    void executeMovementCode(MovementCode code, bool calibrate = false);
 
     // en mode public pour les tests de detection de corners
     void driveDistance(uint16_t distance);
     void goStraight();
+
     LineSensor *getLineSensor()
     {
         return &_lineSensor;
     }
 
-public:
-    static const uint16_t ONE_UNIT_COUNT = 150;
+private:
+    void calibrateDistances(uint16_t distCount);
 
-    // tc / t = 14 / 26 ~ 1/2
+public:
+    //static const uint16_t ONE_UNIT_COUNT = 150;
 
 private:
     Navigation _navigation;
     LineSensor _lineSensor;
+    uint16_t _centeringCount;
+    uint16_t _unitCount;
 };
 
 #endif

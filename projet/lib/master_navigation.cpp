@@ -3,24 +3,29 @@
 
 const uint8_t STABILIZING_DELAY = 250;
 
+const uint16_t ONE_UNIT_COUNT = 150;
 const uint8_t INTERSECTION_CENTERING_COUNT = 42;
 const uint8_t UTURN_COUNT = 90;
 
-// robot 1
 const uint8_t LEFT_ADJUST_STRENGTH = 10;
 const uint8_t RIGHT_ADJUST_STRENGTH = 30;
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
-                                       _lineSensor(LineSensor())
+                                       _lineSensor(LineSensor()),
+                                       _centeringCount(INTERSECTION_CENTERING_COUNT),
+                                       _unitCount(ONE_UNIT_COUNT)
 {
 }
 
-uint16_t MasterNavigation::driveToIntersection()
+uint16_t MasterNavigation::getUnitCount() const
+{
+    return _unitCount;
+}
+
+void MasterNavigation::driveToIntersection(bool calibrate)
 {
     // drive forward while adjusting.
     bool running = true;
-
-    uint16_t calibration = 0;
 
     _navigation.jumpStart();
     _navigation.moveStraight(Orientation::FORWARD);
@@ -33,7 +38,10 @@ uint16_t MasterNavigation::driveToIntersection()
         // check for intersections.
         if (_lineSensor.detectsIntersection() && EventTimer::getNavigationCounter() >= 35) // 3/4 du centrage
         {
-            calibration = EventTimer::getNavigationCounter();
+            // TO TEST!!! (see pathfindingMode travelPath as well)
+            if (calibrate)
+                calibrateDistances(EventTimer::getNavigationCounter());
+
             _navigation.realForward();
 
             while (_lineSensor.detectsSimpleIntersection())
@@ -46,13 +54,11 @@ uint16_t MasterNavigation::driveToIntersection()
             running = false;
         }
     }
-
-    return calibration;
 }
 
 void MasterNavigation::driveOneUnit()
 {
-    driveDistance(MasterNavigation::ONE_UNIT_COUNT);
+    driveDistance(getUnitCount());
 }
 
 void MasterNavigation::driveDistance(uint16_t distance)
@@ -138,9 +144,17 @@ void MasterNavigation::uTurn()
     turn(Side::LEFT);
 
     while (EventTimer::getNavigationCounter() <= UTURN_COUNT)
-    {}
+    {
+    }
 
     pivot(Side::LEFT);
+}
+
+// TO TEST!!!
+void MasterNavigation::calibrateDistances(uint16_t distCount)
+{
+    _centeringCount = (distCount >> 1) + (distCount >> 2);
+    _unitCount = distCount + _centeringCount;
 }
 
 void MasterNavigation::stop()
@@ -148,12 +162,12 @@ void MasterNavigation::stop()
     _navigation.stop();
 }
 
-void MasterNavigation::executeMovementCode(MovementCode code)
+void MasterNavigation::executeMovementCode(MovementCode code, bool calibrate)
 {
     switch (code)
     {
     case MovementCode::FORWARD:
-        driveToIntersection();
+        driveToIntersection(calibrate);
         _delay_ms(STABILIZING_DELAY);
         break;
 
