@@ -2,7 +2,6 @@
 
 CornersDetector::CornersDetector(MasterNavigation *navigation, Piezo *piezo)
     : _navigation(navigation),
-      _lineSensor(navigation->getLineSensor()),
       _piezo(piezo),
       _isDetecting(false),
       _detector(0),
@@ -33,16 +32,17 @@ void CornersDetector::findCorner()
     while (_isDetecting)
     {
         _navigation->goStraight();
-        _lineSensor->updateDetection();
-        if (_lineSensor->getStructure() == LineStructure::RIGHT || _lineSensor->getStructure() == LineStructure::LEFT)
+        _navigation->getLineSensor()->updateDetection();
+        if (_navigation->getLineSensor()->getStructure() == LineStructure::RIGHT ||
+            _navigation->getLineSensor()->getStructure() == LineStructure::LEFT)
         {
-            _intersection = _lineSensor->getStructure();
-            while (_lineSensor->detectsSimpleIntersection())
+            _intersection = _navigation->getLineSensor()->getStructure();
+            while (_navigation->getLineSensor()->detectsSimpleIntersection())
             {
-                _lineSensor->updateDetection();
+                _navigation->getLineSensor()->updateDetection();
             }
 
-            _lineSensor->updateDetection();
+            _navigation->getLineSensor()->updateDetection();
             scanIntersection();
             // center
             _navigation->driveDistance(42);
@@ -92,7 +92,7 @@ void CornersDetector::scanIntersection()
     PRINT(EventTimer::getNavigationCounter());
     LineStructure detection = _intersection;
 
-    if (_lineSensor->getStructure() == LineStructure::FORWARD)
+    if (_navigation->getLineSensor()->getStructure() == LineStructure::FORWARD)
     {
         if (_intersection == LineStructure::RIGHT)
             detection = LineStructure::RIGHT_FORWARD;
