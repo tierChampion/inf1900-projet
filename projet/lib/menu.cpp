@@ -127,7 +127,7 @@ void Menu::updateStep()
     }
 
     // line select
-    else if (Menu::_step == MenuStep::LINE && Menu::_updateType == UpdateType::VALIDATE)
+    else if (Menu::_step == MenuStep::LINE && Menu::_updateType == UpdateType::SELECT)
     {
         Menu::_line = (Menu::_line + 1) % 4;
         Menu::_updateScreen = true;
@@ -135,14 +135,14 @@ void Menu::updateStep()
 
     // switch to column select
     else if ((Menu::_step == MenuStep::LINE) &&
-             (Menu::_updateType == UpdateType::SELECT))
+             (Menu::_updateType == UpdateType::VALIDATE))
     {
         Menu::_step = MenuStep::COLUMN;
         Menu::_updateScreen = true;
     }
 
     // column select
-    else if (Menu::_step == MenuStep::COLUMN && Menu::_updateType == UpdateType::VALIDATE)
+    else if (Menu::_step == MenuStep::COLUMN && Menu::_updateType == UpdateType::SELECT)
     {
         Menu::_column = (Menu::_column + 1) % 7;
         Menu::_updateScreen = true;
@@ -150,7 +150,7 @@ void Menu::updateStep()
 
     // switch to confirmation
     else if ((Menu::_step == MenuStep::COLUMN) &&
-             (Menu::_updateType == UpdateType::SELECT))
+             (Menu::_updateType == UpdateType::VALIDATE))
     {
         Menu::_step = MenuStep::CONFIRM;
         Menu::_updateScreen = true;
