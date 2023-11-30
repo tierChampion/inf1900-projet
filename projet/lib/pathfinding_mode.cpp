@@ -1,15 +1,13 @@
 #include "pathfinding_mode.h"
 
-PathfindingMode::PathfindingMode(MasterNavigation *navigation, Piezo *piezo) : _navigation(navigation),
-                                                                               _piezo(piezo),
-                                                                               _distSensor(DistanceSensor()),
-                                                                               _pathfinder(Pathfinder()),
-                                                                               _position(0),
-                                                                               _direction(Direction::SOUTH)
+PathfindingMode::PathfindingMode() : _distSensor(DistanceSensor()),
+                                     _pathfinder(Pathfinder()),
+                                     _position(0),
+                                     _direction(Direction::SOUTH)
 {
 }
 
-void PathfindingMode::run(uint8_t line, uint8_t column)
+void PathfindingMode::run(uint8_t line, uint8_t column, MasterNavigation* navigation, Piezo* piezo)
 {
     MovementCode moves[2 * Pathfinder::MAX_PATH_LENGTH];
 
@@ -22,10 +20,10 @@ void PathfindingMode::run(uint8_t line, uint8_t column)
             moves[i] = MovementCode::NOTHING;
 
         pathfind(line, column, moves);
-        pathSuccess = travelPath(moves);
+        pathSuccess = travelPath(moves, navigation, piezo);
     }
 
-    finishedPath();
+    finishedPath(piezo);
 }
 
 void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves)
@@ -39,7 +37,7 @@ void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves
     processPath(path, isDestInMiddle, moves);
 }
 
-bool PathfindingMode::travelPath(MovementCode *moves)
+bool PathfindingMode::travelPath(MovementCode *moves, MasterNavigation* navigation, Piezo* piezo)
 {
     uint8_t i = 0;
     while (i < 2 * Pathfinder::MAX_PATH_LENGTH)
@@ -48,7 +46,7 @@ bool PathfindingMode::travelPath(MovementCode *moves)
         {
             if (_distSensor.isClose())
             {
-                foundPillar(moves[i]);
+                foundPillar(moves[i], piezo);
                 return false;
             }
         }
@@ -57,7 +55,7 @@ bool PathfindingMode::travelPath(MovementCode *moves)
         bool calibrate = (moves[i] == MovementCode::FORWARD) &&
                          (i == 0 || moves[i - 1] != MovementCode::FORWARD_1);
 
-        _navigation->executeMovementCode(moves[i], calibrate);
+        navigation->executeMovementCode(moves[i], calibrate);
 
         _direction = updateOrientation(moves[i], _direction);
         _position = updatePosition(moves[i], _direction, _position);
@@ -65,32 +63,32 @@ bool PathfindingMode::travelPath(MovementCode *moves)
         i++;
     }
 
-    _navigation->stop();
+    navigation->stop();
     return true;
 }
 
-void PathfindingMode::foundPillar(MovementCode currentMove)
+void PathfindingMode::foundPillar(MovementCode currentMove, Piezo* piezo)
 {
-    _piezo->play(45);
+    piezo->play(45);
     _delay_ms(2000);
-    _piezo->stop();
+    piezo->stop();
 
     _pathfinder.modifyMap(updatePosition(currentMove, _direction, _position));
 }
 
-void PathfindingMode::finishedPath()
+void PathfindingMode::finishedPath(Piezo* piezo)
 {
     for (uint8_t i = 0; i < 5; i++)
     {
         for (uint8_t j = 0; j < 13; j++)
         {
-            _piezo->play(75 + i);
+            piezo->play(75 + i);
             _delay_ms(15.36);
-            _piezo->play(75 + i + 7);
+            piezo->play(75 + i + 7);
             _delay_ms(15.36);
         }
 
-        _piezo->stop();
+        piezo->stop();
         _delay_ms(100);
     }
 }

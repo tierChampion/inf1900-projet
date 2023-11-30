@@ -18,8 +18,7 @@ uint8_t Menu::_column = 0;
 UpdateType Menu::_updateType = UpdateType::NONE;
 bool Menu::_updateScreen = true;
 
-PathfindingMode *Menu::_pathMode;
-CornersDetector *Menu::_cornerMode;
+Robot Menu::_robot = Robot();
 
 LCM Menu::lcd(&DEMO_DDR, &DEMO_PORT);
 
@@ -38,14 +37,12 @@ ISR(INT2_vect)
     Menu::interrupt2();
 }
 
-void Menu::initialiseMenu(PathfindingMode *pathMode,
-                          CornersDetector *cornerMode)
+void Menu::initialiseMenu()
 {
-    _menu = Menu(pathMode, cornerMode);
+    _menu = Menu();
 }
 
-Menu::Menu(PathfindingMode *pathMode,
-           CornersDetector *cornerMode)
+Menu::Menu()
 {
     Menu::_selectionButton = Button(GeneralInterruptType::INT_0, false);
     Menu::_selectionButton.setSenseControl(SenseControl::FALLING_EDGE);
@@ -62,9 +59,6 @@ Menu::Menu(PathfindingMode *pathMode,
     Menu::_modeButton.enable();
     Menu::_selectionButton.enable();
     Menu::_validationButton.enable();
-
-    Menu::_pathMode = pathMode;
-    Menu::_cornerMode = cornerMode;
 
     Menu::_isInitialised = true;
 }
@@ -105,9 +99,6 @@ void Menu::updateStep()
         PRINT("WARNING: MENU IS NOT INITIALISED!");
         return;
     }
-
-    if (Menu::_updateType == UpdateType::NONE)
-        return;
 
     // corners
     if (Menu::_updateType == UpdateType::MODE)
@@ -208,7 +199,7 @@ void Menu::executeStep()
         PRINT("(X, Y) Z");
         EventTimer::setToggling(false);
         _delay_ms(2000);
-        Menu::lcd.write(Menu::_cornerMode->run());
+        Menu::lcd.write(Menu::_robot.runCornerMode());
         _delay_ms(LCD_DELAY);
         break;
     case MenuStep::LINE:
@@ -243,11 +234,7 @@ void Menu::executeStep()
         Menu::lcd.write("TRAJET EN COURS ****************");
         _delay_ms(LCD_DELAY);
         PRINT("TRAJET EN COURS");
-        Menu::_pathMode->run(Menu::_line, Menu::_column);
-        char pos[32];
-        sprintf(pos, "(%u)", Menu::_pathMode->getPosition());
-        Menu::lcd.write(pos);
-        _delay_ms(LCD_DELAY);
+        Menu::_robot.runPathfindingMode(Menu::_line, Menu::_column);
         break;
     }
 

@@ -16,19 +16,17 @@ enum class ScanState : uint8_t
 class CornersDetector
 {
 public:
-    CornersDetector(MasterNavigation *navigation, Piezo *piezo);
+    CornersDetector();
 
-    const char *run();
-
-private:
-    void scanIntersection();
-    const char *detect();
-    void findCorner();
-    void comeBack();
+    const char *run(MasterNavigation *navigation, Piezo *piezo);
 
 private:
-    MasterNavigation *_navigation;
-    Piezo *_piezo;
+    void scanIntersection(MasterNavigation* navigation);
+    const char *getCornerName();
+    void findCorner(MasterNavigation* navigation);
+    void comeBack(MasterNavigation* navigation);
+
+private:
     bool _isDetecting;
     uint8_t _detector;
     uint8_t _scan;

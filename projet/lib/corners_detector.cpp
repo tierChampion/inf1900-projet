@@ -1,90 +1,91 @@
 #include "corners_detector.h"
 
-CornersDetector::CornersDetector(MasterNavigation *navigation, Piezo *piezo)
-    : _navigation(navigation),
-      _piezo(piezo),
-      _isDetecting(false),
+CornersDetector::CornersDetector()
+    : _isDetecting(false),
       _detector(0),
       _scan(0),
       _intersection(LineStructure::NONE)
 {
 }
 
-const char *CornersDetector::run()
+const char *CornersDetector::run(MasterNavigation *navigation, Piezo *piezo)
 {
-    findCorner();
-    _piezo->play(Note::G, Octave::TOP);
+    findCorner(navigation);
+    piezo->play(Note::G, Octave::TOP);
     _delay_ms(1000);
-    _piezo->stop();
+    piezo->stop();
     EventTimer::setToggling(false, LedColor::GREEN);
-    comeBack();
-    return detect();
+    comeBack(navigation);
+    return getCornerName();
 }
 
-void CornersDetector::findCorner()
+void CornersDetector::findCorner(MasterNavigation* navigation)
 {
     EventTimer::setToggling(true);
     _scan = 0;
     _detector = 0;
     _isDetecting = true;
     EventTimer::resetNavigationCounter();
-    _navigation->jumpStart();
+    navigation->jumpStart();
+
+    LineSensor* lineSensor = navigation->getLineSensor();
+
     while (_isDetecting)
     {
-        _navigation->goStraight();
-        _navigation->getLineSensor()->updateDetection();
-        if (_navigation->getLineSensor()->getStructure() == LineStructure::RIGHT ||
-            _navigation->getLineSensor()->getStructure() == LineStructure::LEFT)
+        navigation->goStraight();
+        lineSensor->updateDetection();
+        if (lineSensor->getStructure() == LineStructure::RIGHT ||
+            lineSensor->getStructure() == LineStructure::LEFT)
         {
-            _intersection = _navigation->getLineSensor()->getStructure();
-            while (_navigation->getLineSensor()->detectsSimpleIntersection())
+            _intersection = lineSensor->getStructure();
+            while (lineSensor->detectsSimpleIntersection())
             {
-                _navigation->getLineSensor()->updateDetection();
+                lineSensor->updateDetection();
             }
 
-            _navigation->getLineSensor()->updateDetection();
-            scanIntersection();
+            lineSensor->updateDetection();
+            scanIntersection(navigation);
             // center
-            _navigation->driveDistance(42);
+            navigation->driveDistance(42);
         }
         PRINT(_detector);
     }
 }
 
-void CornersDetector::comeBack()
+void CornersDetector::comeBack(MasterNavigation* navigation)
 {
     PRINT("FIRST UTURN");
-    _navigation->stop();
+    navigation->stop();
     _delay_ms(200);
     if (_intersection == LineStructure::RIGHT)
     {
-        _navigation->executeMovementCode(MovementCode::LEFT);
+        navigation->executeMovementCode(MovementCode::LEFT);
     }
     else
     {
-        _navigation->executeMovementCode(MovementCode::RIGHT);
+        navigation->executeMovementCode(MovementCode::RIGHT);
     }
     if (_detector == 0b010011 || _detector == 0b011011)
-        _navigation->driveToIntersection();
-    _navigation->driveToIntersection();
+        navigation->driveToIntersection();
+    navigation->driveToIntersection();
     PRINT("SECOND UTURN");
-    _navigation->stop();
+    navigation->stop();
     _delay_ms(200);
     if (_intersection == LineStructure::RIGHT)
     {
-        _navigation->executeMovementCode(MovementCode::RIGHT);
+        navigation->executeMovementCode(MovementCode::RIGHT);
     }
     else
     {
-        _navigation->executeMovementCode(MovementCode::LEFT);
+        navigation->executeMovementCode(MovementCode::LEFT);
     }
 }
-void CornersDetector::scanIntersection()
+void CornersDetector::scanIntersection(MasterNavigation* navigation)
 {
 
     _isDetecting = false;
     _detector |= (_detector == 0 &&
-                  EventTimer::getNavigationCounter() > (_navigation->getUnitCount() + (_navigation->getUnitCount() >> 2)))
+                  EventTimer::getNavigationCounter() > (navigation->getUnitCount() + (navigation->getUnitCount() >> 2)))
                      ? (0b11 << 6)
                      : 0;
 
@@ -92,7 +93,7 @@ void CornersDetector::scanIntersection()
     PRINT(EventTimer::getNavigationCounter());
     LineStructure detection = _intersection;
 
-    if (_navigation->getLineSensor()->getStructure() == LineStructure::FORWARD)
+    if (navigation->getLineSensor()->getStructure() == LineStructure::FORWARD)
     {
         if (_intersection == LineStructure::RIGHT)
             detection = LineStructure::RIGHT_FORWARD;
@@ -133,7 +134,7 @@ void CornersDetector::scanIntersection()
     PRINT(structureToString(detection));
 }
 
-const char *CornersDetector::detect()
+const char *CornersDetector::getCornerName()
 {
     const char *corner = "CORNER NOT DETECTED";
     switch (_detector) // 3 derniers bits pour encodage de la 1er detection

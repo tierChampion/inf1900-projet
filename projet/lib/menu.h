@@ -5,8 +5,7 @@
 #include "lcm_so1602dtr_m_fw.h"
 #include "customprocs.h"
 
-#include "pathfinding_mode.h"
-#include "corners_detector.h"
+#include "robot.h"
 
 enum class MenuStep
 {
@@ -30,8 +29,7 @@ class Menu
 {
 
 public:
-    static void initialiseMenu(PathfindingMode *pathMode,
-                               CornersDetector *cornerMode);
+    static void initialiseMenu();
     static void interrupt0();
     static void interrupt1();
     static void interrupt2();
@@ -40,16 +38,14 @@ public:
     static void executeStep();
 
 private:
-    Menu(PathfindingMode *pathMode,
-         CornersDetector *cornerMode);
+    Menu();
 
 private:
     static Menu _menu;
 
     static bool _isInitialised;
 
-    static PathfindingMode *_pathMode;
-    static CornersDetector *_cornerMode;
+    static Robot _robot;
 
     static Button _modeButton;
     static Button _selectionButton;
