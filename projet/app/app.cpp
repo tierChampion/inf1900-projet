@@ -6,22 +6,22 @@ int main()
 {
     // MAIN CALIBRATION AUTO:
 
-    // MasterNavigation nav = MasterNavigation();
-    // Piezo piezo = Piezo();
+    MasterNavigation nav = MasterNavigation();
+    Piezo piezo = Piezo();
 
-    // nav.driveToIntersection(true);
+    nav.driveToIntersection(true);
 
-    // _delay_ms(350);
+    _delay_ms(350);
 
-    // nav.driveToIntersection();
+    nav.driveOneUnit();
 
     // MAIN FINAL:
 
-    Menu::initialiseMenu();
+    // Menu::initialiseMenu();
 
-    while (true)
-    {
-        Menu::updateStep();
-        Menu::executeStep();
-    }
+    // while (true)
+    // {
+    //     Menu::updateStep();
+    //     Menu::executeStep();
+    // }
 }

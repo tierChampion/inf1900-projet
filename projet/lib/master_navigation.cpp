@@ -3,17 +3,18 @@
 
 const uint8_t STABILIZING_DELAY = 250;
 
-const uint16_t ONE_UNIT_COUNT = 150;
-const uint8_t INTERSECTION_CENTERING_COUNT = 42;
+const uint16_t DEFAULT_ONE_UNIT_COUNT = 150;
+const uint8_t DEFAULT_INTERSECTION_CENTERING_COUNT = 42;
 const uint8_t UTURN_COUNT = 90;
+const uint8_t ESTIMATED_LINECROSSING_COUNT = 5;
 
 const uint8_t LEFT_ADJUST_STRENGTH = 10;
 const uint8_t RIGHT_ADJUST_STRENGTH = 30;
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
                                        _lineSensor(LineSensor()),
-                                       _centeringCount(INTERSECTION_CENTERING_COUNT),
-                                       _unitCount(ONE_UNIT_COUNT)
+                                       _centeringCount(DEFAULT_INTERSECTION_CENTERING_COUNT),
+                                       _unitCount(DEFAULT_ONE_UNIT_COUNT)
 {
 }
 
@@ -36,7 +37,8 @@ void MasterNavigation::driveToIntersection(bool calibrate)
     {
         goStraight();
         // check for intersections.
-        if (_lineSensor.detectsIntersection() && EventTimer::getNavigationCounter() >= 35) // 3/4 du centrage
+        if (_lineSensor.detectsIntersection() && 
+        EventTimer::getNavigationCounter() >= ((_centeringCount >> 1) + (_centeringCount >> 2))) // 3/4 du centrage
         {
             // TO TEST!!! (see pathfindingMode travelPath as well)
             if (calibrate)
@@ -49,7 +51,7 @@ void MasterNavigation::driveToIntersection(bool calibrate)
                 _lineSensor.updateDetection();
             }
 
-            driveDistance(INTERSECTION_CENTERING_COUNT);
+            driveDistance(_centeringCount);
 
             running = false;
         }
@@ -58,7 +60,7 @@ void MasterNavigation::driveToIntersection(bool calibrate)
 
 void MasterNavigation::driveOneUnit()
 {
-    driveDistance(getUnitCount());
+    driveDistance(_unitCount);
 }
 
 void MasterNavigation::driveDistance(uint16_t distance)
@@ -154,7 +156,7 @@ void MasterNavigation::uTurn()
 void MasterNavigation::calibrateDistances(uint16_t distCount)
 {
     _centeringCount = (distCount >> 1) + (distCount >> 2);
-    _unitCount = distCount + _centeringCount;
+    _unitCount = distCount + _centeringCount + ESTIMATED_LINECROSSING_COUNT;
 }
 
 void MasterNavigation::stop()
@@ -172,7 +174,7 @@ void MasterNavigation::executeMovementCode(MovementCode code, bool calibrate)
         break;
 
     case MovementCode::FORWARD_1:
-        driveOneUnit(); // forward one unit
+        driveOneUnit(); 
         _delay_ms(STABILIZING_DELAY);
         break;
 
