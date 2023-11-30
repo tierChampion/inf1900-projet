@@ -6,7 +6,6 @@ Robot::Robot() :
     _navigation(),
     _piezo()
 {
-
 }
 
 void Robot::runPathfindingMode(uint8_t line, uint8_t column)
