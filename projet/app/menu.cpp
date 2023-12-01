@@ -100,6 +100,9 @@ void Menu::updateStep()
         return;
     }
 
+    if (Menu::_updateType == UpdateType::NONE && Menu::_step != MenuStep::PATH)
+        return;
+
     // corners
     if (Menu::_updateType == UpdateType::MODE)
     {
@@ -171,7 +174,8 @@ void Menu::updateStep()
         Menu::_updateScreen = true;
     }
 
-    else if ((Menu::_step == MenuStep::PATH)) {
+    else if ((Menu::_step == MenuStep::PATH))
+    {
         Menu::_step = MenuStep::LINE;
         Menu::_updateScreen = true;
     }
