@@ -8,8 +8,8 @@ const uint8_t DEFAULT_INTERSECTION_CENTERING_COUNT = 42;
 const uint8_t UTURN_COUNT = 90;
 const uint8_t ESTIMATED_LINECROSSING_COUNT = 5;
 
-const uint8_t LEFT_ADJUST_STRENGTH = 10;
-const uint8_t RIGHT_ADJUST_STRENGTH = 30;
+const uint8_t LEFT_ADJUST_STRENGTH = 8; // 10 pour 16
+const uint8_t RIGHT_ADJUST_STRENGTH = 30; // A MODIFIER, PAS ASSEZ// 30 pour 16
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
                                        _lineSensor(LineSensor()),
@@ -110,9 +110,10 @@ void MasterNavigation::drive()
     _navigation.realForward();
 }
 
-void MasterNavigation::pivot(Side turn)
+void MasterNavigation::pivot(Side turn, bool isTurning)
 {
-    _navigation.turnJumpStart(turn);
+    if (!isTurning)
+        _navigation.turnJumpStart(turn);
     _navigation.pivot(turn);
 
     uint8_t lineDetected = 0;
@@ -149,7 +150,7 @@ void MasterNavigation::uTurn()
     {
     }
 
-    pivot(Side::LEFT);
+    pivot(Side::LEFT, true);
 }
 
 // TO TEST!!!

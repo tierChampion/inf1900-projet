@@ -6,10 +6,12 @@ int main()
 {
     // MAIN CALIBRATION AUTO:
 
-    // MasterNavigation nav = MasterNavigation();
-    // Piezo piezo = Piezo();
+    MasterNavigation nav = MasterNavigation();
 
-    // nav.driveToIntersection(true);
+    // nav.driveToIntersection();
+    // nav.drive();
+    // // nav.uTurn();
+    // while(true) {}
 
     // _delay_ms(350);
 
