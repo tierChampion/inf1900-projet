@@ -155,7 +155,7 @@ void MasterNavigation::uTurn()
 // TO TEST!!!
 void MasterNavigation::calibrateDistances(uint16_t distCount)
 {
-    _centeringCount = (distCount >> 1) + (distCount >> 2);
+    _centeringCount = (distCount >> 1) + (distCount >> 2) - 2;
     _unitCount = distCount + _centeringCount + ESTIMATED_LINECROSSING_COUNT;
 }
 

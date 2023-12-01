@@ -21,7 +21,7 @@ public:
     const char *run(MasterNavigation *navigation, Piezo *piezo);
 
 private:
-    void scanIntersection(MasterNavigation* navigation);
+    void scanIntersection(MasterNavigation* navigation, uint16_t counter);
     const char *getCornerName();
     void findCorner(MasterNavigation* navigation);
     void comeBack(MasterNavigation* navigation);

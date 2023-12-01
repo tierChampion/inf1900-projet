@@ -7,7 +7,7 @@ PathfindingMode::PathfindingMode() : _distSensor(DistanceSensor()),
 {
 }
 
-void PathfindingMode::run(uint8_t line, uint8_t column, MasterNavigation* navigation, Piezo* piezo)
+void PathfindingMode::run(uint8_t line, uint8_t column, MasterNavigation *navigation, Piezo *piezo)
 {
     MovementCode moves[2 * Pathfinder::MAX_PATH_LENGTH];
 
@@ -37,13 +37,14 @@ void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves
     processPath(path, isDestInMiddle, moves);
 }
 
-bool PathfindingMode::travelPath(MovementCode *moves, MasterNavigation* navigation, Piezo* piezo)
+bool PathfindingMode::travelPath(MovementCode *moves, MasterNavigation *navigation, Piezo *piezo)
 {
     uint8_t i = 0;
     while (i < 2 * Pathfinder::MAX_PATH_LENGTH)
     {
         if (moves[i] == MovementCode::FORWARD || moves[i] == MovementCode::FORWARD_1)
         {
+            _delay_ms(250);
             if (_distSensor.isClose())
             {
                 foundPillar(moves[i], piezo);
@@ -67,7 +68,7 @@ bool PathfindingMode::travelPath(MovementCode *moves, MasterNavigation* navigati
     return true;
 }
 
-void PathfindingMode::foundPillar(MovementCode currentMove, Piezo* piezo)
+void PathfindingMode::foundPillar(MovementCode currentMove, Piezo *piezo)
 {
     piezo->play(45);
     _delay_ms(2000);
@@ -76,7 +77,7 @@ void PathfindingMode::foundPillar(MovementCode currentMove, Piezo* piezo)
     _pathfinder.modifyMap(updatePosition(currentMove, _direction, _position));
 }
 
-void PathfindingMode::finishedPath(Piezo* piezo)
+void PathfindingMode::finishedPath(Piezo *piezo)
 {
     for (uint8_t i = 0; i < 5; i++)
     {

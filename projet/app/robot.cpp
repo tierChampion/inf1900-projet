@@ -6,6 +6,7 @@ Robot::Robot() :
     _navigation(),
     _piezo()
 {
+    _pathMode.setPosition(2, 3, Direction::EAST);
 }
 
 void Robot::runPathfindingMode(uint8_t line, uint8_t column)

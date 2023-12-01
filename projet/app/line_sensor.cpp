@@ -67,7 +67,7 @@ bool LineSensor::needRightAdjustment() const
 
 bool LineSensor::detectsIntersection() const
 {
-    return _structure != LineStructure::NONE && _structure != LineStructure::FORWARD;
+    return _structure != LineStructure::FORWARD; // to check
 }
 
 bool LineSensor::detectsSimpleIntersection() const

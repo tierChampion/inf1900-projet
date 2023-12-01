@@ -1,6 +1,6 @@
 #include "distance_sensor.h"
 
-const uint8_t CLOSE_DISTANCE = 200; // TO MODIFY WITH RIGHT CALIBRATION
+const uint8_t CLOSE_DISTANCE = 215; // TO MODIFY WITH RIGHT CALIBRATION
 const uint8_t CAN_SHIFT = 2;
 
 DistanceSensor::DistanceSensor() : _converter(can()), _inputPin(ReadPin(Port::A, PA0))

@@ -42,11 +42,11 @@ void CornersDetector::findCorner(MasterNavigation* navigation)
             {
                 lineSensor->updateDetection();
             }
-
-            lineSensor->updateDetection();
-            scanIntersection(navigation);
-            // center
+            uint16_t count = EventTimer::getNavigationCounter();
             navigation->driveDistance(42);
+            lineSensor->updateDetection();
+            scanIntersection(navigation, count);
+            // center
         }
         PRINT(_detector);
     }
@@ -80,17 +80,15 @@ void CornersDetector::comeBack(MasterNavigation* navigation)
         navigation->executeMovementCode(MovementCode::LEFT);
     }
 }
-void CornersDetector::scanIntersection(MasterNavigation* navigation)
+void CornersDetector::scanIntersection(MasterNavigation* navigation, uint16_t count)
 {
 
     _isDetecting = false;
     _detector |= (_detector == 0 &&
-                  EventTimer::getNavigationCounter() > (navigation->getUnitCount() + (navigation->getUnitCount() >> 2)))
+                  count > (navigation->getUnitCount() + (navigation->getUnitCount() >> 2)))
                      ? (0b11 << 6)
                      : 0;
 
-    PRINT("TIME TAKEN");
-    PRINT(EventTimer::getNavigationCounter());
     LineStructure detection = _intersection;
 
     if (navigation->getLineSensor()->getStructure() == LineStructure::FORWARD)
