@@ -8,8 +8,8 @@ const uint8_t DEFAULT_INTERSECTION_CENTERING_COUNT = 42;
 const uint8_t UTURN_COUNT = 90;
 const uint8_t ESTIMATED_LINECROSSING_COUNT = 5;
 
-const uint8_t LEFT_ADJUST_STRENGTH = 8; // 10 pour 16
-const uint8_t RIGHT_ADJUST_STRENGTH = 30; // A MODIFIER, PAS ASSEZ// 30 pour 16
+const uint8_t LEFT_ADJUST_STRENGTH = 10; // 10 pour 16
+const uint8_t RIGHT_ADJUST_STRENGTH = 30; // 30 pour 16
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
                                        _lineSensor(LineSensor()),
@@ -170,45 +170,52 @@ void MasterNavigation::executeMovementCode(MovementCode code, bool calibrate)
     {
     case MovementCode::FORWARD:
         driveToIntersection(calibrate);
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::FORWARD_1:
         driveOneUnit(); 
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::LEFT:
         pivot(Side::LEFT);
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::RIGHT:
         pivot(Side::RIGHT);
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::LEFT_FORWARD:
         pivot(Side::LEFT);
         _delay_ms(STABILIZING_DELAY);
         driveToIntersection();
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::RIGHT_FORWARD:
         pivot(Side::RIGHT);
         _delay_ms(STABILIZING_DELAY);
         driveToIntersection();
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::UTURN:
         uTurn();
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::UTURN_FORWARD:
         uTurn();
         _delay_ms(STABILIZING_DELAY);
         driveToIntersection();
+        _delay_ms(STABILIZING_DELAY);
         break;
 
     default:
         break;
     }
 
-        _delay_ms(STABILIZING_DELAY);
 }

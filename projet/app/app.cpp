@@ -4,26 +4,21 @@
 
 int main()
 {
-    // MAIN CALIBRATION AUTO:
-
-    MasterNavigation nav = MasterNavigation();
-
-    // nav.driveToIntersection();
-    // nav.drive();
-    // // nav.uTurn();
-    // while(true) {}
-
-    // _delay_ms(350);
-
-    // nav.driveOneUnit();
-
     // MAIN FINAL:
 
-    Menu::initialiseMenu();
+    // Menu::initialiseMenu();
 
-    while (true)
-    {
-        Menu::updateStep();
-        Menu::executeStep();
-    }
+    // while (true)
+    // {
+    //     Menu::updateStep();
+    //     Menu::executeStep();
+    // }
+    Pathfinder finder;
+
+    finder.modifyMap(16);
+    uint8_t path[15];
+    //finder.findPath(0, 2, path);
+
+    finder.resetMap();
+    //finder.findPath(2, 0, path);
 }

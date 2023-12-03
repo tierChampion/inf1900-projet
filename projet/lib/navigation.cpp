@@ -1,9 +1,9 @@
 #include "navigation.h"
 
-const uint8_t DEFAULT_SPEED = 97;     // 110 pour le robot 16.
-const uint8_t DEFAULT_TURN_SPEED = 80; // 90 pour le robot 16.
+const uint8_t DEFAULT_SPEED = 110;     // 110 pour le robot 16.
+const uint8_t DEFAULT_TURN_SPEED = 90; // 90 pour le robot 16.
 const uint8_t LEFT_REAL_ADJUST = 0;   // 0 pour le robot 16
-const uint8_t RIGHT_REAL_ADJUST = 6;   // 5 pour le robot 16
+const uint8_t RIGHT_REAL_ADJUST = 5;   // 5 pour le robot 16
 const uint8_t DEFAULT_ADJUST = 5;      // pour le robot 16
 
 // constants to start the robot if it doesnt move

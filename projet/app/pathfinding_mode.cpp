@@ -11,8 +11,6 @@ void PathfindingMode::run(uint8_t line, uint8_t column, MasterNavigation *naviga
 {
     MovementCode moves[2 * Pathfinder::MAX_PATH_LENGTH];
 
-    _pathfinder.resetMap();
-
     bool pathSuccess = false;
     while (!pathSuccess)
     {
@@ -24,6 +22,7 @@ void PathfindingMode::run(uint8_t line, uint8_t column, MasterNavigation *naviga
     }
 
     finishedPath(piezo);
+    _pathfinder.resetMap();
 }
 
 void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves)
@@ -52,7 +51,6 @@ bool PathfindingMode::travelPath(MovementCode *moves, MasterNavigation *navigati
             }
         }
 
-        // TO TEST!!! (see top of master navigation as well)
         bool calibrate = (moves[i] == MovementCode::FORWARD) &&
                          (i == 0 || moves[i - 1] != MovementCode::FORWARD_1);
 

@@ -105,7 +105,7 @@ const MapNode &Map::operator[](uint8_t position) const
     return _nodes[position];
 }
 
-MapNode &Map::operator[](uint8_t position) // wrong
+MapNode &Map::operator[](uint8_t position) 
 {
     return _nodes[position];
 }
@@ -140,6 +140,19 @@ void Map::removePillar()
     uint8_t x = getPositionX(_pillar);
     uint8_t y = getPositionY(_pillar);
 
+    PRINT("PILLAR POS");
+    PRINT(_pillar);
+    PRINT(x);
+    PRINT(y);
+
+    PRINT("PILLAR NEIGHBORS");
+    PRINT(getWestPosition(_pillar));
+    PRINT(getEastPosition(_pillar));
+    PRINT(_nodes[getWestPosition(_pillar)].getCardinalDist(Direction::EAST));
+    PRINT(_nodes[getEastPosition(_pillar)].getCardinalDist(Direction::WEST));
+    PRINT(_nodes[_pillar].getCardinalDist(Direction::WEST));
+    PRINT(_nodes[_pillar].getCardinalDist(Direction::EAST));
+
     if (y > 0)
     {
         _nodes[getNorthPosition(_pillar)].setCardinalDist(Direction::SOUTH,
@@ -160,6 +173,9 @@ void Map::removePillar()
         _nodes[getEastPosition(_pillar)].setCardinalDist(Direction::WEST,
                                                          _nodes[_pillar].getCardinalDist(Direction::EAST));
     }
+
+    PRINT(_nodes[getWestPosition(_pillar)].getCardinalDist(Direction::EAST));
+    PRINT(_nodes[getEastPosition(_pillar)].getCardinalDist(Direction::WEST));
 
     _pillar = NONE;
 }

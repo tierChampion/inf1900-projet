@@ -60,6 +60,8 @@ Menu::Menu()
     Menu::_selectionButton.enable();
     Menu::_validationButton.enable();
 
+    EventTimer::setToggling(false, LedColor::RED);
+
     Menu::_isInitialised = true;
 }
 
@@ -118,6 +120,7 @@ void Menu::updateStep()
         Menu::_line = 0;
         Menu::_column = 0;
         Menu::_updateScreen = true;
+        EventTimer::setToggling(false);
     }
 
     // line select
@@ -197,14 +200,19 @@ void Menu::executeStep()
         PRINT("CHOISIR MODE:");
         break;
     case MenuStep::CORNERS:
+        EventTimer::setToggling(false);
         Menu::lcd.clear();
-        Menu::lcd.write("(X, Y)          Z");
+        Menu::lcd.write("** DETECTION  ****  EN COURS  **");
         _delay_ms(LCD_DELAY);
         PRINT("(X, Y) Z");
-        EventTimer::setToggling(false);
-        _delay_ms(2000);
+        Menu::_modeButton.disable();
+        Menu::_selectionButton.disable();
+        Menu::_validationButton.disable();
         Menu::lcd.write(Menu::_robot.runCornerMode());
         _delay_ms(LCD_DELAY);
+        Menu::_modeButton.enable();
+        Menu::_selectionButton.enable();
+        Menu::_validationButton.enable();
         break;
     case MenuStep::LINE:
         Menu::lcd.clear();
@@ -235,10 +243,16 @@ void Menu::executeStep()
         break;
     case MenuStep::PATH:
         Menu::lcd.clear();
-        Menu::lcd.write("TRAJET EN COURS ****************");
+        Menu::lcd.write("**   TRAJET   ****  EN COURS  **");
         _delay_ms(LCD_DELAY);
         PRINT("TRAJET EN COURS");
+        Menu::_modeButton.disable();
+        Menu::_selectionButton.disable();
+        Menu::_validationButton.disable();
         Menu::_robot.runPathfindingMode(Menu::_line, Menu::_column);
+        Menu::_modeButton.enable();
+        Menu::_selectionButton.enable();
+        Menu::_validationButton.enable();
         break;
     }
 
