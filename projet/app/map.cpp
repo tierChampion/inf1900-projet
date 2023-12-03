@@ -59,6 +59,9 @@ void Map::placePillar(uint8_t position)
 
 void Map::removePillar()
 {
+    if (_pillar == NONE)
+        return;
+
     uint8_t x = getPositionX(_pillar);
     uint8_t y = getPositionY(_pillar);
 

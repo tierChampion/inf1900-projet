@@ -19,15 +19,15 @@ void LineSensor::updateDetection()
 {
     _sensorArray = readSensorArray();
 
-    if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT)) == MASK_FIRST_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT))
+    if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)) == (MASK_FIRST_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)))
     {
         _structure = LineStructure::T;
     }
-    else if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT || MASK_SECOND_DIGITAL_INPUT)) == MASK_FIRST_DIGITAL_INPUT || MASK_SECOND_DIGITAL_INPUT))
+    else if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT | MASK_SECOND_DIGITAL_INPUT)) == (MASK_FIRST_DIGITAL_INPUT | MASK_SECOND_DIGITAL_INPUT)))
     {
         _structure = LineStructure::LEFT;
     }
-    else if (((_sensorArray & (MASK_FOURTH_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT)) == MASK_FOURTH_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT))
+    else if (((_sensorArray & (MASK_FOURTH_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)) == (MASK_FOURTH_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)))
     {
         _structure = LineStructure::RIGHT;
     }
@@ -44,15 +44,15 @@ void LineSensor::updateDetection()
 bool LineSensor::needLeftAdjustment() const
 {
     return ((_sensorArray & MASK_SECOND_DIGITAL_INPUT) != 0) &&
-           ((_sensorArray & (MASK_FOURTH_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT)) == 0) &&
-           ((_sensorArray & (MASK_FIRST_DIGITAL_INPUT || MASK_THIRD_DIGITAL_INPUT)) != (MASK_FIRST_DIGITAL_INPUT || MASK_THIRD_DIGITAL_INPUT));
+           ((_sensorArray & (MASK_FOURTH_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)) == 0) &&
+           ((_sensorArray & (MASK_FIRST_DIGITAL_INPUT | MASK_THIRD_DIGITAL_INPUT)) != (MASK_FIRST_DIGITAL_INPUT | MASK_THIRD_DIGITAL_INPUT));
 }
 
 bool LineSensor::needRightAdjustment() const
 {
     return ((_sensorArray & MASK_FOURTH_DIGITAL_INPUT) != 0) &&
-           ((_sensorArray & (MASK_FIRST_DIGITAL_INPUT || MASK_SECOND_DIGITAL_INPUT)) == 0) &&
-           ((_sensorArray & (MASK_FIFTH_DIGITAL_INPUT || MASK_THIRD_DIGITAL_INPUT)) != (MASK_FIFTH_DIGITAL_INPUT || MASK_THIRD_DIGITAL_INPUT));
+           ((_sensorArray & (MASK_FIRST_DIGITAL_INPUT | MASK_SECOND_DIGITAL_INPUT)) == 0) &&
+           ((_sensorArray & (MASK_FIFTH_DIGITAL_INPUT | MASK_THIRD_DIGITAL_INPUT)) != (MASK_FIFTH_DIGITAL_INPUT | MASK_THIRD_DIGITAL_INPUT));
 }
 
 bool LineSensor::detectsIntersection() const

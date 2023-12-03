@@ -4,19 +4,22 @@
 
 int main()
 {
-    MasterNavigation nav;
+    // MasterNavigation nav;
+
+    // // _delay_ms(2000);
+    // // nav.driveToIntersection(false); // centering calib
 
     // _delay_ms(2000);
-    // nav.driveToIntersection(false); // centering calib
+    // nav.driveOneUnit(); // one unit, calibrated or not
 
-    _delay_ms(2000);
-    nav.driveOneUnit(); // one unit, calibrated or not
+    // Map map;
+    // map.printMap();
 
-    // Menu::initialiseMenu();
+    Menu::initialiseMenu();
 
-    // while (true)
-    // {
-    //     Menu::updateStep();
-    //     Menu::executeStep();
-    // }
+    while (true)
+    {
+        Menu::updateStep();
+        Menu::executeStep();
+    }
 }

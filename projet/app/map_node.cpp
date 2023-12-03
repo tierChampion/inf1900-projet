@@ -16,8 +16,8 @@ MapNode::MapNode() : _verticalDistances(DISCONNECTED),
 MapNode::MapNode(uint8_t north,
                  uint8_t south,
                  uint8_t east,
-                 uint8_t west) : _verticalDistances((north & MASK_NORTH_NODE_DISTANCE) | ((south << 4 & MASK_SOUTH_NODE_DISTANCE))),
-                                 _lateralDistances((east & MASK_SOUTH_NODE_DISTANCE) | (west << 4 & MASK_WEST_NODE_DISTANCE)),
+                 uint8_t west) : _verticalDistances((north & MASK_NORTH_NODE_DISTANCE) | ((south << 4) & MASK_SOUTH_NODE_DISTANCE)),
+                                 _lateralDistances((east & MASK_EAST_NODE_DISTANCE) | ((west << 4) & MASK_WEST_NODE_DISTANCE)),
                                  _distance(NONE),
                                  _travelSettings(0x1F) {}
 

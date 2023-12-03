@@ -20,6 +20,7 @@ void Pathfinder::findPath(uint8_t start, uint8_t dest, uint8_t *path)
 
         if (position == dest)
         {
+            PRINT("FOUND!");
             finished = true;
             continue;
         }
