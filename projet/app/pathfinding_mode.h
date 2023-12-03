@@ -19,7 +19,7 @@ public:
 private:
     void pathfind(uint8_t line, uint8_t column, MovementCode *moves);
 
-    void processPath(uint8_t *path, bool isDestMiddle, MovementCode *moves);
+    void processPath(uint8_t *path, MovementCode *moves);
     bool travelPath(MovementCode *moves, MasterNavigation* navigation, Piezo* piezo);
 
     void foundPillar(MovementCode currentMove, Piezo* piezo);

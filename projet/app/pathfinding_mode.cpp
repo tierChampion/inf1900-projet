@@ -94,11 +94,12 @@ void PathfindingMode::finishedPath(Piezo *piezo)
     }
 }
 
-void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode *moves)
+void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
 {
     uint8_t index = 0;
     uint8_t moveIndex = 0;
     Direction currentDir = _direction;
+    uint8_t currentPos = _position;
 
     while (index < Pathfinder::MAX_PATH_LENGTH - 1 && path[index + 1] != Map::NONE)
     {
@@ -144,25 +145,32 @@ void PathfindingMode::processPath(uint8_t *path, bool isDestMiddle, MovementCode
             currentDir = updateOrientation(moves[moveIndex - 1], currentDir);
             moves[moveIndex++] = MovementCode::FORWARD;
         }
+
+        // change to forward 1 if the move ends in the middle of a line.
+        currentPos = updatePosition(moves[moveIndex - 1], currentDir, currentPos);
+        if (_pathfinder.getMap().isLinePosition(currentPos))
+        {
+            moves[moveIndex - 1] = MovementCode::FORWARD_1;
+        }
+
         index++;
         PRINT(static_cast<uint8_t>(currentDir));
     }
 
-    PRINT("MOVES:");
+#ifdef DEBUG
 
+    PRINT("MOVES:");
     for (uint8_t i = 1; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
     {
-        if (moves[i] == MovementCode::FORWARD && moves[i - 1] == MovementCode::FORWARD)
-        {
-            moves[i - 1] = MovementCode::FORWARD_1;
-        }
-        else if (moves[i] == MovementCode::NOTHING && moves[i - 1] == MovementCode::FORWARD && isDestMiddle)
-        {
-            moves[i - 1] = MovementCode::FORWARD_1;
-        }
+        // if ((moves[i] == MovementCode::FORWARD && moves[i - 1] == MovementCode::FORWARD) ||
+        //     (moves[i] == MovementCode::NOTHING && moves[i - 1] == MovementCode::FORWARD && isDestMiddle))
+        // {
+        //     moves[i - 1] = MovementCode::FORWARD_1;
+        // }
 
         PRINT(static_cast<uint8_t>(moves[i - 1]));
     }
+#endif
 }
 
 uint8_t PathfindingMode::updatePosition(MovementCode move, Direction currentDir, uint8_t currentPos)

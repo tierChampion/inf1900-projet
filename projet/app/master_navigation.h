@@ -43,9 +43,6 @@ public:
 private:
     void calibrateDistances(uint16_t distCount);
 
-public:
-    //static const uint16_t ONE_UNIT_COUNT = 150;
-
 private:
     Navigation _navigation;
     LineSensor _lineSensor;

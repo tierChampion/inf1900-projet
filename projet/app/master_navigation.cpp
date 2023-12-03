@@ -153,7 +153,6 @@ void MasterNavigation::uTurn()
     pivot(Side::LEFT, true);
 }
 
-// TO TEST!!!
 void MasterNavigation::calibrateDistances(uint16_t distCount)
 {
     _centeringCount = (distCount >> 1) + (distCount >> 2) - 2;
@@ -171,22 +170,18 @@ void MasterNavigation::executeMovementCode(MovementCode code, bool calibrate)
     {
     case MovementCode::FORWARD:
         driveToIntersection(calibrate);
-        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::FORWARD_1:
         driveOneUnit(); 
-        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::LEFT:
         pivot(Side::LEFT);
-        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::RIGHT:
         pivot(Side::RIGHT);
-        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::LEFT_FORWARD:
@@ -203,7 +198,6 @@ void MasterNavigation::executeMovementCode(MovementCode code, bool calibrate)
 
     case MovementCode::UTURN:
         uTurn();
-        _delay_ms(STABILIZING_DELAY);
         break;
 
     case MovementCode::UTURN_FORWARD:
@@ -215,4 +209,6 @@ void MasterNavigation::executeMovementCode(MovementCode code, bool calibrate)
     default:
         break;
     }
+
+        _delay_ms(STABILIZING_DELAY);
 }
