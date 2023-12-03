@@ -32,9 +32,9 @@ void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves
 
     uint8_t path[Pathfinder::MAX_PATH_LENGTH];
 
-    bool isDestInMiddle = _pathfinder.findPath(_position, dest, path);
+    _pathfinder.findPath(_position, dest, path);
 
-    processPath(path, isDestInMiddle, moves);
+    processPath(path, moves);
 }
 
 bool PathfindingMode::travelPath(MovementCode *moves, MasterNavigation *navigation, Piezo *piezo)
