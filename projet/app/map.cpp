@@ -46,13 +46,13 @@ void MapNode::setCardinalDist(Direction direction, uint8_t newDist)
         _verticalDistances = (_verticalDistances & 0xF0) | (newDist & 0x0F);
         break;
     case Direction::SOUTH:
-        _verticalDistances = (_verticalDistances & 0x0F) | (newDist & 0xF0);
+        _verticalDistances = (_verticalDistances & 0x0F) | ((newDist << 4) & 0xF0);
         break;
     case Direction::EAST:
         _lateralDistances = (_lateralDistances & 0xF0) | (newDist & 0x0F);
         break;
     case Direction::WEST:
-        _lateralDistances = (_lateralDistances & 0x0F) | (newDist & 0xF0);
+        _lateralDistances = (_lateralDistances & 0x0F) | ((newDist << 4) & 0xF0);
         break;
     }
 }
@@ -146,10 +146,18 @@ void Map::removePillar()
     PRINT(y);
 
     PRINT("PILLAR NEIGHBORS");
+    PRINT(getNorthPosition(_pillar));
+    PRINT(getSouthPosition(_pillar));
     PRINT(getWestPosition(_pillar));
     PRINT(getEastPosition(_pillar));
+    PRINT("NEIGHBORS DISTANCE");
+    PRINT(_nodes[getNorthPosition(_pillar)].getCardinalDist(Direction::SOUTH));
+    PRINT(_nodes[getSouthPosition(_pillar)].getCardinalDist(Direction::NORTH));
     PRINT(_nodes[getWestPosition(_pillar)].getCardinalDist(Direction::EAST));
     PRINT(_nodes[getEastPosition(_pillar)].getCardinalDist(Direction::WEST));
+    PRINT("PILLAR DISTANCE");
+    PRINT(_nodes[_pillar].getCardinalDist(Direction::NORTH));
+    PRINT(_nodes[_pillar].getCardinalDist(Direction::SOUTH));
     PRINT(_nodes[_pillar].getCardinalDist(Direction::WEST));
     PRINT(_nodes[_pillar].getCardinalDist(Direction::EAST));
 
@@ -174,6 +182,9 @@ void Map::removePillar()
                                                          _nodes[_pillar].getCardinalDist(Direction::EAST));
     }
 
+    PRINT("FINAL NEIGHBORS DISTANCE");
+    PRINT(_nodes[getNorthPosition(_pillar)].getCardinalDist(Direction::SOUTH));
+    PRINT(_nodes[getSouthPosition(_pillar)].getCardinalDist(Direction::NORTH));
     PRINT(_nodes[getWestPosition(_pillar)].getCardinalDist(Direction::EAST));
     PRINT(_nodes[getEastPosition(_pillar)].getCardinalDist(Direction::WEST));
 
