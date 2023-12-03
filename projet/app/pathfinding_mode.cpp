@@ -155,6 +155,11 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
         PRINT(static_cast<uint8_t>(currentDir));
     }
 
+    if (_pathfinder.getMap()[currentPos].getCardinalDist(currentDir) == Map::DISCONNECTED)
+    {
+        moves[moveIndex++] = MovementCode::UTURN;
+    }
+
 #ifdef DEBUG
 
     PRINT("MOVES:");
