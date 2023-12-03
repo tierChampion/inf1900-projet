@@ -1,12 +1,12 @@
 #include "menu.h"
-
 #include "avr/interrupt.h"
+#include "commons.h"
 
 #define DEMO_DDR DDRC   // `Data Direction Register' AVR occup� par l'aff.
 #define DEMO_PORT PORTC // Port AVR occup� par l'afficheur
 
 const uint16_t LCD_DELAY = 600;
-
+const uint8_t DISPLAY_STRING_LENGTH = 32;
 bool Menu::_isInitialised = false;
 Button Menu::_modeButton = Button(GeneralInterruptType::INT_2, true);
 Button Menu::_selectionButton = Button(GeneralInterruptType::INT_0, false);
@@ -24,17 +24,17 @@ LCM Menu::lcd(&DEMO_DDR, &DEMO_PORT);
 
 ISR(INT0_vect)
 {
-    Menu::interrupt0();
+    Menu::interruptRoutine0();
 }
 
 ISR(INT1_vect)
 {
-    Menu::interrupt1();
+    Menu::interruptRoutine1();
 }
 
 ISR(INT2_vect)
 {
-    Menu::interrupt2();
+    Menu::interruptRoutine2();
 }
 
 void Menu::initialiseMenu()
@@ -65,7 +65,7 @@ Menu::Menu()
     Menu::_isInitialised = true;
 }
 
-void Menu::interrupt0()
+void Menu::interruptRoutine0()
 {
     Menu::_selectionButton.update();
     if (Menu::_selectionButton.getIsPressed())
@@ -74,7 +74,7 @@ void Menu::interrupt0()
     }
 }
 
-void Menu::interrupt1()
+void Menu::interruptRoutine1()
 {
     Menu::_validationButton.update();
 
@@ -84,7 +84,7 @@ void Menu::interrupt1()
     }
 }
 
-void Menu::interrupt2()
+void Menu::interruptRoutine2()
 {
     Menu::_modeButton.update();
 
@@ -126,7 +126,7 @@ void Menu::updateStep()
     // line select
     else if (Menu::_step == MenuStep::LINE && Menu::_updateType == UpdateType::SELECT)
     {
-        Menu::_line = (Menu::_line + 1) % 4;
+        Menu::_line = (Menu::_line + 1) % MAP_HEIGHT;
         Menu::_updateScreen = true;
     }
 
@@ -141,7 +141,7 @@ void Menu::updateStep()
     // column select
     else if (Menu::_step == MenuStep::COLUMN && Menu::_updateType == UpdateType::SELECT)
     {
-        Menu::_column = (Menu::_column + 1) % 7;
+        Menu::_column = (Menu::_column + 1) % MAP_WIDTH;
         Menu::_updateScreen = true;
     }
 
@@ -204,7 +204,7 @@ void Menu::executeStep()
         Menu::lcd.clear();
         Menu::lcd.write("** DETECTION  ****  EN COURS  **");
         _delay_ms(LCD_DELAY);
-        PRINT("(X, Y) Z");
+        PRINT("DETECTION  EN COURS");
         Menu::_modeButton.disable();
         Menu::_selectionButton.disable();
         Menu::_validationButton.disable();
@@ -216,7 +216,7 @@ void Menu::executeStep()
         break;
     case MenuStep::LINE:
         Menu::lcd.clear();
-        char lin[32];
+        char lin[DISPLAY_STRING_LENGTH];
         sprintf(lin, "LIGNE           %u", Menu::_line + 1);
         Menu::lcd.write(lin);
         _delay_ms(LCD_DELAY);
@@ -225,7 +225,7 @@ void Menu::executeStep()
         break;
     case MenuStep::COLUMN:
         Menu::lcd.clear();
-        char col[32];
+        char col[DISPLAY_STRING_LENGTH];
         sprintf(col, "COLONNE         %u", Menu::_column + 1);
         Menu::lcd.write(col);
         _delay_ms(LCD_DELAY);
@@ -234,7 +234,7 @@ void Menu::executeStep()
         break;
     case MenuStep::CONFIRM:
         Menu::lcd.clear();
-        char conf[32];
+        char conf[DISPLAY_STRING_LENGTH];
         sprintf(conf, "(%u, %u) OK?      %s", Menu::_line + 1, Menu::_column + 1, Menu::_isYes ? "OUI" : "NON");
         Menu::lcd.write(conf);
         _delay_ms(LCD_DELAY);

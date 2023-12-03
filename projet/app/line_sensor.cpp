@@ -1,4 +1,9 @@
 #include "line_sensor.h"
+const uint8_t MASK_FIRST_DIGITAL_INPUT = 0b00001;
+const uint8_t MASK_FOURTH_DIGITAL_INPUT = 0b01000;
+const uint8_t MASK_THIRD_DIGITAL_INPUT = 0b00100;
+const uint8_t MASK_SECOND_DIGITAL_INPUT = 0b00010;
+const uint8_t MASK_FIFTH_DIGITAL_INPUT = 0b10000;
 
 LineSensor::LineSensor() : _digitalInputLeft(ReadPin(Port::A, PA1)),
                            _digitalInputMiddleLeft(ReadPin(Port::A, PA2)),
@@ -14,35 +19,20 @@ void LineSensor::updateDetection()
 {
     _sensorArray = readSensorArray();
 
-    if (((_sensorArray & 0b10001) == 0b10001))
+    if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT)) == MASK_FIRST_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT))
     {
         _structure = LineStructure::T;
     }
-    else if (((_sensorArray & 0b00011) == 0b00011))
+    else if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT || MASK_SECOND_DIGITAL_INPUT)) == MASK_FIRST_DIGITAL_INPUT || MASK_SECOND_DIGITAL_INPUT))
     {
         _structure = LineStructure::LEFT;
     }
-    else if (((_sensorArray & 0b11000) == 0b11000))
+    else if (((_sensorArray & (MASK_FOURTH_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT)) == MASK_FOURTH_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT))
     {
         _structure = LineStructure::RIGHT;
     }
-    else if (((_sensorArray & 0b00100) == 0b00100) || ((_sensorArray & 0b01000) == 0b01000) || ((_sensorArray & 0b00010) == 0b00010))
+    else if (((_sensorArray & MASK_THIRD_DIGITAL_INPUT) == MASK_THIRD_DIGITAL_INPUT) || ((_sensorArray & MASK_FOURTH_DIGITAL_INPUT) == MASK_FOURTH_DIGITAL_INPUT) || ((_sensorArray & MASK_SECOND_DIGITAL_INPUT) == MASK_SECOND_DIGITAL_INPUT))
     {
-        /*  switch (_structure)
-          {
-          case LineStructure::T:
-              _structure = LineStructure::CROSS;
-              break;
-          case LineStructure::RIGHT:
-              _structure = LineStructure::RIGHT_FORWARD;
-              break;
-          case LineStructure::LEFT:
-              _structure = LineStructure::LEFT_FORWARD;
-              break;
-          default:
-              _structure = LineStructure::FORWARD;
-              break;
-          } */
         _structure = LineStructure::FORWARD;
     }
     else
@@ -53,16 +43,16 @@ void LineSensor::updateDetection()
 
 bool LineSensor::needLeftAdjustment() const
 {
-    return ((_sensorArray & 0b00010) != 0) &&
-           ((_sensorArray & 0b11000) == 0) &&
-           ((_sensorArray & 0b00101) != 0b00101);
+    return ((_sensorArray & MASK_SECOND_DIGITAL_INPUT) != 0) &&
+           ((_sensorArray & (MASK_FOURTH_DIGITAL_INPUT || MASK_FIFTH_DIGITAL_INPUT)) == 0) &&
+           ((_sensorArray & (MASK_FIRST_DIGITAL_INPUT || MASK_THIRD_DIGITAL_INPUT)) != (MASK_FIRST_DIGITAL_INPUT || MASK_THIRD_DIGITAL_INPUT));
 }
 
 bool LineSensor::needRightAdjustment() const
 {
-    return ((_sensorArray & 0b01000) != 0) &&
-           ((_sensorArray & 0b00011) == 0) &&
-           ((_sensorArray & 0b10100) != 0b10100);
+    return ((_sensorArray & MASK_FOURTH_DIGITAL_INPUT) != 0) &&
+           ((_sensorArray & (MASK_FIRST_DIGITAL_INPUT || MASK_SECOND_DIGITAL_INPUT)) == 0) &&
+           ((_sensorArray & (MASK_FIFTH_DIGITAL_INPUT || MASK_THIRD_DIGITAL_INPUT)) != (MASK_FIFTH_DIGITAL_INPUT || MASK_THIRD_DIGITAL_INPUT));
 }
 
 bool LineSensor::detectsIntersection() const

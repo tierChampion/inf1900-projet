@@ -1,5 +1,6 @@
 #include "event_timer.h"
-
+const uint8_t INTERRUPT_DELAY = 195;
+const uint8_t LED_TOGGLING_FREQUENCE = 5;
 Timer1 EventTimer::_timer = Timer1();
 Led EventTimer::_led = Led(Port::A, PA6, PA7);
 uint8_t EventTimer::_ledCounter = 0;
@@ -18,7 +19,7 @@ EventTimer::EventTimer()
 {
     _timer.setWaveMode(TimerWaveMode::CTC);
     _timer.setCounterValue(0);
-    _timer.setCompareValue(TimerCompare::A, 195);
+    _timer.setCompareValue(TimerCompare::A, INTERRUPT_DELAY);
     _timer.setCompareMode(TimerCompare::A, TimerCompareMode::DISCONNECTED);
     _timer.setPrescalar(TimerPrescalar::THOUSAND_TWENTY_FOUR);
     _timer.setInterrupt(TimerInterrupt::COMPARE_A);
@@ -43,7 +44,7 @@ void EventTimer::update()
 
 void EventTimer::toggleLed()
 {
-    if (_ledCounter % 5 == 0)
+    if (_ledCounter % LED_TOGGLING_FREQUENCE == 0)
     {
         if (!EventTimer::_isLedToggled)
         {

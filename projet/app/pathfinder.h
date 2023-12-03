@@ -29,7 +29,7 @@ public:
 private:
     Map _map;
 
-    uint8_t _workArray[Map::NODE_COUNT];
+    uint8_t _workArray[NODE_COUNT];
     uint8_t _workSize;
 };
 

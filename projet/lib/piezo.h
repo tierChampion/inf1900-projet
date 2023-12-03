@@ -31,15 +31,14 @@ enum class Octave : uint8_t
 class Piezo
 {
 public:
-
     Piezo();
     void play(uint8_t val);
     void play(Note note, Octave octave);
     void stop();
     void successMelody();
+    void playFoundPillarMelody();
 
 private:
-    
     Timer2 _timer;
     WritePin _timerPin;
     WritePin _groundPin;

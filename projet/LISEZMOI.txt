@@ -1,0 +1,30 @@
+# INF1900_PROJET INTEGRATEUR EQUIOE 1618
+
+## Description
+
+Ce projet est separe en 2 grandes parties:
+
+-Recherche de coin
+-Recherche du chemin le plus court
+
+
+## Brève description des classes
+
+- - 'menu'              : 
+- - 'pathfinder'        : 
+- - 'corners_detector'  : 
+- - 'master_navigation' :
+
+## Makefile
+
+- À la suite de la commande 'make', vous obtenez 'exec' (permettant l'exécution de votre 'main.c') et 'tests' (permettant de rouler les tests unitaires sur les fonctions implémentées) ;
+- La commande './tests' est automatiquement exécutée à la suite d'un 'make' pour vous faciliter la tâche (consultez le Makefile à cet effet).
+
+
+## Notes importantes
+
+1. Vous pouvez rouler le script 'install_dependencies.sh' [sudo chmod "+x" install_dependencies.sh; ./install_dependencies.sh] pour vérifier vos dépendances avant de commencer ;
+2. Les fonctions à produire sont au sein de 'functions.c' - des squelettes vous sont fournis d'emblée, ne modifiez pas l'épilogue ni le prologue, sans quoi les tests s'échoueront (seulement compléter l'implémentation au sein des espaces alloués) ;
+3. Vous pouvez tester votre programme à partir de la commande 'make'. Deux exécutables sont compilés à la fois : 'tests' et 'exec'. Pour 'tests', son nom devrait être trivial. Pour 'exec', celui-ci permet de rouler essentiellement votre 'main.c' qui peut être très utile pour déboguer... ;
+4. Si vous éprouvez des difficultés, aidez-vous des fonctions au sein de 'helpers.c' qui peuvent être insérées à même votre 'main.c' ;
+5. Vous êtes libre d'ajouter davantage de tests, mais pas d'en retirer (nous pourrions extirper simplement votre 'functions.c' et rouler des tests cachés à la suite de la remise en vue de la correction).

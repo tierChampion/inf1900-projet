@@ -1,5 +1,6 @@
 #include "corners_detector.h"
-
+const uint16_t DELAY_HIGH_NOTE = 1000;
+const uint8_t CENTERING_DELAY = 42;
 CornersDetector::CornersDetector()
     : _isDetecting(false),
       _detector(0),
@@ -11,15 +12,17 @@ CornersDetector::CornersDetector()
 const char *CornersDetector::run(MasterNavigation *navigation, Piezo *piezo)
 {
     findCorner(navigation);
+
     piezo->play(Note::G, Octave::TOP);
-    _delay_ms(1000);
+    _delay_ms(DELAY_HIGH_NOTE);
     piezo->stop();
+
     EventTimer::setToggling(false, LedColor::GREEN);
     comeBack(navigation);
     return getCornerName();
 }
 
-void CornersDetector::findCorner(MasterNavigation* navigation)
+void CornersDetector::findCorner(MasterNavigation *navigation)
 {
     EventTimer::setToggling(true);
     _scan = 0;
@@ -28,7 +31,7 @@ void CornersDetector::findCorner(MasterNavigation* navigation)
     EventTimer::resetNavigationCounter();
     navigation->jumpStart();
 
-    LineSensor* lineSensor = navigation->getLineSensor();
+    LineSensor *lineSensor = navigation->getLineSensor();
 
     while (_isDetecting)
     {
@@ -43,16 +46,15 @@ void CornersDetector::findCorner(MasterNavigation* navigation)
                 lineSensor->updateDetection();
             }
             uint16_t count = EventTimer::getNavigationCounter();
-            navigation->driveDistance(42);
+            navigation->driveDistance(CENTERING_DELAY);
             lineSensor->updateDetection();
             scanIntersection(navigation, count);
-            // center
         }
         PRINT(_detector);
     }
 }
 
-void CornersDetector::comeBack(MasterNavigation* navigation)
+void CornersDetector::comeBack(MasterNavigation *navigation)
 {
     PRINT("FIRST UTURN");
     navigation->stop();
@@ -80,7 +82,7 @@ void CornersDetector::comeBack(MasterNavigation* navigation)
         navigation->executeMovementCode(MovementCode::LEFT);
     }
 }
-void CornersDetector::scanIntersection(MasterNavigation* navigation, uint16_t count)
+void CornersDetector::scanIntersection(MasterNavigation *navigation, uint16_t count)
 {
 
     _isDetecting = false;

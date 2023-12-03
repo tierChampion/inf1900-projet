@@ -1,4 +1,5 @@
 #include "pathfinder.h"
+const uint8_t MASK_PREVIOUS_NODE = 0x1F;
 
 Pathfinder::Pathfinder() : _map(Map()), _workSize(0) {}
 
@@ -26,19 +27,19 @@ void Pathfinder::findPath(uint8_t start, uint8_t dest, uint8_t *path)
         MapNode node = _map[position];
         node.setVisited(Visited::FINISHED);
 
-        if (node.getCardinalDist(Direction::NORTH) > Map::DISCONNECTED)
+        if (node.getCardinalDist(Direction::NORTH) > DISCONNECTED)
         {
             handleNeighbor(position, Map::getNorthPosition(position), node.getCardinalDist(Direction::NORTH));
         }
-        if (node.getCardinalDist(Direction::SOUTH) > Map::DISCONNECTED)
+        if (node.getCardinalDist(Direction::SOUTH) > DISCONNECTED)
         {
             handleNeighbor(position, Map::getSouthPosition(position), node.getCardinalDist(Direction::SOUTH));
         }
-        if (node.getCardinalDist(Direction::EAST) > Map::DISCONNECTED)
+        if (node.getCardinalDist(Direction::EAST) > DISCONNECTED)
         {
             handleNeighbor(position, Map::getEastPosition(position), node.getCardinalDist(Direction::EAST));
         }
-        if (node.getCardinalDist(Direction::WEST) > Map::DISCONNECTED)
+        if (node.getCardinalDist(Direction::WEST) > DISCONNECTED)
         {
             handleNeighbor(position, Map::getWestPosition(position), node.getCardinalDist(Direction::WEST));
         }
@@ -86,9 +87,9 @@ void Pathfinder::handleNeighbor(uint8_t position, uint8_t neighborPos, uint8_t w
 
     if (_map[neighborPos].getVisited() != Visited::FINISHED &&
         (distance < _map[neighborPos].getDistance() ||
-         _map[neighborPos].getDistance() == Map::NONE))
+         _map[neighborPos].getDistance() == NONE))
     {
-        _map[neighborPos].setPrev(position);
+        _map[neighborPos].setPreviousNode(position);
         _map[neighborPos].setDistance(distance);
 
         if (_map[neighborPos].getVisited() == Visited::UNKNOWN)
@@ -106,10 +107,10 @@ void Pathfinder::printInvertedPath(uint8_t dest) const
     PRINT("INVERTED PATH:");
     MapNode node = _map[dest];
 
-    while (node.getPrev() != 0x1F)
+    while (node.getPreviousNode() != MASK_PREVIOUS_NODE)
     {
-        PRINT(node.getPrev());
-        node = _map[node.getPrev()];
+        PRINT(node.getPreviousNode());
+        node = _map[node.getPreviousNode()];
     }
 }
 
@@ -118,10 +119,10 @@ void Pathfinder::getPath(uint8_t dest, uint8_t *path) const
     uint8_t size = 0;
     MapNode node = _map[dest];
 
-    while (node.getPrev() != 0x1F)
+    while (node.getPreviousNode() != 0x1F)
     {
         ++size;
-        node = _map[node.getPrev()];
+        node = _map[node.getPreviousNode()];
     }
 
     node = _map[dest];
@@ -130,16 +131,17 @@ void Pathfinder::getPath(uint8_t dest, uint8_t *path) const
     {
         if (i > size)
         {
-            path[i] = Map::NONE;
+            path[i] = NONE;
         }
+
         else if (i == size)
         {
             path[i] = dest;
         }
         else
         {
-            path[i] = node.getPrev();
-            node = _map[node.getPrev()];
+            path[i] = node.getPreviousNode();
+            node = _map[node.getPreviousNode()];
         }
     }
 }

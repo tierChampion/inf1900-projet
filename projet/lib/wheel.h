@@ -23,13 +23,13 @@ class Wheel
 
 public:
     Wheel();
-    Wheel(WritePin directionPin, Side side, Timer0 *timerPwm);
+    Wheel(WritePin directionPin, Side side, Timer0 *timerWheels);
     void setSpeed(Orientation orientation, uint8_t speed);
 
 private:
     WritePin _directionPin;
     Side _side;
-    Timer0 *_timerPWM;
+    Timer0 *_timerWheels;
 };
 
 #endif

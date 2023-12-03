@@ -2,7 +2,7 @@
 
 const uint8_t DEFAULT_SPEED = 110;     // 110 pour le robot 16.
 const uint8_t DEFAULT_TURN_SPEED = 90; // 90 pour le robot 16.
-const uint8_t LEFT_REAL_ADJUST = 0;   // 0 pour le robot 16
+const uint8_t LEFT_REAL_ADJUST = 0;    // 0 pour le robot 16
 const uint8_t RIGHT_REAL_ADJUST = 5;   // 5 pour le robot 16
 const uint8_t DEFAULT_ADJUST = 5;      // pour le robot 16
 
@@ -49,7 +49,7 @@ void Navigation::moveStraight(Orientation orientation)
 
 void Navigation::realForward()
 {
-    _leftWheel.setSpeed(Orientation::FORWARD, (DEFAULT_SPEED + LEFT_REAL_ADJUST)); // to test (was 30)
+    _leftWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED + LEFT_REAL_ADJUST); // to test (was 30)
     _rightWheel.setSpeed(Orientation::FORWARD, DEFAULT_SPEED + RIGHT_REAL_ADJUST);
 }
 

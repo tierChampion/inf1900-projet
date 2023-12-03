@@ -4,7 +4,6 @@
 #include "button.h"
 #include "lcm_so1602dtr_m_fw.h"
 #include "customprocs.h"
-
 #include "robot.h"
 
 enum class MenuStep
@@ -30,9 +29,9 @@ class Menu
 
 public:
     static void initialiseMenu();
-    static void interrupt0();
-    static void interrupt1();
-    static void interrupt2();
+    static void interruptRoutine0();
+    static void interruptRoutine1();
+    static void interruptRoutine2();
 
     static void updateStep();
     static void executeStep();

@@ -11,6 +11,11 @@ typedef uint8_t Flag;
 const uint8_t MAXIMUM_8BIT = 255;
 const float MAXIMUM_8BIT_F = 255.0f;
 const float MAXIMUM_PERCENTAGE = 100.0f;
+const uint8_t MAP_WIDTH = 7;
+const uint8_t MAP_HEIGHT = 4;
+const uint8_t NODE_COUNT = 28;
+const uint8_t NONE = 0xFF;
+const uint8_t DISCONNECTED = 0;
 
 inline void configurableDelayMS(uint8_t count25)
 {

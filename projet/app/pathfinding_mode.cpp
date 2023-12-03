@@ -27,7 +27,7 @@ void PathfindingMode::run(uint8_t line, uint8_t column, MasterNavigation *naviga
 
 void PathfindingMode::pathfind(uint8_t line, uint8_t column, MovementCode *moves)
 {
-    uint8_t dest = line * Map::MAP_WIDTH + column;
+    uint8_t dest = line * MAP_WIDTH + column;
 
     uint8_t path[Pathfinder::MAX_PATH_LENGTH];
 
@@ -68,9 +68,7 @@ bool PathfindingMode::travelPath(MovementCode *moves, MasterNavigation *navigati
 
 void PathfindingMode::foundPillar(MovementCode currentMove, Piezo *piezo)
 {
-    piezo->play(45);
-    _delay_ms(2000);
-    piezo->stop();
+    piezo->playFoundPillarMelody();
 
     _pathfinder.modifyMap(updatePosition(currentMove, _direction, _position));
 }
@@ -99,7 +97,7 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
     Direction currentDir = _direction;
     uint8_t currentPos = _position;
 
-    while (index < Pathfinder::MAX_PATH_LENGTH - 1 && path[index + 1] != Map::NONE)
+    while (index < Pathfinder::MAX_PATH_LENGTH - 1 && path[index + 1] != NONE)
     {
 
         PRINT("pos");
@@ -155,7 +153,7 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
         PRINT(static_cast<uint8_t>(currentDir));
     }
 
-    if (_pathfinder.getMap()[currentPos].getCardinalDist(currentDir) == Map::DISCONNECTED)
+    if (_pathfinder.getMap()[currentPos].getCardinalDist(currentDir) == DISCONNECTED)
     {
         moves[moveIndex++] = MovementCode::UTURN;
     }
@@ -263,6 +261,6 @@ Direction PathfindingMode::updateOrientation(MovementCode move, Direction curren
 
 void PathfindingMode::setPosition(uint8_t line, uint8_t column, Direction dir)
 {
-    _position = line * Map::MAP_WIDTH + column;
+    _position = line * MAP_WIDTH + column;
     _direction = dir;
 }
