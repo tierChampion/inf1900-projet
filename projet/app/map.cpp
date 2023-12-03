@@ -204,14 +204,14 @@ uint8_t Map::getWestPosition(uint8_t position)
 
 bool Map::isLinePosition(uint8_t position)
 {
-    return (_nodes[position].getCardinalDist(Direction::NORTH) > 0 &&
-            _nodes[position].getCardinalDist(Direction::SOUTH) > 0 &&
-            _nodes[position].getCardinalDist(Direction::EAST) == 0 &&
-            _nodes[position].getCardinalDist(Direction::WEST) == 0) ||
-           (_nodes[position].getCardinalDist(Direction::EAST) > 0 &&
-            _nodes[position].getCardinalDist(Direction::WEST) > 0 &&
-            _nodes[position].getCardinalDist(Direction::NORTH) == 0 &&
-            _nodes[position].getCardinalDist(Direction::SOUTH) == 0);
+    return ((_nodes[position].getCardinalDist(Direction::NORTH) > 0 ||
+            _nodes[position].getCardinalDist(Direction::SOUTH) > 0) &&
+            (_nodes[position].getCardinalDist(Direction::EAST) == 0 &&
+            _nodes[position].getCardinalDist(Direction::WEST) == 0)) ||
+           ((_nodes[position].getCardinalDist(Direction::EAST) > 0 ||
+            _nodes[position].getCardinalDist(Direction::WEST) > 0) &&
+            (_nodes[position].getCardinalDist(Direction::NORTH) == 0 &&
+            _nodes[position].getCardinalDist(Direction::SOUTH) == 0));
 }
 
 void Map::printMap() const
