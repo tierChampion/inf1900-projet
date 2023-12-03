@@ -73,16 +73,24 @@ void PathfindingMode::foundPillar(MovementCode currentMove, Piezo *piezo)
     _pathfinder.modifyMap(updatePosition(currentMove, _direction, _position));
 }
 
-void PathfindingMode::finishedPath(Piezo *piezo)
+void PathfindingMode::finishedPath(Piezo *piezo, bool beautiful)
 {
     for (uint8_t i = 0; i < 5; i++)
     {
-        for (uint8_t j = 0; j < 13; j++)
+        if (beautiful)
+        {
+            for (uint8_t j = 0; j < 13; j++)
+            {
+                piezo->play(75 + i);
+                _delay_ms(15.36);
+                piezo->play(75 + i + 7);
+                _delay_ms(15.36);
+            }
+        }
+        else
         {
             piezo->play(75 + i);
-            _delay_ms(15.36);
-            piezo->play(75 + i + 7);
-            _delay_ms(15.36);
+            _delay_ms(200);
         }
 
         piezo->stop();

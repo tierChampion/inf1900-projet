@@ -202,7 +202,7 @@ void Menu::executeStep()
     case MenuStep::CORNERS:
         EventTimer::setToggling(false);
         Menu::lcd.clear();
-        Menu::lcd.write("** DETECTION  ****  EN COURS  **");
+        Menu::lcd.write("...");
         _delay_ms(LCD_DELAY);
         PRINT("DETECTION  EN COURS");
         Menu::_modeButton.disable();

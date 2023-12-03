@@ -3,12 +3,12 @@
 
 const uint8_t STABILIZING_DELAY = 250;
 
-const uint16_t DEFAULT_ONE_UNIT_COUNT = 150;
-const uint8_t DEFAULT_INTERSECTION_CENTERING_COUNT = 42;
+const uint16_t DEFAULT_ONE_UNIT_COUNT = 134;
+const uint8_t DEFAULT_INTERSECTION_CENTERING_COUNT = 44;
 const uint8_t UTURN_COUNT = 90;
 const uint8_t ESTIMATED_LINECROSSING_COUNT = 5;
 
-const uint8_t LEFT_ADJUST_STRENGTH = 10; // 10 pour 16
+const uint8_t LEFT_ADJUST_STRENGTH = 10;  // 10 pour 16
 const uint8_t RIGHT_ADJUST_STRENGTH = 30; // 30 pour 16
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
@@ -37,8 +37,8 @@ void MasterNavigation::driveToIntersection(bool calibrate)
     {
         goStraight();
         // check for intersections.
-        if (_lineSensor.detectsIntersection() && 
-        EventTimer::getNavigationCounter() >= ((_centeringCount >> 1) + (_centeringCount >> 2))) // 3/4 du centrage
+        if (_lineSensor.detectsIntersection() &&
+            EventTimer::getNavigationCounter() >= ((_centeringCount >> 1) + (_centeringCount >> 2))) // 3/4 du centrage
         {
             // TO TEST!!! (see pathfindingMode travelPath as well)
             if (calibrate)
@@ -101,6 +101,10 @@ void MasterNavigation::goStraight()
         {
             _navigation.moveStraight(Orientation::FORWARD);
         }
+    }
+    else
+    {
+        _navigation.moveStraight(Orientation::FORWARD);
     }
 }
 
@@ -174,7 +178,7 @@ void MasterNavigation::executeMovementCode(MovementCode code, bool calibrate)
         break;
 
     case MovementCode::FORWARD_1:
-        driveOneUnit(); 
+        driveOneUnit();
         _delay_ms(STABILIZING_DELAY);
         break;
 
@@ -217,5 +221,4 @@ void MasterNavigation::executeMovementCode(MovementCode code, bool calibrate)
     default:
         break;
     }
-
 }

@@ -23,7 +23,7 @@ private:
     bool travelPath(MovementCode *moves, MasterNavigation* navigation, Piezo* piezo);
 
     void foundPillar(MovementCode currentMove, Piezo* piezo);
-    void finishedPath(Piezo* piezo);
+    void finishedPath(Piezo* piezo, bool beautiful = false);
 
     uint8_t updatePosition(MovementCode move, Direction currentDir, uint8_t currentPos);
     Direction updateOrientation(MovementCode move, Direction currentDir);
