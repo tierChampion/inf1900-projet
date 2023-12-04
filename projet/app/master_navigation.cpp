@@ -120,21 +120,21 @@ void MasterNavigation::pivot(Side turn, bool isTurning)
         _navigation.turnJumpStart(turn);
     _navigation.pivot(turn);
 
-    uint8_t lineDetected = 0;
+    uint8_t lineDetected = INIT;
 
-    while (lineDetected < 2)
+    while (lineDetected != LINE_DETECTED)
     {
         _lineSensor.updateDetection();
 
-        if (_lineSensor.getStructure() == LineStructure::NONE && lineDetected == 0)
+        if (_lineSensor.getStructure() == LineStructure::NONE && lineDetected == INIT)
         {
-            lineDetected = 1;
+            lineDetected = NO_LINE_DETECTED;
         }
 
-        if (_lineSensor.getStructure() == LineStructure::FORWARD && lineDetected == 1)
+        if (_lineSensor.getStructure() == LineStructure::FORWARD && lineDetected == NO_LINE_DETECTED)
         {
             _navigation.stop();
-            lineDetected = 2;
+            lineDetected = LINE_DETECTED;
         }
     }
 }

@@ -6,7 +6,12 @@
 #include "timer1.h"
 #include "distance_sensor.h"
 #include "movement_code.h"
-
+enum State
+{
+    INIT,
+    LINE_DETECTED,
+    NO_LINE_DETECTED
+};
 class MasterNavigation
 {
 public:
