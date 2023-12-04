@@ -10,6 +10,7 @@ enum class Direction : uint8_t
     EAST = 2,
     WEST = 3
 };
+
 enum class Visited : uint8_t
 {
     UNKNOWN = 0,

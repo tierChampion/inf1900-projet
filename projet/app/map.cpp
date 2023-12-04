@@ -1,4 +1,5 @@
 #include "map.h"
+
 const uint8_t NORMAL_WEIGHT = 1;
 const uint8_t YELLOW_WEIGHT = 2;
 const uint8_t RED_WEIGHT = 5;

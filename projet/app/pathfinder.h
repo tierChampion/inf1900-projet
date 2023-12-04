@@ -23,9 +23,8 @@ private:
     void getPath(uint8_t dest, uint8_t *path) const;
 
 public:
-    static const uint8_t MAX_PATH_LENGTH = 15;
-    // attention, s'assurer que c'est assez,
-    // le max trouver est de 11 ((0, 3) vers (4, 0))
+    static const uint8_t MAX_PATH_LENGTH = 16;
+
 private:
     Map _map;
 

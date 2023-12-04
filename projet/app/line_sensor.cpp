@@ -1,4 +1,5 @@
 #include "line_sensor.h"
+
 const uint8_t MASK_FIRST_DIGITAL_INPUT = 0b00001;
 const uint8_t MASK_FOURTH_DIGITAL_INPUT = 0b01000;
 const uint8_t MASK_THIRD_DIGITAL_INPUT = 0b00100;
@@ -19,19 +20,24 @@ void LineSensor::updateDetection()
 {
     _sensorArray = readSensorArray();
 
-    if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)) == (MASK_FIRST_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)))
+    if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)) ==
+         (MASK_FIRST_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)))
     {
         _structure = LineStructure::T;
     }
-    else if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT | MASK_SECOND_DIGITAL_INPUT)) == (MASK_FIRST_DIGITAL_INPUT | MASK_SECOND_DIGITAL_INPUT)))
+    else if (((_sensorArray & (MASK_FIRST_DIGITAL_INPUT | MASK_SECOND_DIGITAL_INPUT)) ==
+              (MASK_FIRST_DIGITAL_INPUT | MASK_SECOND_DIGITAL_INPUT)))
     {
         _structure = LineStructure::LEFT;
     }
-    else if (((_sensorArray & (MASK_FOURTH_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)) == (MASK_FOURTH_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)))
+    else if (((_sensorArray & (MASK_FOURTH_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)) ==
+              (MASK_FOURTH_DIGITAL_INPUT | MASK_FIFTH_DIGITAL_INPUT)))
     {
         _structure = LineStructure::RIGHT;
     }
-    else if (((_sensorArray & MASK_THIRD_DIGITAL_INPUT) == MASK_THIRD_DIGITAL_INPUT) || ((_sensorArray & MASK_FOURTH_DIGITAL_INPUT) == MASK_FOURTH_DIGITAL_INPUT) || ((_sensorArray & MASK_SECOND_DIGITAL_INPUT) == MASK_SECOND_DIGITAL_INPUT))
+    else if (((_sensorArray & MASK_THIRD_DIGITAL_INPUT) == MASK_THIRD_DIGITAL_INPUT) ||
+             ((_sensorArray & MASK_FOURTH_DIGITAL_INPUT) == MASK_FOURTH_DIGITAL_INPUT) ||
+             ((_sensorArray & MASK_SECOND_DIGITAL_INPUT) == MASK_SECOND_DIGITAL_INPUT))
     {
         _structure = LineStructure::FORWARD;
     }
@@ -57,7 +63,7 @@ bool LineSensor::needRightAdjustment() const
 
 bool LineSensor::detectsIntersection() const
 {
-    return _structure != LineStructure::FORWARD; // to check
+    return _structure != LineStructure::FORWARD;
 }
 
 bool LineSensor::detectsSimpleIntersection() const
@@ -74,28 +80,31 @@ uint8_t LineSensor::readSensorArray() const
             _digitalInputRight.read()) >>
            1;
 }
+
 uint8_t LineSensor::readSensor(uint8_t index) const
 {
     switch (index)
     {
-    case 1:
-        return _digitalInputLeft.read();
-    case 2:
-        return _digitalInputMiddleLeft.read();
+        case 1:
+            return _digitalInputLeft.read();
+        case 2:
+            return _digitalInputMiddleLeft.read();
 
-    case 3:
-        return _digitalInputMiddle.read();
+        case 3:
+            return _digitalInputMiddle.read();
 
-    case 4:
-        return _digitalInputMiddleRight.read();
+        case 4:
+            return _digitalInputMiddleRight.read();
 
-    case 5:
-        return _digitalInputRight.read();
+        case 5:
+            return _digitalInputRight.read();
 
-    default:
-        PRINT("ERROR");
-        break;
+        default:
+            PRINT("ERROR");
+            break;
     }
+
     return -1;
 }
+
 LineStructure LineSensor::getStructure() const { return _structure; }
