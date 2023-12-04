@@ -1,30 +1,31 @@
-# INF1900_PROJET INTEGRATEUR EQUIOE 1618
+INF1900 PROJET INTEGRATEUR ÉQUIPE 1618
+
+Thierry Champion        2250224
+Nikolai Olekhnovitch    2204357
+Raissa Oumarou Petitot  2180935
+Rym Touati              2134811
+
 
 ## Description
 
-Ce projet est separe en 2 grandes parties:
+Le Polynator est un projet de système embarqué de robot véhicule pouvant naviguer sur un parcours prédéterminé.
 
--Recherche de coin
--Recherche du chemin le plus court
+Ce projet est séparé en 2 grandes parties:
 
-
-## Brève description des classes
-
-- - 'menu'              : 
-- - 'pathfinder'        : 
-- - 'corners_detector'  : 
-- - 'master_navigation' :
-
-## Makefile
-
-- À la suite de la commande 'make', vous obtenez 'exec' (permettant l'exécution de votre 'main.c') et 'tests' (permettant de rouler les tests unitaires sur les fonctions implémentées) ;
-- La commande './tests' est automatiquement exécutée à la suite d'un 'make' pour vous faciliter la tâche (consultez le Makefile à cet effet).
+-Recherche de coins : le robot va déterminer le coin de départ et son orientation.
+-Recherche du chemin le plus court : Entrez le point désiré sur la carte, et le robot déterminera le chemin le plus cours, selon le poids des arêtes.
 
 
-## Notes importantes
+## Brève description des classes principales
 
-1. Vous pouvez rouler le script 'install_dependencies.sh' [sudo chmod "+x" install_dependencies.sh; ./install_dependencies.sh] pour vérifier vos dépendances avant de commencer ;
-2. Les fonctions à produire sont au sein de 'functions.c' - des squelettes vous sont fournis d'emblée, ne modifiez pas l'épilogue ni le prologue, sans quoi les tests s'échoueront (seulement compléter l'implémentation au sein des espaces alloués) ;
-3. Vous pouvez tester votre programme à partir de la commande 'make'. Deux exécutables sont compilés à la fois : 'tests' et 'exec'. Pour 'tests', son nom devrait être trivial. Pour 'exec', celui-ci permet de rouler essentiellement votre 'main.c' qui peut être très utile pour déboguer... ;
-4. Si vous éprouvez des difficultés, aidez-vous des fonctions au sein de 'helpers.c' qui peuvent être insérées à même votre 'main.c' ;
-5. Vous êtes libre d'ajouter davantage de tests, mais pas d'en retirer (nous pourrions extirper simplement votre 'functions.c' et rouler des tests cachés à la suite de la remise en vue de la correction).
+- - 'menu'              :    Point d'entrée de l'application. C'est ici qu'on détermine quel mode est utilisé (pathfinding_mode ou corners_detector). Le mode par défaut est pathfinding_mode et on peut basculer à corners_detector avec le bouton d'interruption sur la carte mère et il s'activera automatiquement.
+
+Les boutons sur le breadboard permettent de sélectionner la destination (ligne et colonne) et valider. Le bouton de sélection (à gauche lorsqu'on regarde le robot de face) permet d'incrémenter et le bouton de validation (à droite) permet de passer au prochain affichage. Une confirmation de destination est demandée. Par défaut, l'option NON est sélectionnée et ramènera l'utilisateur au choix de destination si on appuie sur validation. Confirmez la destination en sélectionnant OUI avec le bouton de sélection. Le robot effectuera le trajet en appuyant à valider.
+
+- - 'pathfinder'        :   Pathfinder applique l'algorithme de Dijkstra sur une liste d'adjacence de nœuds qui représentent les différents points sur la carte. Cette approche minimise l'utilisation de mémoire sur la carte mère, vu qu'il s'agit d'un tableau contigu en mémoire 28 objets de 4 octets   . 
+
+Un tableau de nœuds de carte organise le parcours et donne l'information sur les poids des arêtes connectés à chaque nœud. Pathfinder utilise ces nœuds pour déterminer le chemin le plus cours et peut refaire le traitement dans le cas d'un obstacle qui empêche la progression.
+
+- - 'corners_detector'  :   Ce mode détermine l'emplacement et l'orientation du robot lorsqu'il est posé sur un des quatre coins du parcours. Le robot va avancer et, selon les intersections rencontrées et les distances parcourues, il pourra déterminer le point de départ. 
+
+- - 'master_navigation' :   Cette classe comprend tous les éléments qui permettent le déplacement du robot. Il s'agit de l'implémentation du suiveur de ligne qui ajuste la direction, EventTimer qui gère la mesure des distances et l'activation de la DEL et Navigation qui fait bouger les roues pour effectuer les déplacements et les virages.
