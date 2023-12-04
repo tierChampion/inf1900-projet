@@ -1,3 +1,23 @@
+/*
+* fichier menu.cpp
+*auteurs Thierry Champion, Nikolai Olekhnovitch, Raissa Oumarou Petitot, Rym Touati
+*Programme qui gere un menu interactif a laide de boutons sur le microcontroleur AVR, affichent des informations sur lecran lors de la detection de coin ainsi q
+ue lors de la recherche de trajets et reagissent aux differentes actions effectue dessus.
+Elle controle aussi le robot en definissant des parametres tels que la ligne et la colonne pour la recherche de trajet, puis en executant des modes sp/cifiques du robot
+tel que le path finding ou le corner detection.
+* \date   05 decembre 2023
+* Créé le 7 novembre 2023
+/* La table des etats : (a modifier)
++-------------+---------+--------------+
+| ETAT ACTUEL |    ETAT FUTURE         |
++-------------+---------+--------------+
+|             |         |              |
++-------------+---------+--------------+
+|             |         |              |
+|             |         |              |
++-------------+---------+--------------+
+*/
+* /
 #include "menu.h"
 #include "avr/interrupt.h"
 #include "commons.h"
@@ -5,7 +25,7 @@
 #define DEMO_DDR DDRC   // `Data Direction Register' AVR occup� par l'aff.
 #define DEMO_PORT PORTC // Port AVR occup� par l'afficheur
 
-const uint16_t LCD_DELAY = 600;
+    const uint16_t LCD_DELAY = 600;
 const uint8_t DISPLAY_STRING_LENGTH = 32;
 bool Menu::_isInitialised = false;
 Button Menu::_modeButton = Button(GeneralInterruptType::INT_2, true);
