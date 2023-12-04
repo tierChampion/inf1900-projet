@@ -8,8 +8,8 @@ const uint8_t DEFAULT_INTERSECTION_CENTERING_COUNT = 44;
 const uint8_t UTURN_COUNT = 90;
 const uint8_t ESTIMATED_LINECROSSING_COUNT = 5;
 
-const uint8_t LEFT_ADJUST_STRENGTH = 10;  // 10 pour 16
-const uint8_t RIGHT_ADJUST_STRENGTH = 30; // 30 pour 16
+const uint8_t LEFT_ADJUST_STRENGTH = 10;
+const uint8_t RIGHT_ADJUST_STRENGTH = 30;
 
 MasterNavigation::MasterNavigation() : _navigation(Navigation()),
                                        _lineSensor(LineSensor()),
@@ -40,7 +40,6 @@ void MasterNavigation::driveToIntersection(bool calibrate)
         if (_lineSensor.detectsIntersection() &&
             EventTimer::getNavigationCounter() >= ((_centeringCount >> 1) + (_centeringCount >> 2))) // 3/4 du centrage
         {
-            // TO TEST!!! (see pathfindingMode travelPath as well)
             if (calibrate)
                 calibrateDistances(EventTimer::getNavigationCounter());
 

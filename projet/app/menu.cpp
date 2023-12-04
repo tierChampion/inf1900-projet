@@ -77,7 +77,6 @@ void Menu::interruptRoutine0()
 void Menu::interruptRoutine1()
 {
     Menu::_validationButton.update();
-
     if (Menu::_validationButton.getIsPressed())
     {
         Menu::_updateType = UpdateType::VALIDATE;
@@ -87,7 +86,6 @@ void Menu::interruptRoutine1()
 void Menu::interruptRoutine2()
 {
     Menu::_modeButton.update();
-
     if (Menu::_modeButton.getIsPressed())
     {
         Menu::_updateType = UpdateType::MODE;

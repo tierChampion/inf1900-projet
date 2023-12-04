@@ -20,22 +20,22 @@ inline const char *structureToString(LineStructure structure)
 {
     switch (structure)
     {
-    case LineStructure::NONE:
-        return "No line";
-    case LineStructure::FORWARD:
-        return "Straight line";
-    case LineStructure::LEFT:
-        return "Left turn";
-    case LineStructure::RIGHT:
-        return "Right turn";
-    case LineStructure::T:
-        return "T intersection";
-    case LineStructure::LEFT_FORWARD:
-        return "Left forward";
-    case LineStructure::RIGHT_FORWARD:
-        return "Right forward";
-    default:
-        return "UNKNOWN!";
+        case LineStructure::NONE:
+            return "No line";
+        case LineStructure::FORWARD:
+            return "Straight line";
+        case LineStructure::LEFT:
+            return "Left turn";
+        case LineStructure::RIGHT:
+            return "Right turn";
+        case LineStructure::T:
+            return "T intersection";
+        case LineStructure::LEFT_FORWARD:
+            return "Left forward";
+        case LineStructure::RIGHT_FORWARD:
+            return "Right forward";
+        default:
+            return "UNKNOWN!";
     }
 }
 

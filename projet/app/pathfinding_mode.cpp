@@ -171,12 +171,6 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
     PRINT("MOVES:");
     for (uint8_t i = 1; i < 2 * Pathfinder::MAX_PATH_LENGTH; i++)
     {
-        // if ((moves[i] == MovementCode::FORWARD && moves[i - 1] == MovementCode::FORWARD) ||
-        //     (moves[i] == MovementCode::NOTHING && moves[i - 1] == MovementCode::FORWARD && isDestMiddle))
-        // {
-        //     moves[i - 1] = MovementCode::FORWARD_1;
-        // }
-
         PRINT(static_cast<uint8_t>(moves[i - 1]));
     }
 #endif

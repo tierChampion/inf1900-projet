@@ -1,6 +1,5 @@
 #include "event_timer.h"
-const uint8_t INTERRUPT_DELAY = 195;
-const uint8_t LED_TOGGLING_FREQUENCE = 5;
+
 Timer1 EventTimer::_timer = Timer1();
 Led EventTimer::_led = Led(Port::A, PA6, PA7);
 uint8_t EventTimer::_ledCounter = 0;
@@ -9,6 +8,9 @@ bool EventTimer::_isToggling = false;
 bool EventTimer::_isLedToggled = true;
 
 bool EventTimer::_isInitialised = false;
+
+const uint8_t INTERRUPT_DELAY = 195;
+const uint8_t LED_TOGGLING_FREQUENCE = 5;
 
 ISR(TIMER1_COMPA_vect)
 {

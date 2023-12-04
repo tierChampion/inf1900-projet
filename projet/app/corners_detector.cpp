@@ -1,6 +1,8 @@
 #include "corners_detector.h"
+
 const uint16_t DELAY_HIGH_NOTE = 1000;
 const uint8_t CENTERING_DELAY = 42;
+
 CornersDetector::CornersDetector()
     : _isDetecting(false),
       _detector(0),
@@ -59,6 +61,7 @@ void CornersDetector::comeBack(MasterNavigation *navigation)
     PRINT("FIRST UTURN");
     navigation->stop();
     _delay_ms(200);
+
     if (_intersection == LineStructure::RIGHT)
     {
         navigation->executeMovementCode(MovementCode::LEFT);
@@ -70,6 +73,7 @@ void CornersDetector::comeBack(MasterNavigation *navigation)
     if (_detector == 0b010011 || _detector == 0b011011)
         navigation->driveToIntersection();
     navigation->driveToIntersection();
+
     PRINT("SECOND UTURN");
     navigation->stop();
     _delay_ms(200);
@@ -103,28 +107,28 @@ void CornersDetector::scanIntersection(MasterNavigation *navigation, uint16_t co
 
     switch (detection)
     {
-    case LineStructure::RIGHT:
+        case LineStructure::RIGHT:
 
-        _detector |= 0b010 << _scan;
-        break;
-    case LineStructure::RIGHT_FORWARD:
-        _detector |= 0b011 << _scan;
-        _isDetecting = true;
-        _scan += 3;
-        if (_detector == 0b11000011)
-        {
-            _isDetecting = false;
-        }
-        break;
-    case LineStructure::LEFT:
-        _detector |= 0b100 << _scan;
-        break;
-    case LineStructure::LEFT_FORWARD:
-        _detector |= 0b101 << _scan;
+            _detector |= 0b010 << _scan;
+            break;
+        case LineStructure::RIGHT_FORWARD:
+            _detector |= 0b011 << _scan;
+            _isDetecting = true;
+            _scan += 3;
+            if (_detector == 0b11000011)
+            {
+                _isDetecting = false;
+            }
+            break;
+        case LineStructure::LEFT:
+            _detector |= 0b100 << _scan;
+            break;
+        case LineStructure::LEFT_FORWARD:
+            _detector |= 0b101 << _scan;
 
-        break;
-    default:
-        break;
+            break;
+        default:
+            break;
     }
     if (_scan == 6)
     {
@@ -139,33 +143,32 @@ const char *CornersDetector::getCornerName()
     const char *corner = "CORNER NOT DETECTED";
     switch (_detector) // 3 derniers bits pour encodage de la 1er detection
     {                  // 3 bits du milieu pour la 2eme
-
-    case 0b11000011: // RIGHT_FORWARD Long
-        corner = "(1,1)           EAST";
-        break;
-    case 0b100: // LEFT
-        corner = "(1,1)           SOUTH";
-        break;
-    case 0b11000100: // LEFT long
-        corner = "(1,4)           EAST";
-        break;
-    case 0b010: // RIGHT
-        corner = "(1,4)           NORTH";
-        break;
-    case 0b011011: // RIGHT_FORWARD  and RIGHT_FORWARD
-        corner = "(4,7)           WEST";
-        break;
-    case 0b11000101: // LEFT_FORWARD long
-        corner = "(4,7)           NORTH";
-        break;
-    case 0b010011: // RIGHT_FORWARD and RIGHT
-        corner = "(1,7)           SOUTH";
-        break;
-    case 0b101: // LEFT_FORWARD
-        corner = "(1,7)           WEST";
-        break;
-    default:
-        break;
+        case 0b11000011: // RIGHT_FORWARD Long
+            corner = "(1,1)           EAST";
+            break;
+        case 0b100: // LEFT
+            corner = "(1,1)           SOUTH";
+            break;
+        case 0b11000100: // LEFT long
+            corner = "(1,4)           EAST";
+            break;
+        case 0b010: // RIGHT
+            corner = "(1,4)           NORTH";
+            break;
+        case 0b011011: // RIGHT_FORWARD  and RIGHT_FORWARD
+            corner = "(4,7)           WEST";
+            break;
+        case 0b11000101: // LEFT_FORWARD long
+            corner = "(4,7)           NORTH";
+            break;
+        case 0b010011: // RIGHT_FORWARD and RIGHT
+            corner = "(1,7)           SOUTH";
+            break;
+        case 0b101: // LEFT_FORWARD
+            corner = "(1,7)           WEST";
+            break;
+        default:
+            break;
     }
 
     PRINT(corner);
