@@ -15,6 +15,39 @@ Ce projet est séparé en 2 grandes parties:
 -Recherche de coins : le robot va déterminer le coin de départ et son orientation.
 -Recherche du chemin le plus court : Entrez le point désiré sur la carte, et le robot déterminera le chemin le plus cours, selon le poids des arêtes.
 
+## Compilation
+
+Pour compiler sur un robot, naviguez à INF1900/1618/projet. Voici les différentes options:
+
+- Pour seulement compiler la libraire, entrez make.
+- Pour installer sur un robot branché via USB, entrez make app. Vous aurez à valider que le port B est libre (y/N).
+
+## Branchements
+
+Voici la liste des branchements:
+
+Port A
+Broche 0 : capteur infrarouge
+Broches 1 à 5 : suiveur de ligne, en ordre
+Broche 6 : négatif de la DEL intégrée
+Broche 7 : positif de la DEL intégrée
+
+Port B
+Broche 0 : bouton interrupt (broche proche de la lettre 'V')
+Broche 2 : bouton interrupt (broche proche de la lettre 'N')
+Broche 3 : M2 (left) enable
+Broche 4 : M1 (right) enable
+Broche 5 : M2 (left) direction
+Broche 6 : M1 (right) direction
+
+Port C
+Broches 0 à 7 : écran LCD
+
+Port D
+Broche 2 : output SEL bouton breadboard
+Broche 3 : output VAL bouton breadboard
+Broche 6 : piezo
+Broche 7 : piezo
 
 ## Brève description des classes principales
 
