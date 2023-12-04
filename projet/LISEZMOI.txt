@@ -51,14 +51,14 @@ Broche 7 : piezo
 
 ## Brève description des classes principales
 
-- - 'menu'              :    Point d'entrée de l'application. C'est ici qu'on détermine quel mode est utilisé (pathfinding_mode ou corners_detector). Le mode par défaut est pathfinding_mode et on peut basculer à corners_detector avec le bouton d'interruption sur la carte mère et il s'activera automatiquement.
+- Menu              :    Point d'entrée de l'application. C'est ici qu'on détermine quel mode est utilisé (PathfindingMode ou CornersDetector). Le mode par défaut est PathfindingMode et on peut basculer à CornersDetector avec le bouton d'interruption sur la carte mère et il s'activera automatiquement.
 
 Les boutons sur le breadboard permettent de sélectionner la destination (ligne et colonne) et valider. Le bouton de sélection (à gauche lorsqu'on regarde le robot de face) permet d'incrémenter et le bouton de validation (à droite) permet de passer au prochain affichage. Une confirmation de destination est demandée. Par défaut, l'option NON est sélectionnée et ramènera l'utilisateur au choix de destination si on appuie sur validation. Confirmez la destination en sélectionnant OUI avec le bouton de sélection. Le robot effectuera le trajet en appuyant à valider.
 
-- - 'pathfinder'        :   Pathfinder applique l'algorithme de Dijkstra sur une liste d'adjacence de nœuds qui représentent les différents points sur la carte. Cette approche minimise l'utilisation de mémoire sur la carte mère, vu qu'il s'agit d'un tableau contigu en mémoire 28 objets de 4 octets   . 
+- Pathfinder        :   Pathfinder applique l'algorithme de Dijkstra sur une liste d'adjacence de nœuds qui représentent les différents points sur la carte. Cette approche minimise l'utilisation de mémoire sur la carte mère, vu qu'il s'agit d'un tableau contigu en mémoire 28 objets de 4 octets. 
 
 Un tableau de nœuds de carte organise le parcours et donne l'information sur les poids des arêtes connectés à chaque nœud. Pathfinder utilise ces nœuds pour déterminer le chemin le plus cours et peut refaire le traitement dans le cas d'un obstacle qui empêche la progression.
 
-- - 'corners_detector'  :   Ce mode détermine l'emplacement et l'orientation du robot lorsqu'il est posé sur un des quatre coins du parcours. Le robot va avancer et, selon les intersections rencontrées et les distances parcourues, il pourra déterminer le point de départ. 
+- CornersDetector  :   Ce mode détermine l'emplacement et l'orientation du robot lorsqu'il est posé sur un des quatre coins du parcours. Le robot va avancer et, selon les intersections rencontrées et les distances parcourues, il pourra déterminer le point de départ. 
 
-- - 'master_navigation' :   Cette classe comprend tous les éléments qui permettent le déplacement du robot. Il s'agit de l'implémentation du suiveur de ligne qui ajuste la direction, EventTimer qui gère la mesure des distances et l'activation de la DEL et Navigation qui fait bouger les roues pour effectuer les déplacements et les virages.
+- MasterNavigation :   Cette classe comprend tous les éléments qui permettent le déplacement du robot. Il s'agit de l'implémentation du suiveur de ligne qui ajuste la direction, EventTimer qui gère la mesure des distances et l'activation de la DEL et Navigation qui fait bouger les roues pour effectuer les déplacements et les virages.
