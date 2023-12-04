@@ -1,5 +1,24 @@
 #include "corners_detector.h"
 
+/**
+ * /fichier corners_detector.cpp
+ * /auteurs Thierry Champion, Nikolai Olekhnovitch, Raisse Oumarou Petitot, Rym Touati
+ * /date    05 décembre 2023
+ * Créé le 10 novembre
+ * 
+ * Classe représentant le mode de détermination du coin. Un encodage est utilisé pour 
+ * identifier quelles intersections ont été détectées et quels ont été les distances.
+ * 
+ * Les deux bits significatfis de l'encodage représente la distance avec la première
+ * intersection. Une unité donne une valeure de 00 et deux unité donne une valeure de 11.
+ * Les trois bits les moins significatifs représente la nature de la première intersection.
+ * Pour un virage a gauche, les bits sont 100 et pour un virage a droite, les bits sont 010.
+ * S'il est aussi possible d'aller tout droit, le premier bit est mit à 1.
+ * Les trois bits restants représente la nature de la deuxième interseciton, s'il y en a une.
+ * 
+ * Ex: (4, 7) nord = Long Gauche et tout droit => 11 000 101
+ */
+
 const uint16_t DELAY_HIGH_NOTE = 1000;
 const uint8_t CENTERING_DELAY = 42;
 

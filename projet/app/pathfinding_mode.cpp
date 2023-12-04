@@ -1,5 +1,19 @@
 #include "pathfinding_mode.h"
 
+/**
+ * /fichier map_node.cpp
+ * /auteurs Thierry Champion, Nikolai Olekhnovitch, Raisse Oumarou Petitot, Rym Touati
+ * /date    05 décembre 2023
+ * Créé le 10 novembre
+ * 
+ * Classe qui représente le mode de la recherche de chemin. Cette classe est aussi responsable
+ * de convertir une série de noeud en une série de mouvements.
+ * 
+ * Les déplacements se font soit par pair de rotation et de déplacement vers l'avant ou uniquement 
+ * avec un déplacement vers l'avant. Si jamais un déplacement en ligne droite se terminerait sur le 
+ * milieu d'une ligne, alors une ligne droite d'une unité est effectuée.
+ */
+
 PathfindingMode::PathfindingMode() : _distSensor(DistanceSensor()),
                                      _pathfinder(Pathfinder()),
                                      _position(0),
@@ -178,31 +192,23 @@ void PathfindingMode::processPath(uint8_t *path, MovementCode *moves)
 
 uint8_t PathfindingMode::updatePosition(MovementCode move, Direction currentDir, uint8_t currentPos)
 {
-    if ((currentDir == Direction::NORTH && (move == MovementCode::FORWARD || move == MovementCode::FORWARD_1)) ||
-        (currentDir == Direction::SOUTH && (move == MovementCode::UTURN_FORWARD)) ||
-        (currentDir == Direction::EAST && (move == MovementCode::LEFT_FORWARD)) ||
-        (currentDir == Direction::WEST && (move == MovementCode::RIGHT_FORWARD)))
+    if (move != MovementCode::FORWARD && move != MovementCode::FORWARD_1)
+    {
+        return currentPos;
+    }
+    else if (currentDir == Direction::NORTH)
     {
         return Map::getNorthPosition(currentPos);
     }
-    else if ((currentDir == Direction::SOUTH && (move == MovementCode::FORWARD || move == MovementCode::FORWARD_1)) ||
-             (currentDir == Direction::NORTH && (move == MovementCode::UTURN_FORWARD)) ||
-             (currentDir == Direction::WEST && (move == MovementCode::LEFT_FORWARD)) ||
-             (currentDir == Direction::EAST && (move == MovementCode::RIGHT_FORWARD)))
+    else if (currentDir == Direction::SOUTH)
     {
         return Map::getSouthPosition(currentPos);
     }
-    else if ((currentDir == Direction::EAST && (move == MovementCode::FORWARD || move == MovementCode::FORWARD_1)) ||
-             (currentDir == Direction::WEST && (move == MovementCode::UTURN_FORWARD)) ||
-             (currentDir == Direction::SOUTH && (move == MovementCode::LEFT_FORWARD)) ||
-             (currentDir == Direction::NORTH && (move == MovementCode::RIGHT_FORWARD)))
+    else if (currentDir == Direction::EAST)
     {
         return Map::getEastPosition(currentPos);
     }
-    else if ((currentDir == Direction::WEST && (move == MovementCode::FORWARD || move == MovementCode::FORWARD_1)) ||
-             (currentDir == Direction::EAST && (move == MovementCode::UTURN_FORWARD)) ||
-             (currentDir == Direction::NORTH && (move == MovementCode::LEFT_FORWARD)) ||
-             (currentDir == Direction::SOUTH && (move == MovementCode::RIGHT_FORWARD)))
+    else if (currentDir == Direction::WEST)
     {
         return Map::getWestPosition(currentPos);
     }
@@ -215,7 +221,6 @@ Direction PathfindingMode::updateOrientation(MovementCode move, Direction curren
     switch (move)
     {
     case MovementCode::LEFT:
-    case MovementCode::LEFT_FORWARD:
         currentDir = static_cast<Direction>((static_cast<uint8_t>(currentDir) / 2) == 1
                                                 ? static_cast<uint8_t>(currentDir) - 2
                                                 : static_cast<uint8_t>(currentDir) + 2);
@@ -230,7 +235,6 @@ Direction PathfindingMode::updateOrientation(MovementCode move, Direction curren
         break;
 
     case MovementCode::RIGHT:
-    case MovementCode::RIGHT_FORWARD:
         currentDir = static_cast<Direction>((static_cast<uint8_t>(currentDir) / 2) == 1
                                                 ? static_cast<uint8_t>(currentDir) - 2
                                                 : static_cast<uint8_t>(currentDir) + 2);
@@ -245,7 +249,6 @@ Direction PathfindingMode::updateOrientation(MovementCode move, Direction curren
         break;
 
     case MovementCode::UTURN:
-    case MovementCode::UTURN_FORWARD:
         currentDir = static_cast<Direction>((static_cast<uint8_t>(currentDir) % 2) == 1
                                                 ? static_cast<uint8_t>(currentDir) - 1
                                                 : static_cast<uint8_t>(currentDir) + 1);

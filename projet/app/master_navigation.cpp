@@ -1,6 +1,17 @@
 #include "master_navigation.h"
 #include "event_timer.h"
 
+/**
+ * /fichier master_navigation.cpp
+ * /auteurs Thierry Champion, Nikolai Olekhnovitch, Raisse Oumarou Petitot, Rym Touati
+ * /date    05 décembre 2023
+ * Créé le 10 novembre
+ * 
+ * Classe représentant la navigation avancé avec les capteurs et les mesures. La MasterNavigation 
+ * est capable de plusieurs movements ajustées et mesurés. Avec ses mesures, la navigation est 
+ * aussi capable de se calibrer automatiquement en estimant les distances.
+ */
+
 const uint8_t STABILIZING_DELAY = 250;
 
 const uint16_t DEFAULT_ONE_UNIT_COUNT = 134;
@@ -25,7 +36,6 @@ uint16_t MasterNavigation::getUnitCount() const
 
 void MasterNavigation::driveToIntersection(bool calibrate)
 {
-    // drive forward while adjusting.
     bool running = true;
 
     _navigation.jumpStart();
@@ -36,9 +46,9 @@ void MasterNavigation::driveToIntersection(bool calibrate)
     while (running)
     {
         goStraight();
-        // check for intersections.
+        
         if (_lineSensor.detectsIntersection() &&
-            EventTimer::getNavigationCounter() >= ((_centeringCount >> 1) + (_centeringCount >> 2))) // 3/4 du centrage
+            EventTimer::getNavigationCounter() >= ((_centeringCount >> 1) + (_centeringCount >> 2)))
         {
             if (calibrate)
                 calibrateDistances(EventTimer::getNavigationCounter());
@@ -191,29 +201,8 @@ void MasterNavigation::executeMovementCode(MovementCode code, bool calibrate)
         _delay_ms(STABILIZING_DELAY);
         break;
 
-    case MovementCode::LEFT_FORWARD:
-        pivot(Side::LEFT);
-        _delay_ms(STABILIZING_DELAY);
-        driveToIntersection();
-        _delay_ms(STABILIZING_DELAY);
-        break;
-
-    case MovementCode::RIGHT_FORWARD:
-        pivot(Side::RIGHT);
-        _delay_ms(STABILIZING_DELAY);
-        driveToIntersection();
-        _delay_ms(STABILIZING_DELAY);
-        break;
-
     case MovementCode::UTURN:
         uTurn();
-        _delay_ms(STABILIZING_DELAY);
-        break;
-
-    case MovementCode::UTURN_FORWARD:
-        uTurn();
-        _delay_ms(STABILIZING_DELAY);
-        driveToIntersection();
         _delay_ms(STABILIZING_DELAY);
         break;
 

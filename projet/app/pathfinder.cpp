@@ -1,4 +1,5 @@
 #include "pathfinder.h"
+
 const uint8_t MASK_PREVIOUS_NODE = 0x1F;
 
 Pathfinder::Pathfinder() : _map(Map()), _workSize(0) {}

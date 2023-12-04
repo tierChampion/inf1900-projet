@@ -1,5 +1,22 @@
 #include "map_node.h"
 
+/**
+ * /fichier map_node.cpp
+ * /auteurs Thierry Champion, Nikolai Olekhnovitch, Raisse Oumarou Petitot, Rym Touati
+ * /date    05 décembre 2023
+ * Créé le 10 novembre
+ * 
+ * Classe qui représente un noeud sur la carte. Chaque noeud contient 4 octets.
+ * Les deux premiers sont utilisées pour les distances nord, sud, est, ouest.
+ * Le troisième octet contient la distance depuis le noeud de départ.
+ * Finalement, le quatrième octet contient le statut de visité ainsi que l'index 
+ *      du noeud précédent.
+ * 
+ * Mapping: 4 bits pour le sud, 4 bits pour le nord, 4 bits pour l'est, 4 bits pour l'ouest,
+ * 8 bits pour la distance, 3 bits pour le statut de visite et 5 bits pour l'index du noeud
+ * précédent.
+ */
+
 const uint8_t MASK_NORTH_NODE_DISTANCE = 0x0F;
 const uint8_t MASK_SOUTH_NODE_DISTANCE = 0xF0;
 const uint8_t MASK_EAST_NODE_DISTANCE = 0x0F;

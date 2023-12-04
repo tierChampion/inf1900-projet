@@ -6,14 +6,11 @@
 enum class MovementCode
 {
     NOTHING,
-    FORWARD,
-    FORWARD_1,
+    FORWARD, // forward to the next intersection
+    FORWARD_1, // forward one unit on the map
     LEFT,
     RIGHT,
-    LEFT_FORWARD,
-    RIGHT_FORWARD,
     UTURN,
-    UTURN_FORWARD
 };
 
 #endif
