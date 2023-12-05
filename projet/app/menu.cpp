@@ -15,14 +15,58 @@
  * tel que la recherche de chemin ou l'identifiquation du coin.
  *
  * La table des etats : (a modifier)
- * +-------------+---------+--------------+
- * | ETAT ACTUEL |    ETAT FUTURE         |
- * +-------------+---------+--------------+
- * |             |         |              |
- * +-------------+---------+--------------+
- * |             |         |              |
- * |             |         |              |
- * +-------------+---------+--------------+
+ 
+// +============+==========+============+====================+
+// |   STATE    |  BUTTON  |    NEXT    |     LCD WRITE      |
+// +============+==========+============+====================+
+// | INIT       | SELECT   | LINE1      | CHOISIR MODE       |
+// +------------+----------+------------+--------------------+
+// | INIT       | VALIDATE | INIT       | CHOISIR MODE       |
+// +------------+----------+------------+--------------------+
+// | INIT       | MODE     | CORNERS    | CHOISIR MODE       |
+// +------------+----------+------------+--------------------+
+// | LINE1      | SELECT   | LINE1 + 1  | LIGNE 1            |
+// +------------+----------+------------+--------------------+
+// | LINE1      | VALIDATE | COLUMN1    | LIGNE 1            |
+// +------------+----------+------------+--------------------+
+// | LINE1      | MODE     | CORNERS    | LIGNE 1            |
+// +------------+----------+------------+--------------------+
+// | ///        | ///      | ///        | ///                |
+// +------------+----------+------------+--------------------+
+// | COLUMN1    | SELECT   | COLUMN + 1 | COLONNE 1          |
+// +------------+----------+------------+--------------------+
+// | COLUMN1    | VALIDATE | CONFIRMYES | COLONNE 1          |
+// +------------+----------+------------+--------------------+
+// | COLUMN1    | MODE     | CORNERS    | COLONNE 1          |
+// +------------+----------+------------+--------------------+
+// | ///        | ///      | ///        | ///                |
+// +------------+----------+------------+--------------------+
+// | CONFIRMYES | SELECT   | CONFIRMNO  | YES                |
+// +------------+----------+------------+--------------------+
+// | CONFIRMYES | VALIDATE | PATH       | YES                |
+// +------------+----------+------------+--------------------+
+// | CONFIRMYES | MODE     | CORNERS    | YES                |
+// +------------+----------+------------+--------------------+
+// | CONFIRMNO  | SELECT   | CONFIRMYES | NON                |
+// +------------+----------+------------+--------------------+
+// | CONFIRMNO  | VALIDATE | LINE1      | NON                |
+// +------------+----------+------------+--------------------+
+// | CONFIRMNO  | MODE     | CORNERS    | NON                |
+// +------------+----------+------------+--------------------+
+// | PATH       | SELECT   | PATH       | TRAJET EN COURS    |
+// +------------+----------+------------+--------------------+
+// | PATH       | VALIDATE | PATH       | TRAJET EN COURS    |
+// +------------+----------+------------+--------------------+
+// | PATH       | MODE     | PATH       | TRAJET EN COURS    |
+// +------------+----------+------------+--------------------+
+// | CORNERS    | SELECT   | PATH       | DETECTION EN COURS |
+// +------------+----------+------------+--------------------+
+// | CORNERS    | VALIDATE | PATH       | DETECTION EN COURS |
+// +------------+----------+------------+--------------------+
+// | CORNERS    | MODE     | PATH       | DETECTION EN COURS |
+// +------------+----------+------------+--------------------+
+
+
  */
 
 const uint16_t LCD_DELAY = 600;
@@ -32,7 +76,7 @@ Button Menu::_modeButton = Button(GeneralInterruptType::INT_2, true);
 Button Menu::_selectionButton = Button(GeneralInterruptType::INT_0, false);
 Button Menu::_validationButton = Button(GeneralInterruptType::INT_1, false);
 MenuStep Menu::_step = MenuStep::INIT;
-bool Menu::_isYes = false;
+bool Menu::_isYes = true;
 uint8_t Menu::_line = 0;
 uint8_t Menu::_column = 0;
 UpdateType Menu::_updateType = UpdateType::NONE;
@@ -138,7 +182,7 @@ void Menu::updateStep()
         Menu::_line = 0;
         Menu::_column = 0;
         Menu::_updateScreen = true;
-        EventTimer::setToggling(false);
+        EventTimer::setToggling(false); 
     }
 
     // line select
@@ -153,7 +197,7 @@ void Menu::updateStep()
              (Menu::_updateType == UpdateType::VALIDATE))
     {
         Menu::_step = MenuStep::COLUMN;
-        Menu::_updateScreen = true;
+        Menu::_updateScr   en = true;
     }
 
     // column select
