@@ -169,10 +169,10 @@ const char *CornersDetector::getCornerName()
             corner = "(1,1)           SOUTH";
             break;
         case 0b11000100: // LEFT long
-            corner = "(1,4)           EAST";
+            corner = "(4,1)           EAST";
             break;
         case 0b010: // RIGHT
-            corner = "(1,4)           NORTH";
+            corner = "(4,1)           NORTH";
             break;
         case 0b011011: // RIGHT_FORWARD  and RIGHT_FORWARD
             corner = "(4,7)           WEST";
