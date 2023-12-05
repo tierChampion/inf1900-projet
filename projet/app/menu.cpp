@@ -8,13 +8,14 @@
  * /date   05 décembre 2023
  * Créé le 7 novembre 2023
  *
- * Programme qui gère un menu interactif à l'aide de boutons sur le microcontrôleur AVR, affichent
- * des informations sur l'écran lors de la détection de coin ainsi que lors de la recherche de trajets
- * et réagissent aux différentes actions effectuée dessus. Elle contrôle aussi le robot en définissant
- * des paramètres tels que la ligne et la colonne pour la recherche de trajet, puis en executant des modes spécifiques du robot
- * tel que la recherche de chemin ou l'identifiquation du coin.
+ * Programme qui gère un menu interactif à l'aide de boutons sur le microcontrôleur AVR, 
+ * qui affiche des informations sur l'écran lors de la détection de coin ainsi que lors 
+ * de la recherche de trajets et qui réagit aux différentes actions effectuées dessus. 
+ * Il contrôle aussi le robot en définissant des paramètres tels que la ligne et la 
+ * colonne pour la recherche de trajet, puis en exécutant des modes spécifiques du robot
+ * tels que la recherche de chemin ou l'identification du coin.
  *
- * La table des états:
+ * La table des états (simplifiée pour améliorer la lisibilité):
  *
  * +============+==========+============+====================+
  * |   STATE    |  BUTTON  |    NEXT    |     LCD WRITE      |
