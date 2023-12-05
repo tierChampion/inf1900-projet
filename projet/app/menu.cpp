@@ -115,7 +115,7 @@ Menu::Menu()
     Menu::_modeButton.setSenseControl(SenseControl::RISING_EDGE);
 
     Menu::_step = MenuStep::INIT;
-    Menu::_isYes = false;
+    Menu::_isYes = true;
     Menu::_line = 0;
     Menu::_column = 0;
 
@@ -196,7 +196,7 @@ void Menu::updateStep()
              (Menu::_updateType == UpdateType::VALIDATE))
     {
         Menu::_step = MenuStep::COLUMN;
-        Menu::_updateScr   en = true;
+        Menu::_updateScreen = true;
     }
 
     // column select
