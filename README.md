@@ -1,10 +1,12 @@
-INF1900 PROJET INTEGRATEUR ÉQUIPE 1618
+# INF1900 PROJET INTEGRATEUR ÉQUIPE 1618
 
-Thierry Champion        2250224
-Nikolai Olekhnovitch    2204357
-Raissa Oumarou Petitot  2180935
-Rym Touati              2134811
+`Thierry Champion`  
+`Nikolai Olekhnovitch`  
+`Raissa Oumarou Petitot`  
+`Rym Touati`  
 
+![image_robots](res/robots.jpg "Robots")  
+<smaller>Image d'un robot sans branchements et d'un robot prêt pour le programme.</smaller>
 
 ## Description
 
@@ -12,17 +14,26 @@ Le Polynator est un projet de système embarqué de robot véhicule pouvant navi
 
 Ce projet est séparé en 2 grandes parties:
 
--Recherche de coins : le robot va déterminer le coin de départ et son orientation.
--Recherche du chemin le plus court : Entrez le point désiré sur la carte, et le robot déterminera le chemin le plus cours, selon le poids des arêtes.
+- Recherche de coins : le robot va déterminer le coin de départ et son orientation.
+- Recherche du chemin le plus court : Entrez le point désiré sur la carte, et le robot déterminera le chemin le plus cours, selon le poids des arêtes.
+
+![image_map](res/map.png "Map")  
+<smaller>Image de la carte à parcourir. (reference)</smaller>
 
 ## Compilation
 
-Pour compiler sur un robot, naviguez à INF1900/1618/projet. Voici les différentes options:
+Pour compiler sur un robot, voici les différentes options:
 
-- Pour seulement compiler la libraire, entrez make.
-- Pour installer sur un robot branché via USB, entrez make app. Vous aurez à valider que le port B est libre (y/N).
+- $ make app : compile et install l'application sur le robot.
+- $ make debug-app : compile et install l'application en mode debug sur le robot. Des messages de debug seront transférés par
+  RS-232 et peuvent être lu à l'aide de la commande $ serieViaUSB -l.
+
+** Une question de validation confirmant que le port B est libre devra être répondu avec "y" afin de pouvoir l'installer. **
 
 ## Branchements
+
+![image_branchements](res/connections.png "Branchements")  
+<smaller>Image dans SimullIDE des branchements de la carte.</smaller>
 
 Voici la liste des branchements:
 
@@ -51,13 +62,9 @@ Broche 7 : piezo
 
 ## Brève description des classes principales
 
-- Menu              :    Point d'entrée de l'application. C'est ici qu'on détermine quel mode est utilisé (PathfindingMode ou CornersDetector). Le mode par défaut est PathfindingMode et on peut basculer à CornersDetector avec le bouton d'interruption sur la carte mère et il s'activera automatiquement.
+- Menu              :    Point d'entrée de l'application. C'est ici qu'on détermine quel mode est utilisé (PathfindingMode ou CornersDetector). Le mode par défaut est PathfindingMode et on peut basculer à CornersDetector avec le bouton d'interruption sur la carte mère et il s'activera automatiquement. Les boutons sur le breadboard permettent de sélectionner la destination (ligne et colonne) et valider. Le bouton de sélection (à gauche lorsqu'on regarde le robot de face) permet d'incrémenter et le bouton de validation (à droite) permet de passer au prochain affichage. Une confirmation de destination est demandée. Par défaut, l'option NON est sélectionnée et ramènera l'utilisateur au choix de destination si on appuie sur validation. Confirmez la destination en sélectionnant OUI avec le bouton de sélection. Le robot effectuera le trajet en appuyant à valider.
 
-Les boutons sur le breadboard permettent de sélectionner la destination (ligne et colonne) et valider. Le bouton de sélection (à gauche lorsqu'on regarde le robot de face) permet d'incrémenter et le bouton de validation (à droite) permet de passer au prochain affichage. Une confirmation de destination est demandée. Par défaut, l'option NON est sélectionnée et ramènera l'utilisateur au choix de destination si on appuie sur validation. Confirmez la destination en sélectionnant OUI avec le bouton de sélection. Le robot effectuera le trajet en appuyant à valider.
-
-- Pathfinder        :   Pathfinder applique l'algorithme de Dijkstra sur une liste d'adjacence de nœuds qui représentent les différents points sur la carte. Cette approche minimise l'utilisation de mémoire sur la carte mère, vu qu'il s'agit d'un tableau contigu en mémoire 28 objets de 4 octets. 
-
-Un tableau de nœuds de carte organise le parcours et donne l'information sur les poids des arêtes connectés à chaque nœud. Pathfinder utilise ces nœuds pour déterminer le chemin le plus cours et peut refaire le traitement dans le cas d'un obstacle qui empêche la progression.
+- Pathfinder        :   Pathfinder applique l'algorithme de Dijkstra sur une liste d'adjacence de nœuds qui représentent les différents points sur la carte. Cette approche minimise l'utilisation de mémoire sur la carte mère, vu qu'il s'agit d'un tableau contigu en mémoire 28 objets de 4 octets. Un tableau de nœuds de carte organise le parcours et donne l'information sur les poids des arêtes connectés à chaque nœud. Pathfinder utilise ces nœuds pour déterminer le chemin le plus cours et peut refaire le traitement dans le cas d'un obstacle qui empêche la progression.
 
 - CornersDetector  :   Ce mode détermine l'emplacement et l'orientation du robot lorsqu'il est posé sur un des quatre coins du parcours. Le robot va avancer et, selon les intersections rencontrées et les distances parcourues, il pourra déterminer le point de départ. 
 
