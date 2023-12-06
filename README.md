@@ -6,7 +6,7 @@
 `Rym Touati`  
 
 ![image_robots](res/robots.jpg "Robots")  
-<smaller>Image d'un robot sans branchements et d'un robot prêt pour le programme.</smaller>
+<small>Image d'un robot sans branchements et d'un robot prêt pour le programme.</small>
 
 ## Description
 
@@ -18,7 +18,10 @@ Ce projet est séparé en 2 grandes parties:
 - Recherche du chemin le plus court : Entrez le point désiré sur la carte, et le robot déterminera le chemin le plus cours, selon le poids des arêtes.
 
 ![image_map](res/map.png "Map")  
-<smaller>Image de la carte à parcourir. (reference)</smaller>
+<small>
+Image de la carte à parcourir.  
+(Jérôme Collin, Cours 1900 : Projet Initial de Système Embarqué. [En ligne]. Disponible: https://cours.polymtl.ca/inf1900/)
+</small>
 
 ## Compilation
 
@@ -33,7 +36,7 @@ Pour compiler sur un robot, voici les différentes options:
 ## Branchements
 
 ![image_branchements](res/connections.png "Branchements")  
-<smaller>Image dans SimullIDE des branchements de la carte.</smaller>
+<small>Image dans SimullIDE des branchements de la carte.</small>
 
 Voici la liste des branchements:
 
