@@ -1,0 +1,19 @@
+===BRANCHEMENTS SUR BREADBOARD ===
+
+Formats: (X, Y)
+
+VCC-GND: (1, 0) et (2, 0)
+Outputs: (7, 0) Sel et (8, 0) Val
+
+Resistance1: (0, 1) vers (5, 1)
+Resistance2: (1, 3) vers (8, 2)
+Capaciteur: (0, 2) vers (2, 2)
+
+Bleu: (0, 0) vers (1, 1)
+Noir1: (5, 2) vers (7, 2)
+InSelection: (2, 4) vers (2, 5)
+OutSelection: (4, 5) vers (7, 4)
+InValidation: (2, 3) vers (9, 5)
+OutValidation: (11, 5) vers (8, 4)
+
+==================================
